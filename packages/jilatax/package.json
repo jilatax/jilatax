@@ -1,0 +1,7 @@
+{
+  "name": "jilatax",
+  "version": "0.0.0",
+  "description": "Jilatax framework for Lynx applications.",
+  "type": "module",
+  "private": true
+}
