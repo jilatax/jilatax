@@ -1,2 +1,37 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+out/
+build/
+.astro/
+
+# Build and test caches
+.turbo/
+.nx/
+.cache/
+coverage/
+*.tsbuildinfo
+
+# Environment files
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Package artifacts
+*.tgz
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+
+# Operating systems and editors
+.DS_Store
+Thumbs.db
+.idea/
+
+# Internal planning
 plan/
-node_modules
