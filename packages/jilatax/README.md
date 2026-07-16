@@ -1,12 +1,30 @@
 # jilatax
 
-The future public Jilatax framework package.
+> A minimal TypeScript library package with ESM, CommonJS, and declaration outputs.
 
-Its intended installation command is:
+Requires Node.js 22.18 or newer.
+
+## Install
 
 ```bash
-npm install jilatax
+npm i jilatax
 ```
 
-This package boundary exists now, but the framework API and release configuration
-have not been implemented yet.
+## Usage
+
+```ts
+import { hello } from "jilatax";
+
+hello("world");
+```
+
+## Development
+
+```bash
+bun install
+bun run check
+```
+
+## License
+
+MIT
