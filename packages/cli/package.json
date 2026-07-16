@@ -1,0 +1,7 @@
+{
+  "name": "@jilatax/cli",
+  "version": "0.0.0",
+  "description": "Command-line implementation for Jilatax.",
+  "type": "module",
+  "private": true
+}
