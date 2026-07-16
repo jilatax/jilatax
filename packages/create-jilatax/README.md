@@ -1,12 +1,30 @@
 # create-jilatax
 
-The future Jilatax application generator.
+> A minimal TypeScript library package with ESM, CommonJS, and declaration outputs.
 
-Its intended creation command is:
+Requires Node.js 22.18 or newer.
+
+## Install
 
 ```bash
-npm create jilatax@latest
+npm i create-jilatax
 ```
 
-The package must be named `create-jilatax` for npm to resolve that command.
-This is an architecture shell only; it does not create projects yet.
+## Usage
+
+```ts
+import { hello } from "create-jilatax";
+
+hello("world");
+```
+
+## Development
+
+```bash
+bun install
+bun run check
+```
+
+## License
+
+MIT
