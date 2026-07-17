@@ -44,7 +44,7 @@
   },
 
   "dependencies": {
-    "jilatax": "^0.0.4"
+    "jilatax": "^0.0.5"
   },
 
   "devDependencies": {

@@ -163,7 +163,7 @@ assert.equal(await runCli(['--help'], { services: cliServices }), 0);
 assert.match(cliOutput.at(-1), /jilatax run:android/u);
 assert.match(cliOutput.at(-1), /jilatax create:aab/u);
 assert.equal(await runCli(['--version'], { services: cliServices }), 0);
-assert.equal(cliOutput.at(-1), '0.0.4');
+assert.equal(cliOutput.at(-1), '0.0.5');
 assert.equal(await runCli(['unknown'], { services: cliServices }), 1);
 assert.match(cliWarnings.at(-2), /JTX_USAGE/u);
 
@@ -173,7 +173,7 @@ assert.notEqual((await stat(cliBin)).mode & 0o111, 0);
 
 const packageJson = JSON.parse(await readFile('package.json', 'utf8'));
 assert.equal(packageJson.bin.jilatax, './dist/bin.js');
-assert.equal(packageJson.dependencies.jilatax, '^0.0.4');
+assert.equal(packageJson.dependencies.jilatax, '^0.0.5');
 assert.equal('sparkling-app-cli' in packageJson.dependencies, false);
 assert.equal('sparkling-debug-tool' in packageJson.dependencies, false);
 
