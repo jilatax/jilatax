@@ -2,7 +2,7 @@
   "name": "jilatax",
   "version": "0.0.4",
   "packageManager": "bun@1.3.4",
-  "description": "A minimal TypeScript library package with ESM, CommonJS, and declaration outputs.",
+  "description": "Android-first application framework for Lynx and Rspeedy.",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -17,11 +17,23 @@
         "types": "./dist/index.d.cts",
         "default": "./dist/index.cjs"
       }
-    }
+    },
+    "./schema/app.schema.json": "./schema/app.schema.json",
+    "./package.json": "./package.json"
   },
-  "files": ["dist"],
+  "files": [
+    "android/README.md",
+    "android/build.gradle.kts",
+    "android/consumer-rules.pro",
+    "android/gradle.properties",
+    "android/settings.gradle.kts",
+    "android/src",
+    "dist",
+    "schema",
+    "THIRD_PARTY_NOTICES.md"
+  ],
   "sideEffects": false,
-  "keywords": ["typescript", "esm", "commonjs"],
+  "keywords": ["android", "lynx", "lynxjs", "rspeedy", "typescript"],
   "author": "gohit x (bastndev)",
   "license": "MIT",
   "homepage": "https://jilatax.dev",
@@ -34,6 +46,10 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "jilatax": {
+    "android": "./android",
+    "schema": "./schema/app.schema.json"
   },
   "engines": {
     "node": ">=22.18.0"

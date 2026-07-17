@@ -1,0 +1,23 @@
+import './App.css';
+
+const applicationName = {{displayNameJson}};
+
+export function App() {
+  return (
+    <view className="page">
+      <view className="orb orb--top" />
+      <view className="orb orb--bottom" />
+      <view className="card">
+        <text className="label">JILATAX · ANDROID</text>
+        <text className="title">{applicationName}</text>
+        <text className="description">
+          Your Lynx app is ready. Edit src/App.tsx and save to see changes.
+        </text>
+        <view className="status">
+          <view className="status__dot" />
+          <text className="status__text">Rspeedy development ready</text>
+        </view>
+      </view>
+    </view>
+  );
+}

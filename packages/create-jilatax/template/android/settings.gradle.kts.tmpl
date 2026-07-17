@@ -1,0 +1,29 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    plugins {
+        id("com.android.application") version "8.10.1"
+        id("com.android.library") version "8.10.1"
+        id("org.jetbrains.kotlin.android") version "2.2.0"
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = {{projectNameJson}}
+include(":app", ":jilatax")
+
+val jilataxAndroidProject = file("../node_modules/jilatax/android")
+check(jilataxAndroidProject.isDirectory) {
+    "Jilatax Android sources are missing. Run bun install from the project root."
+}
+project(":jilatax").projectDir = jilataxAndroidProject
