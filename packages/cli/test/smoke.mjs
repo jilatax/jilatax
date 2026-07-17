@@ -72,7 +72,7 @@ try {
     await readFile(
       path.join(
         projectRoot,
-        'android/app/src/main/assets/main.lynx.bundle',
+        '.jilatax/android-assets/main.lynx.bundle',
       ),
       'utf8',
     ),

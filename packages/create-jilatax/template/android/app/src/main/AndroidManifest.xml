@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application
+        android:name="dev.jilatax.android.JilataxApplication"
+        android:allowBackup="false"
+        android:enableOnBackInvokedCallback="${jilataxPredictiveBack}"
+        android:icon="@mipmap/jilatax_launcher"
+        android:label="@string/jilatax_app_name"
+        android:roundIcon="@mipmap/jilatax_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Jilatax"
+        android:usesCleartextTraffic="false">
+        <activity
+            android:name="dev.jilatax.android.JilataxActivity"
+            android:exported="true"
+            android:screenOrientation="${jilataxOrientation}"
+            android:theme="@style/Theme.Jilatax.Starting">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="${jilataxScheme}" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

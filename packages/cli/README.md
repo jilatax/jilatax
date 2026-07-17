@@ -18,7 +18,7 @@ The development command:
 
 1. validates `app.json` and selects one authorized Android device;
 2. starts or reuses the Rspeedy server on `127.0.0.1:5969`;
-3. builds and synchronizes `main.lynx.bundle` as a packaged fallback;
+3. builds and synchronizes `main.lynx.bundle` into `.jilatax/android-assets`;
 4. assembles and installs the debug APK without launching it;
 5. creates and verifies `adb reverse` after installation; and
 6. launches the Jilatax activity exactly once with an explicit bundle source.

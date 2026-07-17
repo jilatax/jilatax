@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Jilatax" parent="android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:colorAccent">#38BDF8</item>
+        <item name="android:navigationBarColor">@color/jilatax_splash_background</item>
+        <item name="android:statusBarColor">@color/jilatax_splash_background</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Jilatax.Starting" parent="Theme.Jilatax">
+        <item name="android:windowBackground">@drawable/jilatax_splash</item>
+    </style>
+</resources>

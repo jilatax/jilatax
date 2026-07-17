@@ -28,6 +28,12 @@ export {
   resolveAndroidProjectPath,
   resolveAppSchemaPath,
 } from './android.js';
+
+export {
+  serializeAndroidProjectConfig,
+  syncAndroidProjectConfig,
+} from './android-project.js';
+export type { SyncAndroidProjectConfigResult } from './android-project.js';
 export type {
   AndroidBundleMode,
   AndroidBundleSource,

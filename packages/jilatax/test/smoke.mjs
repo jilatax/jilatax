@@ -14,6 +14,8 @@ import {
   resolveAndroidBundleSource,
   resolveAndroidProjectPath,
   resolveAppSchemaPath,
+  serializeAndroidProjectConfig,
+  syncAndroidProjectConfig,
 } from 'jilatax';
 
 const rawConfig = {
@@ -45,6 +47,16 @@ assert.equal(parsed.jilatax.orientation, 'portrait');
 assert.equal(parsed.jilatax.scheme, 'text-expo');
 assert.equal(parsed.jilatax.android.versionCode, 1);
 assert.equal(parsed.jilatax.android.predictiveBackGestureEnabled, false);
+const serializedAndroidConfig = serializeAndroidProjectConfig(parsed);
+assert.match(serializedAndroidConfig, /^jilatax\.name=Text Expo$/mu);
+assert.match(
+  serializedAndroidConfig,
+  /^jilatax\.android\.package=com\.example\.textexpo$/mu,
+);
+assert.match(
+  serializedAndroidConfig,
+  /^jilatax\.splash\.backgroundColor=#208AEF$/mu,
+);
 
 assert.throws(
   () =>
@@ -78,6 +90,14 @@ try {
   const loaded = await loadAppConfig(temporaryProject);
   assert.equal(loaded.config.jilatax.android.package, 'com.example.textexpo');
   assert.equal(loaded.configPath, path.join(temporaryProject, 'app.json'));
+  const synced = await syncAndroidProjectConfig(
+    temporaryProject,
+    loaded.config,
+  );
+  assert.equal(
+    await readFile(synced.propertiesPath, 'utf8'),
+    serializeAndroidProjectConfig(loaded.config),
+  );
 } finally {
   await rm(temporaryProject, { recursive: true, force: true });
 }

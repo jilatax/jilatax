@@ -7,6 +7,7 @@ import {
   JilataxConfigError,
   loadAppConfig,
   resolveAndroidBundleSource,
+  syncAndroidProjectConfig,
 } from 'jilatax';
 
 import { CliError, errorMessage } from './errors.js';
@@ -70,6 +71,7 @@ export async function runAndroid(
     await listAndroidDevices(projectRoot, services),
     options.device,
   );
+  await syncAndroidProjectConfig(projectRoot, config);
 
   let startedDevServer = false;
   let devServerProcess:
@@ -184,9 +186,10 @@ export async function createAab(
   services: CliServices = defaultCliServices,
 ): Promise<CreateAabResult> {
   const projectRoot = resolve(options.projectRoot ?? process.cwd());
-  await loadConfig(projectRoot);
+  const config = await loadConfig(projectRoot);
   const androidProject = await resolveAndroidProject(projectRoot);
 
+  await syncAndroidProjectConfig(projectRoot, config);
   await buildAndSyncLynxBundle(projectRoot, services);
   services.log('Building the Android release bundle...');
   assertCommandSucceeded(

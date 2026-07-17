@@ -148,14 +148,7 @@ export async function buildAndSyncLynxBundle(
     `Rspeedy did not create dist/${DEFAULT_LYNX_BUNDLE}.`,
   );
 
-  const androidAssets = resolve(
-    projectRoot,
-    'android',
-    'app',
-    'src',
-    'main',
-    'assets',
-  );
+  const androidAssets = resolve(projectRoot, '.jilatax', 'android-assets');
   await mkdir(androidAssets, { recursive: true });
   await cp(outputRoot, androidAssets, {
     dereference: true,

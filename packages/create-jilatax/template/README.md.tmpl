@@ -1,0 +1,31 @@
+# {{projectName}}
+
+Android-first Lynx application created with Jilatax.
+
+## Development
+
+```bash
+bun install
+bun run run:android
+```
+
+The Android command starts Rspeedy, builds and installs the debug APK, verifies
+the ADB reverse tunnel, and launches the app once.
+
+To run only the Lynx development server:
+
+```bash
+bun run dev
+```
+
+## Android App Bundle
+
+```bash
+bun run create:aab
+```
+
+Configure `android/keystore.properties` from the included example before a
+Play Store release. Never commit signing credentials.
+
+Application metadata lives in `app.json`. Android is the only supported native
+platform in this phase.
