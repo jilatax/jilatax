@@ -23,12 +23,19 @@
       },
     },
     "packages/cli": {
-      "name": "@jilatax/cli",
-      "version": "0.0.0",
+      "name": "@JILATAX/CLI",
+      "version": "0.1.0",
+      "devDependencies": {
+        "@arethetypeswrong/core": "^0.18.5",
+        "@types/node": "^22.20.1",
+        "publint": "^0.3.21",
+        "tsdown": "^0.22.7",
+        "typescript": "^7.0.2",
+      },
     },
     "packages/create-jilatax": {
       "name": "create-jilatax",
-      "version": "0.1.0",
+      "version": "0.0.1",
       "devDependencies": {
         "@arethetypeswrong/core": "^0.18.5",
         "@types/node": "^22.20.1",
@@ -50,6 +57,8 @@
     },
   },
   "packages": {
+    "@JILATAX/CLI": ["@JILATAX/CLI@workspace:packages/cli"],
+
     "@andrewbranch/untar.js": ["@andrewbranch/untar.js@1.0.3", "", {}, "sha512-Jh15/qVmrLGhkKJBdXlK1+9tY4lZruYjsgkDFj08ZmDiWVBLJcqkok7Z0/R0In+i1rScBpJlSvrTS2Lm41Pbnw=="],
 
     "@arethetypeswrong/core": ["@arethetypeswrong/core@0.18.5", "", { "dependencies": { "@andrewbranch/untar.js": "^1.0.3", "@loaderkit/resolve": "^1.0.2", "cjs-module-lexer": "^1.2.3", "fflate": "^0.8.3", "lru-cache": "^11.0.1", "semver": "^7.5.4", "typescript": "5.6.1-rc", "validate-npm-package-name": "^5.0.0" } }, "sha512-9ytjzGwxjm9Uz7I9avfbt5vlQt6uk9uRRESzJjqrznl6WKvI6dwYTo+vJ3U02Wrq/mR3iql/PzhvHhKdJIAjDQ=="],
@@ -249,8 +258,6 @@
     "@img/sharp-win32-ia32": ["@img/sharp-win32-ia32@0.34.5", "", { "os": "win32", "cpu": "ia32" }, "sha512-FV9m/7NmeCmSHDD5j4+4pNI8Cp3aW+JvLoXcTUo0IqyjSfAZJ8dIUmijx1qaJsIiU+Hosw6xM5KijAWRJCSgNg=="],
 
     "@img/sharp-win32-x64": ["@img/sharp-win32-x64@0.34.5", "", { "os": "win32", "cpu": "x64" }, "sha512-+29YMsqY2/9eFEiW93eqWnuLcWcufowXewwSNIT6UwZdUUCrM3oFjMWH/Z6/TMmb4hlFenmfAVbpWeup2jryCw=="],
-
-    "@jilatax/cli": ["@jilatax/cli@workspace:packages/cli"],
 
     "@jridgewell/sourcemap-codec": ["@jridgewell/sourcemap-codec@1.5.5", "", {}, "sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og=="],
 
