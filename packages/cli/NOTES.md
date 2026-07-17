@@ -93,9 +93,8 @@ git pull
 ```
 
 ```bash
-npm version patch
-git push origin main
-git push origin v0.1.0
+git tag -a cli-v0.0.2 -m "cli 0.0.2"
+git push origin cli-v0.0.2
 ```
 
 > Use the tag created by `npm version`; update the example tag when the version changes.
