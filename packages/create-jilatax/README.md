@@ -6,6 +6,11 @@ Requires Node.js 22.18 or newer and Bun.
 
 ## Create an application
 
+```sh
+bun create jilatax@latest
+```
+---
+
 ```bash
 bunx create-jilatax@latest my-app
 cd my-app
