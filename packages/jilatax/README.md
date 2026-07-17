@@ -25,6 +25,21 @@ bun install
 bun run check
 ```
 
-## License
+## 📄 License
 
-`MIT`
+MIT © [JilataX](https://jilatax.dev) — see [`LICENSE`](./LICENSE).
+
+<br>
+
+---
+
+<div align="center">
+  <p>
+    Built with <strong>Bun</strong>, <strong>TypeScript</strong>, and <strong>Lynx</strong>.
+  </p>
+  <p>
+    <a href="https://www.jilatax.dev/jilatax">Website</a> ·
+    <a href="https://github.com/jilatax/jilatax">GitHub</a> ·
+    <a href="https://www.npmjs.com/package/jilatax">npm</a>
+  </p>
+</div>
