@@ -1,6 +1,3 @@
-/**
- * Jilatax CLI package boundary.
- *
- * Command parsing and framework orchestration will be implemented later.
- */
-export {};
+export function hello(name: string): string {
+  return `Hello, ${name}!`;
+}

@@ -1,12 +1,30 @@
-# @jilatax/cli
+# @JILATAX/CLI
 
-The future Jilatax command-line implementation.
+> A minimal TypeScript library package with ESM, CommonJS, and declaration outputs.
 
-Its intended installation command is:
+Requires Node.js 22.18 or newer.
+
+## Install
 
 ```bash
-npm install @jilatax/cli
+npm i @jilatax/cli
 ```
 
-This package is intentionally not executable yet. The `jilatax` binary mapping
-will be added together with real command behavior and its tests.
+## Usage
+
+```ts
+import { hello } from "@JILATAX/CLI";
+
+hello("world");
+```
+
+## Development
+
+```bash
+bun install
+bun run check
+```
+
+## License
+
+MIT
