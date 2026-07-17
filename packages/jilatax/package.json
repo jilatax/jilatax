@@ -1,6 +1,6 @@
 {
   "name": "jilatax",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "packageManager": "bun@1.3.4",
   "description": "A minimal TypeScript library package with ESM, CommonJS, and declaration outputs.",
   "type": "module",
@@ -21,7 +21,6 @@
   },
   "files": ["dist"],
   "sideEffects": false,
-
   "keywords": ["typescript", "esm", "commonjs"],
   "author": "gohit x (bastndev)",
   "license": "MIT",
@@ -39,7 +38,6 @@
   "engines": {
     "node": ">=22.18.0"
   },
-
   "devDependencies": {
     "@arethetypeswrong/core": "^0.18.5",
     "@types/node": "^22.20.1",
