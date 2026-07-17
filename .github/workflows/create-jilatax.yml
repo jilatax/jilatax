@@ -22,6 +22,10 @@ jobs:
       - name: Install dependencies
         run: bun install
 
+      - name: Build jilatax
+        working-directory: packages/jilatax
+        run: bun run build
+
       - name: Build create-jilatax
         working-directory: packages/create-jilatax
         run: bun run build

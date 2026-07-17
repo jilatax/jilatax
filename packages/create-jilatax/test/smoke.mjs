@@ -72,9 +72,9 @@ async function testGeneratedProject(root) {
     'run:android': 'jilatax run:android',
     'create:aab': 'jilatax create:aab',
   });
-  assert.equal(typeof packageJson.dependencies?.jilatax, 'string');
+  assert.equal(packageJson.dependencies?.jilatax, '^0.0.5');
   assert.equal(typeof packageJson.dependencies?.['@lynx-js/react'], 'string');
-  assert.equal(typeof packageJson.devDependencies?.['@jilatax/cli'], 'string');
+  assert.equal(packageJson.devDependencies?.['@jilatax/cli'], '^0.0.7');
   assert.equal(typeof packageJson.devDependencies?.['@lynx-js/rspeedy'], 'string');
 
   for (const dependencyName of [

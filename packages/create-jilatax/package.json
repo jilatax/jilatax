@@ -45,7 +45,7 @@
 
   "dependencies": {
     "@clack/prompts": "^1.7.0",
-    "jilatax": "^0.0.4"
+    "jilatax": "^0.0.5"
   },
 
   "devDependencies": {
