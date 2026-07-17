@@ -19,6 +19,7 @@ export interface CommandResult {
 
 export interface RunningCommand {
   readonly exited: Promise<CommandResult>;
+  readonly pid?: number;
   kill(signal?: NodeJS.Signals): boolean;
 }
 
@@ -81,6 +82,8 @@ function createCommand(
   const spawnOptions: SpawnOptions = {
     cwd: options.cwd,
     env: options.env ?? process.env,
+    shell:
+      process.platform === 'win32' && /\.(?:bat|cmd)$/iu.test(command),
     stdio: stdio === 'pipe' ? ['ignore', 'pipe', 'pipe'] : 'inherit',
     windowsHide: true,
   };
@@ -124,6 +127,7 @@ function createCommand(
 
   return {
     exited,
+    ...(child.pid === undefined ? {} : { pid: child.pid }),
     kill(signal = 'SIGTERM') {
       return child.kill(signal);
     },

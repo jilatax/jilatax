@@ -1,4 +1,12 @@
-import { access, cp, mkdir, stat, writeFile } from 'node:fs/promises';
+import {
+  access,
+  cp,
+  mkdir,
+  readFile,
+  rm,
+  stat,
+  writeFile,
+} from 'node:fs/promises';
 import { dirname, relative, resolve, sep } from 'node:path';
 
 import { CliError, errorMessage } from './errors.js';
@@ -33,7 +41,16 @@ export async function ensureRspeedyDevServer(
 ): Promise<DevServerHandle> {
   const url = developmentBundleUrl(port);
   if (await bundleIsAvailable(url, services)) {
-    return { started: false, url };
+    if (await ownedDevServerIsRunning(projectRoot, port)) {
+      return { started: false, url };
+    }
+    throw new CliError(
+      'JTX_DEV_SERVER_CONFLICT',
+      `Port ${port} is serving a Lynx bundle that is not owned by this Jilatax project.`,
+      {
+        hint: `Stop the other server or run again with another port, such as --port ${port + 1}.`,
+      },
+    );
   }
 
   const rspeedy = await resolveRspeedyBinary(projectRoot);
@@ -49,6 +66,12 @@ export async function ensureRspeedyDevServer(
     ['dev', '--config', devConfig],
     { cwd: projectRoot, stdio: 'inherit' },
   );
+  const markerPath = devServerMarkerPath(projectRoot);
+  void processHandle.exited
+    .finally(async () => {
+      await rm(markerPath, { force: true });
+    })
+    .catch(() => {});
 
   let processResult: CommandResult | undefined;
   let processError: unknown;
@@ -76,12 +99,24 @@ export async function ensureRspeedyDevServer(
       );
     }
     if (await bundleIsAvailable(url, services)) {
+      if (processHandle.pid !== undefined) {
+        await writeFile(
+          markerPath,
+          `${JSON.stringify({
+            pid: processHandle.pid,
+            port,
+            projectRoot,
+          }, null, 2)}\n`,
+          'utf8',
+        );
+      }
       return { process: processHandle, started: true, url };
     }
     await services.sleep(500);
   }
 
   processHandle.kill();
+  await rm(markerPath, { force: true });
   throw new CliError(
     'JTX_DEV_SERVER_TIMEOUT',
     `Rspeedy did not serve ${DEFAULT_LYNX_BUNDLE} on port ${port}.`,
@@ -178,6 +213,34 @@ async function resolveRspeedyBinary(projectRoot: string): Promise<string> {
     'The local Rspeedy executable is missing.',
     { hint: 'Install the project dependencies before running this command.' },
   );
+}
+
+async function ownedDevServerIsRunning(
+  projectRoot: string,
+  port: number,
+): Promise<boolean> {
+  try {
+    const marker = JSON.parse(
+      await readFile(devServerMarkerPath(projectRoot), 'utf8'),
+    ) as { pid?: unknown; port?: unknown; projectRoot?: unknown };
+    if (
+      marker.projectRoot !== projectRoot ||
+      marker.port !== port ||
+      typeof marker.pid !== 'number' ||
+      !Number.isInteger(marker.pid) ||
+      marker.pid < 1
+    ) {
+      return false;
+    }
+    process.kill(marker.pid, 0);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function devServerMarkerPath(projectRoot: string): string {
+  return resolve(projectRoot, '.jilatax', 'dev-server.json');
 }
 
 async function resolveLynxConfig(projectRoot: string): Promise<string> {

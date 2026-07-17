@@ -14,11 +14,11 @@ import {
   defaultCliServices,
   type CliServices,
   type CommandResult,
+  type RunningCommand,
 } from './process.js';
 import {
   DEFAULT_DEV_SERVER_PORT,
   buildAndSyncLynxBundle,
-  developmentBundleUrl,
   ensureRspeedyDevServer,
 } from './rspeedy.js';
 
@@ -39,6 +39,7 @@ export interface RunAndroidResult {
   readonly apkPath: string;
   readonly bundleSource: string;
   readonly deviceSerial: string;
+  readonly devServer?: RunningCommand;
   readonly mode: 'development' | 'packaged';
   readonly startedDevServer: boolean;
 }
@@ -157,6 +158,7 @@ export async function runAndroid(
     await verifyAndroidProcess(
       device.serial,
       packageId,
+      bundleSource,
       projectRoot,
       services,
     );
@@ -165,6 +167,9 @@ export async function runAndroid(
       apkPath,
       bundleSource,
       deviceSerial: device.serial,
+      ...(devServerProcess === undefined
+        ? {}
+        : { devServer: devServerProcess }),
       mode: options.packaged === true ? 'packaged' : 'development',
       startedDevServer,
     };
@@ -456,6 +461,7 @@ async function launchAndroidApp(
 async function verifyAndroidProcess(
   serial: string,
   packageId: string,
+  bundleSource: string,
   projectRoot: string,
   services: CliServices,
 ): Promise<void> {
@@ -487,7 +493,9 @@ async function verifyAndroidProcess(
       'JTX_LAUNCH_FAILED',
       `Lynx reported a bundle failure: ${failedLine.trim()}`,
       {
-        hint: `Verify ${developmentBundleUrl(DEFAULT_DEV_SERVER_PORT)} or run with --packaged.`,
+        hint: bundleSource.startsWith('http')
+          ? `Verify ${bundleSource} or run with --packaged.`
+          : `Rebuild ${DEFAULT_ANDROID_BUNDLE} and run the command again.`,
       },
     );
   }
