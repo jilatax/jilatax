@@ -30,29 +30,27 @@ Application code
    Lynx / Rspeedy         ── engine, compilation, dev server
        │
        ▼
-   Android / iOS
+   Android                  ── only supported native platform in this phase
 ```
 
 ## 📦 Packages
 
 | Package | npm | Role |
 |---------|-----|------|
-| `jilatax` | `jilatax` | Public API, `defineConfig`, SDK entry |
+| `jilatax` | `jilatax` | Public API, app configuration, Android host |
 | `cli` | `@jilatax/cli` | Command parsing, user output |
 | `create-jilatax` | `create-jilatax` | Scaffolding, templates |
 
-### Planned
+### Internal boundaries
 
-| Package | Role |
-|---------|------|
-| `@jilatax/core` | Orchestration, config loading |
-| `@jilatax/config` | Schema, validation |
-| `@jilatax/dev-server` | Dev server, QR, device discovery |
-| `@jilatax/android` | Android host, Gradle generation |
-| `@jilatax/ios` | iOS host, Xcode generation |
-| `@jilatax/prebuild` | Native project generation |
-| `@jilatax/autolinking` | Native module linking |
-| `@jilatax/doctor` | Project diagnostics |
+These remain modules inside the three public packages; they are not additional npm packages.
+
+| Boundary | Owner | Role |
+|----------|-------|------|
+| Config and schema | `jilatax` | Load, validate, and normalize `app.json` |
+| Android host | `jilatax` | Native runtime and packaged-bundle boundary |
+| Commands | `@jilatax/cli` | Development, device, APK, and AAB orchestration |
+| Templates | `create-jilatax` | Initial project files and assets |
 
 ## 🔧 Build
 
@@ -83,5 +81,5 @@ Validation: `publint` + `@arethetypeswrong/core`
 ```
 Phase 1  ✓  Website & docs
 Phase 2  ✓  Monorepo foundation
-Phase 3  ·  Framework behavior (pending)
+Phase 3  ◐  Android framework behavior (in progress)
 ```

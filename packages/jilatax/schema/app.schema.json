@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jilatax.dev/schema/app.schema.json",
+  "title": "Jilatax application configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["jilatax"],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "jilatax": {
+      "$ref": "#/$defs/jilataxConfig"
+    }
+  },
+  "$defs": {
+    "assetPath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?![\\\\/])(?![A-Za-z]:[\\\\/])(?![A-Za-z][A-Za-z0-9+.-]*:)(?!\\.\\.(?:[\\\\/]|$))(?!.*[\\\\/]\\.\\.(?:[\\\\/]|$))(?!.*[\\\\/]$).+$",
+      "description": "A project-relative asset path."
+    },
+    "color": {
+      "type": "string",
+      "pattern": "^#[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?$"
+    },
+    "adaptiveIcon": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["backgroundColor", "foregroundImage"],
+      "properties": {
+        "backgroundColor": {
+          "$ref": "#/$defs/color"
+        },
+        "foregroundImage": {
+          "$ref": "#/$defs/assetPath"
+        },
+        "backgroundImage": {
+          "$ref": "#/$defs/assetPath"
+        },
+        "monochromeImage": {
+          "$ref": "#/$defs/assetPath"
+        }
+      }
+    },
+    "androidConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["package"],
+      "properties": {
+        "package": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)+$",
+          "examples": ["com.example.myapp"]
+        },
+        "versionCode": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1
+        },
+        "adaptiveIcon": {
+          "$ref": "#/$defs/adaptiveIcon"
+        },
+        "predictiveBackGestureEnabled": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "splashConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["backgroundColor"],
+      "properties": {
+        "backgroundColor": {
+          "$ref": "#/$defs/color"
+        },
+        "image": {
+          "$ref": "#/$defs/assetPath"
+        },
+        "imageWidth": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "resizeMode": {
+          "enum": ["contain", "cover", "native"]
+        }
+      }
+    },
+    "jilataxConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "android"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:[-_][a-z0-9]+)*$"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$",
+          "default": "1.0.0"
+        },
+        "orientation": {
+          "enum": ["default", "portrait", "landscape"],
+          "default": "portrait"
+        },
+        "icon": {
+          "$ref": "#/$defs/assetPath"
+        },
+        "scheme": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9+.-]*$"
+        },
+        "userInterfaceStyle": {
+          "enum": ["automatic", "light", "dark"],
+          "default": "automatic"
+        },
+        "splash": {
+          "$ref": "#/$defs/splashConfig"
+        },
+        "android": {
+          "$ref": "#/$defs/androidConfig"
+        }
+      }
+    }
+  }
+}
