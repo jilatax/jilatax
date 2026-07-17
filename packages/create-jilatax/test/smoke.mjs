@@ -74,7 +74,11 @@ async function testGeneratedProject(root) {
   });
   assert.equal(packageJson.dependencies?.jilatax, '^0.0.5');
   assert.equal(typeof packageJson.dependencies?.['@lynx-js/react'], 'string');
-  assert.equal(packageJson.devDependencies?.['@jilatax/cli'], '^0.0.7');
+  assert.equal(packageJson.devDependencies?.['@jilatax/cli'], '^0.0.8');
+  assert.equal(
+    packageJson.devDependencies?.['@lynx-js/qrcode-rsbuild-plugin'],
+    '^0.4.4',
+  );
   assert.equal(typeof packageJson.devDependencies?.['@lynx-js/rspeedy'], 'string');
 
   for (const dependencyName of [
@@ -114,6 +118,14 @@ async function testGeneratedProject(root) {
   assert.match(appGradle, /\.jilatax\/android-assets/u);
   assert.match(appGradle, /implementation\(project\(":jilatax"\)\)/u);
   assert.doesNotMatch(appGradle, /sparkling/iu);
+
+  const lynxConfig = await readFile(
+    path.join(projectDirectory, 'lynx.config.ts'),
+    'utf8',
+  );
+  assert.match(lynxConfig, /@lynx-js\/qrcode-rsbuild-plugin/u);
+  assert.match(lynxConfig, /pluginQRCode/u);
+  assert.match(lynxConfig, /\?fullscreen=true/u);
 
   const mainManifest = await readFile(
     path.join(projectDirectory, 'android', 'app', 'src', 'main', 'AndroidManifest.xml'),

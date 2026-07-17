@@ -27,6 +27,10 @@ Use `--device <serial>` when multiple devices are connected, `--port <number>`
 to select another development port, or `--packaged` to skip the server and open
 the bundled Lynx application.
 
+The development server started by this command removes the QR code plugin from
+the project's Lynx configuration; run `bun run dev` in another terminal when
+you want the scannable QR code instead.
+
 ### `jilatax create:aab`
 
 This builds the production Lynx bundle, copies the output into Android assets,

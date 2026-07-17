@@ -95,6 +95,13 @@ try {
     'adb:pidof',
     'adb:logcat',
   ]);
+
+  const generatedDevConfig = await readFile(
+    path.join(projectRoot, '.jilatax/lynx.dev.config.ts'),
+    'utf8',
+  );
+  assert.match(generatedDevConfig, /basePlugins\.filter/u);
+  assert.match(generatedDevConfig, /lynx:rsbuild:qrcode/u);
   assert.equal(
     development.events.filter((event) => event === 'adb:start').length,
     1,

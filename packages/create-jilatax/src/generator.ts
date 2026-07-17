@@ -38,8 +38,9 @@ export interface CreateProjectResult {
 
 export type ProjectInstaller = (projectDirectory: string) => Promise<void>;
 
-const JILATAX_CLI_VERSION = '^0.0.7';
+const JILATAX_CLI_VERSION = '^0.0.8';
 const JILATAX_VERSION = '^0.0.5';
+const LYNX_QRCODE_PLUGIN_VERSION = '^0.4.4';
 const LYNX_REACT_VERSION = '^0.116.2';
 const LYNX_TYPES_VERSION = '^3.7.0';
 const REACT_PLUGIN_VERSION = '^0.12.7';
@@ -251,6 +252,7 @@ async function writeGeneratedMetadata(
     },
     devDependencies: {
       '@jilatax/cli': JILATAX_CLI_VERSION,
+      '@lynx-js/qrcode-rsbuild-plugin': LYNX_QRCODE_PLUGIN_VERSION,
       '@lynx-js/react-rsbuild-plugin': REACT_PLUGIN_VERSION,
       '@lynx-js/rspeedy': RSPEEDY_VERSION,
       '@lynx-js/types': LYNX_TYPES_VERSION,

@@ -28,6 +28,8 @@ const LYNX_CONFIG_FILES = [
   'lynx.config.cjs',
 ] as const;
 
+const QRCODE_PLUGIN_NAME = 'lynx:rsbuild:qrcode';
+
 export interface DevServerHandle {
   readonly process?: RunningCommand;
   readonly started: boolean;
@@ -272,9 +274,17 @@ async function writeDevelopmentConfig(
     '  (baseConfigModule as Record<string, unknown>);',
     'const baseServer =',
     '  (baseConfig.server as Record<string, unknown> | undefined) ?? {};',
+    'const basePlugins = Array.isArray(baseConfig.plugins)',
+    '    ? baseConfig.plugins',
+    '    : [];',
     '',
     'export default {',
     '  ...baseConfig,',
+    '  plugins: basePlugins.filter(',
+    '    (plugin) =>',
+    '      (plugin as { name?: string } | null | undefined)?.name !==',
+    `      ${JSON.stringify(QRCODE_PLUGIN_NAME)},`,
+    '  ),',
     '  server: {',
     '    ...baseServer,',
     `    host: ${JSON.stringify(DEFAULT_DEV_SERVER_HOST)},`,
