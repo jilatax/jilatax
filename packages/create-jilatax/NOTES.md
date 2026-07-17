@@ -86,6 +86,7 @@ jobs:
 Commit and push the workflow to `main` manually.
 
 ## 3 — Publish and deploy
+
 ```bash
 git checkout main
 git pull
