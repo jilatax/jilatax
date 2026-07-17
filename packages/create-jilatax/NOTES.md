@@ -93,8 +93,8 @@ git pull
 ```
 
 ```bash
-  git tag -a create-jilatax-v0.0.2 -m "create-jilatax 0.0.2"
-  git push origin create-jilatax-v0.0.2
+git tag -a create-jilatax-v0.0.2 -m "create-jilatax 0.0.2"
+git push origin create-jilatax-v0.0.2
 ```
 
 > Use the tag created by `npm version`; update the example tag when the version changes.
