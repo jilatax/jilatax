@@ -91,6 +91,7 @@ Commit and push the workflow to `main` manually.
 git checkout main
 git pull
 ```
+**Update in package.json** `v0.0.1` to `v0.0.2`
 
 ```bash
 git tag -a cli-v0.0.2 -m "cli 0.0.2"
