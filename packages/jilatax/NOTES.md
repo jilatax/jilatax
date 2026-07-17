@@ -91,18 +91,11 @@ Commit and push the workflow to `main` manually.
 git checkout main
 git pull
 ```
+**Update in package.json** `v0.0.1` to `v0.0.2`
 
 ```bash
-npm version patch
-git push origin main
-git push origin v0.0.3
-```
-
-Optional
-
-```bash
-git tag -a v0.0.3 -m "0.0.3"
-git push origin v0.0.3
+git tag -a v0.0.2 -m "0.0.2"
+git push origin v0.0.2
 ```
 
 > Use the tag created by `npm version`; update the example tag when the version changes.
