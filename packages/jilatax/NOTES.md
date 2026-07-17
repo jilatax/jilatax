@@ -95,7 +95,14 @@ git pull
 ```bash
 npm version patch
 git push origin main
-git push origin v0.1.0
+git push origin v0.0.3
+```
+
+Optional
+
+```bash
+git tag -a v0.0.3 -m "0.0.3"
+git push origin v0.0.3
 ```
 
 > Use the tag created by `npm version`; update the example tag when the version changes.
