@@ -27,4 +27,4 @@ bun run check
 
 ## License
 
-MIT
+`MIT`
