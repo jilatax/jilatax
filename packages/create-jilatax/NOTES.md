@@ -88,14 +88,9 @@ Commit and push the workflow to `main` manually.
 ## 3 — Publish and deploy
 
 ```bash
-git checkout main
-git pull
+  git checkout main
+  git pull
+  git tag -a create-jilatax-v0.0.2 -m "create-jilatax 0.0.2"
+  git push origin create-jilatax-v0.0.2
 ```
-
-```bash
-npm version patch
-git push origin main
-git push origin v0.1.0
-```
-
 > Use the tag created by `npm version`; update the example tag when the version changes.
