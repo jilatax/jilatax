@@ -18,6 +18,7 @@ export const ROUTES: Route[] = [
   { href: '/', label: 'Home' },
   { href: '/#use', label: 'Use' },
   { href: '/#packages', label: 'Packages' },
+  { href: '/#Last', label: 'Last' },
 ];
 
 /** External links used across the landing page. */

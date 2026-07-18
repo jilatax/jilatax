@@ -1,14 +1,339 @@
 ---
-// Minimal site footer: the project name + the current year. Shown on every page
-// via Layout.astro. The name comes from SITE so it follows the single source of
-// truth (rename once in consts.ts). Its styles live in global.css (a
-// render-blocking, global stylesheet) instead of a scoped <style> here — so the
-// centered line is applied before first paint and never flashes left-aligned.
-import { SITE } from '@/consts';
+import { SITE, LINKS } from '@/consts';
+import GithubIcon from '@/assets/icons/github.svg';
+import XIcon from '@/assets/icons/social/x.svg';
+import SkyBlueIcon from '@/assets/icons/social/sky-blue.svg';
 
 const year = new Date().getFullYear();
+
+const columns = [
+  {
+    title: 'Get started',
+    links: [
+      { label: 'Create app', href: LINKS.npm },
+      { label: 'Documentation', href: 'https://docs.jilatax.dev' },
+      { label: 'GitHub', href: LINKS.github },
+      { label: 'CLI', href: 'https://www.npmjs.com/package/@jilatax/cli' },
+    ],
+  },
+  {
+    title: 'Packages',
+    links: [
+      { label: 'jilatax', href: 'https://www.npmjs.com/package/jilatax' },
+      { label: 'create-jilatax', href: 'https://www.npmjs.com/package/create-jilatax' },
+      { label: '@jilatax/cli', href: 'https://www.npmjs.com/package/@jilatax/cli' },
+    ],
+  },
+  {
+    title: 'Stack',
+    links: [
+      { label: 'Lynx', href: null },
+      { label: 'Rspeedy', href: null },
+      { label: 'Android', href: null },
+      { label: 'TypeScript', href: null },
+    ],
+  },
+  {
+    title: 'Resources',
+    links: [
+      { label: 'npm registry', href: LINKS.npm },
+      { label: 'MIT License', href: `${LINKS.github}/blob/main/LICENSE` },
+      { label: 'Changelog', href: `${LINKS.github}/releases` },
+      { label: 'Status', href: null },
+    ],
+  },
+  {
+    title: 'Project',
+    links: [
+      { label: 'Home', href: '/' },
+      { label: 'Use', href: '/#use' },
+      { label: 'Packages', href: '/#packages' },
+      { label: SITE.name, href: null },
+    ],
+  },
+];
 ---
 
-<footer class="site-footer">
-  <p class="footer-line">{SITE.name} © {year}</p>
+<footer class="site-footer" id="Last">
+  <div class="footer-glow-wrap" aria-hidden="true">
+    <div class="footer-lightings">
+      <div class="glow-one">
+        <div class="glow-two">
+          <div class="glow-three">
+            <div class="glow-four">
+              <div class="glow-five"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-inner">
+    <nav class="footer-grid" aria-label="Footer">
+      {
+        columns.map((col) => (
+          <div class="footer-col">
+            <h3 class="footer-heading">{col.title}</h3>
+            <ul class="footer-list">
+              {col.links.map((link) => (
+                <li>
+                  {link.href ? (
+                    <a class="footer-link" href={link.href} {...(link.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+                      {link.label}
+                    </a>
+                  ) : (
+                    <span class="footer-text">{link.label}</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </nav>
+
+    <div class="footer-bar">
+      <p class="footer-copy">© {year} {SITE.name}, ❤️ Perú</p>
+
+      <div class="footer-social" aria-label="Social">
+        <a
+          class="social-btn"
+          href={LINKS.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHub"
+        >
+          <GithubIcon class="icon-github" aria-hidden="true" />
+        </a>
+        <span class="social-sep" aria-hidden="true"></span>
+        <a
+          class="social-btn"
+          href="https://x.com/jilatax"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="X"
+        >
+          <XIcon class="icon-x" aria-hidden="true" />
+        </a>
+        <span class="social-sep" aria-hidden="true"></span>
+        <span class="social-btn social-static" aria-label="Bluesky">
+          <SkyBlueIcon class="icon-sky" aria-hidden="true" />
+        </span>
+      </div>
+    </div>
+  </div>
 </footer>
+
+<style>
+  .site-footer {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    margin-top: auto;
+    padding: 6rem 1.5rem 2.5rem;
+    background: var(--color-bg);
+  }
+
+  .footer-glow-wrap {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .footer-lightings {
+    bottom: -60px;
+    position: absolute;
+    width: 100%;
+  }
+
+  .footer-lightings div {
+    border-radius: 50%;
+    height: 20px;
+    position: relative;
+    margin: auto;
+  }
+
+  .glow-one {
+    width: 100%;
+    animation: glow-one 5s ease-in-out infinite alternate;
+  }
+  @keyframes glow-one {
+    from { box-shadow: 0 0 250px 20px var(--color-green); }
+    to { box-shadow: 0 0 100px 15px var(--color-orange); }
+  }
+
+  .glow-two {
+    width: 90%;
+    animation: glow-two 4s ease-in-out infinite alternate;
+  }
+  @keyframes glow-two {
+    from { box-shadow: 0 0 250px 20px var(--color-orange); }
+    to { box-shadow: 0 0 100px 15px var(--color-green); }
+  }
+
+  .glow-three {
+    width: 80%;
+    animation: glow-three 3s ease-in-out infinite alternate;
+  }
+  @keyframes glow-three {
+    from { box-shadow: 0 0 250px 20px var(--color-coral); }
+    to { box-shadow: 0 0 100px 15px var(--color-orange); }
+  }
+
+  .glow-four {
+    width: 70%;
+    animation: glow-four 2s ease-in-out infinite alternate;
+  }
+  @keyframes glow-four {
+    from { box-shadow: 0 0 250px 20px var(--color-green); }
+    to { box-shadow: 0 0 100px 15px var(--color-coral); }
+  }
+
+  .glow-five {
+    width: 60%;
+    animation: glow-five 1s ease-in-out infinite alternate;
+  }
+  @keyframes glow-five {
+    from { box-shadow: 0 0 250px 20px var(--color-orange); }
+    to { box-shadow: 0 0 100px 15px var(--color-green); }
+  }
+
+  :global([data-theme='dark']) .footer-lightings {
+    opacity: 0.85;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .footer-lightings div {
+      animation: none !important;
+    }
+  }
+
+  .footer-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem 1.5rem;
+  }
+
+  @media (min-width: 720px) {
+    .footer-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 2rem 1.25rem;
+    }
+  }
+
+  .footer-heading {
+    margin: 0 0 1rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .footer-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .footer-link,
+  .footer-text {
+    font-size: 0.95rem;
+    line-height: 1.3;
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .footer-link {
+    transition: color 0.2s ease, opacity 0.2s ease;
+  }
+
+  .footer-link:hover {
+    color: var(--color-coral);
+  }
+
+  .footer-text {
+    opacity: 0.72;
+    cursor: default;
+  }
+
+  .footer-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-top: 3.5rem;
+  }
+
+  .footer-copy {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    cursor: default;
+  }
+
+  .footer-social {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+
+  .social-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text);
+    text-decoration: none;
+    opacity: 0.92;
+    transition: opacity 0.2s ease;
+  }
+
+  a.social-btn:hover {
+    opacity: 1;
+  }
+
+  .social-static {
+    cursor: default;
+  }
+
+  .social-btn :global(svg) {
+    display: block;
+  }
+
+  .social-btn :global(.icon-github) {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+  }
+
+  .social-btn :global(.icon-x) {
+    width: 16px;
+    height: 16px;
+  }
+
+  .social-btn :global(.icon-sky) {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+  }
+
+  .social-sep {
+    width: 1px;
+    height: 14px;
+    background: color-mix(in srgb, var(--color-text) 28%, transparent);
+    flex-shrink: 0;
+  }
+</style>

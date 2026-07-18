@@ -11,6 +11,10 @@
   --color-bg-elevated: #fdfaf1;
   --color-bg-subtle: #ede6d3;
 
+  /* notice banner */
+  --color-notice-bg: var(--color-bg-elevated); /* Light background for clear mode */
+  --color-notice-text: var(--color-text);
+
   /* borders */
   --color-border: #e0d6bf;
 
@@ -55,6 +59,10 @@
   --color-bg: #17140e;
   --color-bg-elevated: #211d15;
   --color-bg-subtle: #1d1a12;
+
+  /* notice banner */
+  --color-notice-bg: #0e0c09; /* Specific dark background requested */
+  --color-notice-text: var(--color-text);
 
   --color-border: #332d1f;
 
@@ -117,33 +125,6 @@ main {
 ::selection {
   background: var(--color-coral);
   color: #fff;
-}
-
-/* Footer — kept here (global, render-blocking) rather than scoped in
-   Footer.astro so the centered line is styled before first paint and never
-   flashes left-aligned on load. */
-.site-footer {
-  /* A faded ("degraded") top border: instead of a full-width solid rule, a
-     hairline that fades from transparent at the edges to the border colour
-     across the middle. border-image paints the 1px top border with the
-     gradient (the `1` slice makes it a simple line, no corner art). */
-  border-top: 1px solid;
-  border-image: linear-gradient(
-      to right,
-      transparent,
-      var(--color-border) 40%,
-      var(--color-border) 60%,
-      transparent
-    ) 1;
-  background: var(--color-nav-bg);
-}
-.footer-line {
-  margin: 0;
-  padding: 1.25rem 1.5rem;
-  text-align: center;
-  color: var(--color-text-muted);
-  font-size: 0.9rem;
-  cursor: default; /* keep the normal arrow on hover, not the text I-beam */
 }
 
 /* Theme-toggle icons (Header). Kept global because the visible icon is chosen by
