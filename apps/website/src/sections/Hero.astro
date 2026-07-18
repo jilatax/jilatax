@@ -63,13 +63,6 @@ import { LINKS } from '@/consts';
       </div>
     </div>
 
-    <div class="hero-visual" aria-hidden="true">
-      <span class="shape shape-coral" style="--depth: 30px"><i></i></span>
-      <span class="shape shape-green" style="--depth: 56px"><i></i></span>
-      <span class="shape shape-amber" style="--depth: 44px"><i></i></span>
-      <span class="shape shape-blue" style="--depth: 68px"><i></i></span>
-      <span class="shape shape-pink" style="--depth: 84px"><i></i></span>
-    </div>
   </div>
 </section>
 
@@ -79,13 +72,20 @@ import { LINKS } from '@/consts';
     overflow: hidden;
   }
   .hero-inner {
-    max-width: 1200px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 4.5rem 1.5rem 4rem;
-    display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
-    gap: 2rem;
+    display: flex;
+    flex-direction: column;
     align-items: center;
+    text-align: center;
+  }
+  .hero-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
   }
 
   /* ── Announcement Banner ── */
@@ -93,6 +93,7 @@ import { LINKS } from '@/consts';
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
     flex-wrap: wrap;
     gap: 0.5rem;
     width: 100%;
@@ -104,9 +105,7 @@ import { LINKS } from '@/consts';
     color: var(--color-text);
   }
   .banner-text {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
+    display: inline;
     opacity: 0.95;
   }
   .beta-badge {
@@ -146,7 +145,7 @@ import { LINKS } from '@/consts';
   }
 
   .sub {
-    margin: 1.4rem 0 0;
+    margin: 1.4rem auto 0;
     max-width: 34rem;
     color: var(--color-text-muted);
     font-size: 1.05rem;
@@ -221,6 +220,7 @@ import { LINKS } from '@/consts';
     margin-top: 1.6rem;
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 0.9rem;
   }
   .btn {
@@ -259,10 +259,12 @@ import { LINKS } from '@/consts';
     margin: 2.5rem 0 1.75rem;
     border: 0;
     border-top: 1.5px dashed var(--color-border);
+    width: 100%;
   }
   .stats {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 2.4rem;
   }
   .stat {
@@ -291,112 +293,11 @@ import { LINKS } from '@/consts';
     font-weight: 700;
   }
 
-  /* ── Floating shapes (bento garnish) ── */
-  .hero-visual {
-    position: relative;
-    height: 480px;
-  }
-  .shape {
-    position: absolute;
-    transform: translate3d(
-      calc(var(--px, 0) * var(--depth)),
-      calc(var(--py, 0) * var(--depth)),
-      0
-    );
-    will-change: transform;
-  }
-  .shape i {
-    display: block;
-    width: 100%;
-    height: 100%;
-    border-radius: 26%;
-    animation: float 7s ease-in-out infinite;
-  }
-  @keyframes float {
-    0%, 100% { transform: translateY(0) rotate(var(--rot, 0deg)); }
-    50% { transform: translateY(-16px) rotate(var(--rot, 0deg)); }
-  }
-
-  .shape-coral {
-    width: 128px;
-    height: 128px;
-    top: 3rem;
-    right: 1.5rem;
-    --rot: -9deg;
-  }
-  .shape-coral i {
-    background: linear-gradient(145deg, color-mix(in srgb, var(--color-coral) 80%, #fff), var(--color-coral));
-    box-shadow: 0 0 90px 4px color-mix(in srgb, var(--color-coral) 55%, transparent);
-  }
-  .shape-green {
-    width: 62px;
-    height: 62px;
-    top: 0.5rem;
-    left: 5.5rem;
-    --rot: 13deg;
-  }
-  .shape-green i {
-    animation-duration: 6.2s;
-    animation-delay: -2s;
-    background: linear-gradient(145deg, color-mix(in srgb, var(--color-green) 80%, #fff), var(--color-green));
-    box-shadow: 0 0 60px 2px color-mix(in srgb, var(--color-green) 50%, transparent);
-  }
-  .shape-amber {
-    width: 84px;
-    height: 84px;
-    bottom: 7.5rem;
-    left: 1.5rem;
-    --rot: 7deg;
-  }
-  .shape-amber i {
-    animation-duration: 7.8s;
-    animation-delay: -4s;
-    background: linear-gradient(145deg, color-mix(in srgb, var(--color-amber) 80%, #fff), var(--color-amber));
-    box-shadow: 0 0 70px 3px color-mix(in srgb, var(--color-amber) 50%, transparent);
-  }
-  .shape-blue {
-    width: 46px;
-    height: 46px;
-    bottom: 3.5rem;
-    right: 6rem;
-  }
-  .shape-blue i {
-    border-radius: 50%;
-    animation-duration: 5.6s;
-    animation-delay: -1s;
-    background: linear-gradient(145deg, color-mix(in srgb, var(--color-blue) 80%, #fff), var(--color-blue));
-    box-shadow: 0 0 55px 4px color-mix(in srgb, var(--color-blue) 55%, transparent);
-  }
-  .shape-pink {
-    width: 26px;
-    height: 26px;
-    top: 9rem;
-    right: 11rem;
-    --rot: 20deg;
-  }
-  .shape-pink i {
-    animation-duration: 5s;
-    animation-delay: -3s;
-    background: linear-gradient(145deg, color-mix(in srgb, var(--color-pink) 80%, #fff), var(--color-pink));
-    box-shadow: 0 0 40px 3px color-mix(in srgb, var(--color-pink) 55%, transparent);
-  }
-
   /* ── Responsive ── */
   @media (max-width: 900px) {
     .hero-inner {
-      grid-template-columns: 1fr;
       padding-top: 3rem;
     }
-    .hero-visual {
-      height: 300px;
-      order: -1;
-      margin-bottom: -1rem;
-    }
-    .shape-coral { width: 96px; height: 96px; top: 2.5rem; right: 8%; }
-    .shape-green { width: 48px; height: 48px; top: 0.5rem; left: 22%; }
-    .shape-amber { width: 64px; height: 64px; bottom: 3rem; left: 8%; }
-    .shape-blue { width: 36px; height: 36px; bottom: 1.5rem; right: 30%; }
-    .shape-pink { display: none; }
   }
   @media (max-width: 520px) {
     .stats {
@@ -408,7 +309,6 @@ import { LINKS } from '@/consts';
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .shape i,
     .badge-dot {
       animation: none;
     }
