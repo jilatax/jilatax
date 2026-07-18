@@ -1,11 +1,9 @@
 ---
-import { ArrowRight, Check, Copy } from '@lucide/astro';
-import GithubIcon from '@/assets/icons/social/github.svg';
+import { Check, Copy } from '@lucide/astro';
 import NpmIcon from '@/assets/icons/package-managers/npm.svg';
 import YarnIcon from '@/assets/icons/package-managers/yarn.svg';
 import PnpmIcon from '@/assets/icons/package-managers/pnpm.svg';
 import BunIcon from '@/assets/icons/package-managers/bun.svg';
-import { LINKS } from '@/consts';
 ---
 
 <section class="hero">
@@ -56,14 +54,7 @@ import { LINKS } from '@/consts';
         </div>
       </div>
 
-      <div class="cta">
-        <a class="btn btn-primary" href="#box">
-          Explore the box <ArrowRight size={16} aria-hidden="true" />
-        </a>
-        <a class="btn btn-ghost" href={LINKS.github} target="_blank" rel="noopener noreferrer">
-          <GithubIcon width={16} height={16} aria-hidden="true" /> GitHub
-        </a>
-      </div>
+
 
       <hr class="divider" />
 
@@ -297,44 +288,7 @@ import { LINKS } from '@/consts';
     display: block;
   }
 
-  /* ── CTAs ── */
-  .cta {
-    margin-top: 1.6rem;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.9rem;
-  }
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.85rem 1.6rem;
-    border-radius: 13px;
-    font-weight: 800;
-    font-size: 0.97rem;
-    text-decoration: none;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease,
-      border-color 0.25s ease, color 0.25s ease;
-  }
-  .btn-primary {
-    background: var(--color-coral);
-    color: #fff;
-    box-shadow: 0 14px 32px -12px var(--color-coral);
-  }
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 20px 40px -12px var(--color-coral);
-  }
-  .btn-ghost {
-    border: 1px solid var(--color-border);
-    color: var(--color-text);
-    background: var(--color-bg-elevated);
-  }
-  .btn-ghost:hover {
-    transform: translateY(-2px);
-    border-color: var(--color-text-muted);
-  }
+
 
   /* ── Stats ── */
   .divider {
