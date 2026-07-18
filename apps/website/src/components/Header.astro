@@ -64,7 +64,9 @@ const currentPath = stripTrailingSlash(Astro.url.pathname);
     display: inline-flex;
     align-items: center;
     gap: 0.6rem;
-    font-weight: 700;
+    font-weight: 800;
+    font-size: 1.25rem;
+    letter-spacing: -0.01em;
     color: var(--color-nav-text);
     text-decoration: none;
   }
@@ -75,8 +77,8 @@ const currentPath = stripTrailingSlash(Astro.url.pathname);
      brand's currentColor — so the logo follows the in-app theme toggle. This
      only *references* the file; the scaffold never modifies or replaces it. */
   .brand-logo {
-    width: 26px;
-    height: 26px;
+    width: 32px;
+    height: 32px;
     flex-shrink: 0;
     background-color: currentColor;
     -webkit-mask: url(/favicon.svg) center / contain no-repeat;
