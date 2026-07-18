@@ -85,6 +85,7 @@
 
 * {
   transition: var(--transition-theme);
+    scrollbar-color: var(--color-text-muted) transparent;
 }
 
 /* Always reserve space for the vertical scrollbar so navigating between a page
