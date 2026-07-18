@@ -74,7 +74,7 @@ async function testGeneratedProject(root) {
   });
   assert.equal(packageJson.dependencies?.jilatax, '^0.0.6');
   assert.equal(typeof packageJson.dependencies?.['@lynx-js/react'], 'string');
-  assert.equal(packageJson.devDependencies?.['@jilatax/cli'], '^0.0.8');
+  assert.equal(packageJson.devDependencies?.['@jilatax/cli'], '^0.0.9');
   assert.equal(
     packageJson.devDependencies?.['@lynx-js/qrcode-rsbuild-plugin'],
     '^0.4.4',
