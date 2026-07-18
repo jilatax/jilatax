@@ -93,8 +93,17 @@ async function testGeneratedProject(root) {
   assert.equal(appJson.jilatax.name, 'Sample Android App');
   assert.equal(appJson.jilatax.slug, 'sample-app');
   assert.equal(appJson.jilatax.version, '1.0.0');
+  assert.equal(appJson.jilatax.icon, './assets/icon.png');
+  assert.equal(appJson.jilatax.splash.image, './assets/splash-icon.png');
+  assert.equal(appJson.jilatax.splash.imageWidth, 96);
+  assert.equal(appJson.jilatax.splash.resizeMode, 'contain');
+  assert.equal(appJson.jilatax.splash.backgroundColor, '#041A17');
   assert.equal(appJson.jilatax.android.package, 'dev.jilatax.sample');
   assert.equal(appJson.jilatax.android.versionCode, 1);
+  assert.deepEqual(appJson.jilatax.android.adaptiveIcon, {
+    backgroundColor: '#E8FFF2',
+    foregroundImage: './assets/splash-icon.png',
+  });
 
   const androidProperties = await readFile(
     path.join(projectDirectory, 'android', 'jilatax.properties'),
@@ -116,6 +125,7 @@ async function testGeneratedProject(root) {
     'utf8',
   );
   assert.match(appGradle, /\.jilatax\/android-assets/u);
+  assert.match(appGradle, /\.jilatax\/android-res/u);
   assert.match(appGradle, /implementation\(project\(":jilatax"\)\)/u);
   assert.doesNotMatch(appGradle, /sparkling/iu);
 
@@ -143,6 +153,18 @@ async function testGeneratedProject(root) {
 
   const projectFiles = await listFiles(projectDirectory);
   assert(projectFiles.includes('.gitignore'));
+  assert(projectFiles.includes('assets/icon.png'));
+  assert(projectFiles.includes('assets/splash-icon.png'));
+  assert(
+    projectFiles.includes(
+      '.jilatax/android-res/drawable/jilatax_splash_icon.xml',
+    ),
+  );
+  assert(
+    projectFiles.includes(
+      '.jilatax/android-res/mipmap-anydpi-v26/jilatax_launcher.xml',
+    ),
+  );
   assert(!projectFiles.includes('gitignore'));
   assert(!projectFiles.some((file) => file.startsWith('node_modules/')));
   assert(!projectFiles.some((file) => file.startsWith('.git/')));

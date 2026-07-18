@@ -16,7 +16,7 @@ import { fileURLToPath } from 'node:url';
 
 import {
   parseAppConfig,
-  serializeAndroidProjectConfig,
+  syncAndroidProjectConfig,
   type NormalizedJilataxConfig,
 } from 'jilatax';
 
@@ -271,11 +271,7 @@ async function writeGeneratedMetadata(
     `${JSON.stringify(config, null, 2)}\n`,
     'utf8',
   );
-  await writeFile(
-    path.join(projectRoot, 'android', 'jilatax.properties'),
-    serializeAndroidProjectConfig(config),
-    'utf8',
-  );
+  await syncAndroidProjectConfig(projectRoot, config);
   if (process.platform !== 'win32') {
     await chmod(path.join(projectRoot, 'android', 'gradlew'), 0o755);
   }
@@ -296,15 +292,25 @@ function createInitialConfig(
     $schema: './node_modules/jilatax/schema/app.schema.json',
     jilatax: {
       android: {
+        adaptiveIcon: {
+          backgroundColor: '#E8FFF2',
+          foregroundImage: './assets/splash-icon.png',
+        },
         package: packageId,
         predictiveBackGestureEnabled: false,
         versionCode: 1,
       },
+      icon: './assets/icon.png',
       name: displayName,
       orientation: 'portrait',
       scheme: schemeBase || 'jilatax-app',
       slug,
-      splash: { backgroundColor: '#0F172A' },
+      splash: {
+        backgroundColor: '#041A17',
+        image: './assets/splash-icon.png',
+        imageWidth: 96,
+        resizeMode: 'contain',
+      },
       userInterfaceStyle: 'automatic',
       version: '1.0.0',
     },
