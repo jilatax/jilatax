@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
-import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { createRequire } from 'node:module';
@@ -82,6 +82,17 @@ assert.throws(
 
 const temporaryProject = await mkdtemp(path.join(tmpdir(), 'jilatax-config-'));
 try {
+  const assetsDirectory = path.join(temporaryProject, 'assets');
+  await mkdir(assetsDirectory);
+  const png = Buffer.from(
+    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M/wHwAF/gL+XwQYVQAAAABJRU5ErkJggg==',
+    'base64',
+  );
+  await Promise.all([
+    writeFile(path.join(assetsDirectory, 'icon.png'), png),
+    writeFile(path.join(assetsDirectory, 'splash.png'), png),
+    writeFile(path.join(assetsDirectory, 'android-foreground.png'), png),
+  ]);
   await writeFile(
     path.join(temporaryProject, 'app.json'),
     JSON.stringify(rawConfig),
@@ -97,6 +108,42 @@ try {
   assert.equal(
     await readFile(synced.propertiesPath, 'utf8'),
     serializeAndroidProjectConfig(loaded.config),
+  );
+  assert.equal(
+    path.relative(temporaryProject, synced.resourcesPath),
+    path.join('.jilatax', 'android-res'),
+  );
+  assert.deepEqual(
+    await readFile(
+      path.join(
+        synced.resourcesPath,
+        'drawable-nodpi',
+        'jilatax_icon_image.png',
+      ),
+    ),
+    png,
+  );
+  assert.match(
+    await readFile(
+      path.join(
+        synced.resourcesPath,
+        'drawable',
+        'jilatax_splash_icon.xml',
+      ),
+      'utf8',
+    ),
+    /android:width="76dp"/u,
+  );
+  assert.match(
+    await readFile(
+      path.join(
+        synced.resourcesPath,
+        'mipmap-anydpi-v26',
+        'jilatax_launcher.xml',
+      ),
+      'utf8',
+    ),
+    /@drawable\/jilatax_adaptive_foreground/u,
   );
 } finally {
   await rm(temporaryProject, { recursive: true, force: true });
@@ -131,6 +178,18 @@ assert.throws(
     }),
   JilataxConfigError,
 );
+
+const missingAssetProject = await mkdtemp(
+  path.join(tmpdir(), 'jilatax-missing-asset-'),
+);
+try {
+  await assert.rejects(
+    syncAndroidProjectConfig(missingAssetProject, parsed),
+    /Android image asset does not exist: \.\/assets\/icon\.png/u,
+  );
+} finally {
+  await rm(missingAssetProject, { recursive: true, force: true });
+}
 
 const androidProjectPath = resolveAndroidProjectPath();
 const androidBuildFile = await readFile(

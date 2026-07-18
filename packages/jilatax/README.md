@@ -61,8 +61,10 @@ The default configuration file is `app.json` in the generated project root:
 `parseAppConfig` and `loadAppConfig` validate and normalize this file. `defineConfig` is also
 exported for typed programmatic configuration, although `app.json` is the default public format.
 Before Gradle runs, `syncAndroidProjectConfig` writes the normalized Android metadata to
-`android/jilatax.properties`; generated native projects consume that file instead of parsing
-application configuration independently.
+`android/jilatax.properties` and prepares launcher and splash resources under
+`.jilatax/android-res`; generated native projects consume those outputs instead of parsing
+application configuration independently. PNG, JPEG, and WebP project-relative image paths are
+supported. Generated resources are disposable and should remain ignored by version control.
 
 ## Android host
 

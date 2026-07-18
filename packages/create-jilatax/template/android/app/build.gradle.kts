@@ -60,12 +60,12 @@ android {
         manifestPlaceholders["jilataxPredictiveBack"] = predictiveBack.toString()
         manifestPlaceholders["jilataxScheme"] = appScheme
         resValue("string", "jilatax_app_name", appName)
-        resValue("color", "jilatax_icon_background", splashBackground)
         resValue("color", "jilatax_splash_background", splashBackground)
     }
 
     sourceSets {
         getByName("main").assets.srcDir(file("../../.jilatax/android-assets"))
+        getByName("main").res.srcDir(file("../../.jilatax/android-res"))
     }
 
     signingConfigs {
