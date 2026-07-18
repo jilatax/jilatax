@@ -1,0 +1,397 @@
+---
+import { ArrowRight, Check, Copy } from '@lucide/astro';
+import GithubIcon from '@/assets/icons/social/github.svg';
+import { LINKS } from '@/consts';
+---
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <p class="badge"><span class="badge-dot" aria-hidden="true"></span> MIT License · TypeScript · Node ≥ 22.18</p>
+
+      <h1 class="title">
+        One command.<br />
+        Zero config.<br />
+        <span class="gradient-text">Ship Android apps.</span>
+      </h1>
+
+      <p class="sub">
+        Jilatax is the Android-first application framework for <strong>Lynx</strong> and <strong>Rspeedy</strong>. Scaffold a production-ready project in seconds — the CLI wires up the rest.
+      </p>
+
+      <div class="cmd" role="group" aria-label="Install command">
+        <span class="cmd-dollar" aria-hidden="true">$</span>
+        <code class="cmd-text">{LINKS.command}</code>
+        <button class="cmd-copy" type="button" data-copy={LINKS.command} aria-label="Copy install command">
+          <Copy class="icon-copy" size={16} aria-hidden="true" />
+          <Check class="icon-check" size={16} aria-hidden="true" />
+        </button>
+      </div>
+
+      <div class="cta">
+        <a class="btn btn-primary" href="#box">
+          Explore the box <ArrowRight size={16} aria-hidden="true" />
+        </a>
+        <a class="btn btn-ghost" href={LINKS.github} target="_blank" rel="noopener noreferrer">
+          <GithubIcon width={16} height={16} aria-hidden="true" /> GitHub
+        </a>
+      </div>
+
+      <hr class="divider" />
+
+      <div class="stats">
+        <div class="stat" style="--depth: 5px">
+          <span class="num coral">3</span>
+          <span class="label">npm packages</span>
+        </div>
+        <div class="stat" style="--depth: 9px">
+          <span class="num amber">1</span>
+          <span class="label">command to start</span>
+        </div>
+        <div class="stat" style="--depth: 7px">
+          <span class="num green">0</span>
+          <span class="label">runtime deps</span>
+        </div>
+        <div class="stat" style="--depth: 11px">
+          <span class="num blue">MIT</span>
+          <span class="label">open source</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual" aria-hidden="true">
+      <span class="shape shape-coral" style="--depth: 30px"><i></i></span>
+      <span class="shape shape-green" style="--depth: 56px"><i></i></span>
+      <span class="shape shape-amber" style="--depth: 44px"><i></i></span>
+      <span class="shape shape-blue" style="--depth: 68px"><i></i></span>
+      <span class="shape shape-pink" style="--depth: 84px"><i></i></span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4.5rem 1.5rem 4rem;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  /* ── Copy column ── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin: 0 0 1.75rem;
+    padding: 0.45rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: var(--color-bg-elevated);
+    color: var(--color-text-muted);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .badge-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-coral);
+    box-shadow: 0 0 10px var(--color-coral);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.45; }
+  }
+
+  .title {
+    margin: 0;
+    font-size: clamp(2.7rem, 6vw, 4.4rem);
+    font-weight: 1000;
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+  }
+  .gradient-text {
+    background: var(--gradient-hero);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .sub {
+    margin: 1.4rem 0 0;
+    max-width: 34rem;
+    color: var(--color-text-muted);
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.65;
+  }
+  .sub strong {
+    color: var(--color-text);
+  }
+
+  /* ── Command chip (the product) ── */
+  .cmd {
+    margin-top: 2.1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    max-width: 100%;
+    padding: 0.9rem 0.65rem 0.9rem 1.25rem;
+    border-radius: 14px;
+    border: 1px solid #3a3324;
+    background: #16130d;
+    box-shadow:
+      0 18px 45px -18px rgba(0, 0, 0, 0.55),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    font-family: ui-monospace, 'Cascadia Code', 'JetBrains Mono', 'Fira Code', Menlo, Consolas, monospace;
+    font-size: 0.98rem;
+  }
+  .cmd-dollar {
+    color: var(--color-coral);
+    font-weight: 700;
+    user-select: none;
+  }
+  .cmd-text {
+    color: #f5f1e4;
+    white-space: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .cmd-text::-webkit-scrollbar {
+    display: none;
+  }
+  .cmd-copy {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border: 1px solid #3a3324;
+    border-radius: 9px;
+    background: transparent;
+    color: #a29a85;
+    cursor: pointer;
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  }
+  .cmd-copy:hover {
+    color: #f5f1e4;
+    border-color: #57503c;
+  }
+  .cmd-copy .icon-check {
+    display: none;
+    color: var(--color-green);
+  }
+  .cmd-copy.copied .icon-copy {
+    display: none;
+  }
+  .cmd-copy.copied .icon-check {
+    display: block;
+  }
+
+  /* ── CTAs ── */
+  .cta {
+    margin-top: 1.6rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1.6rem;
+    border-radius: 13px;
+    font-weight: 800;
+    font-size: 0.97rem;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease,
+      border-color 0.25s ease, color 0.25s ease;
+  }
+  .btn-primary {
+    background: var(--color-coral);
+    color: #fff;
+    box-shadow: 0 14px 32px -12px var(--color-coral);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 40px -12px var(--color-coral);
+  }
+  .btn-ghost {
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    background: var(--color-bg-elevated);
+  }
+  .btn-ghost:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-text-muted);
+  }
+
+  /* ── Stats ── */
+  .divider {
+    margin: 2.5rem 0 1.75rem;
+    border: 0;
+    border-top: 1.5px dashed var(--color-border);
+  }
+  .stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.4rem;
+  }
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    transform: translate3d(
+      calc(var(--px, 0) * var(--depth)),
+      calc(var(--py, 0) * var(--depth)),
+      0
+    );
+  }
+  .num {
+    font-size: 1.9rem;
+    font-weight: 1000;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .coral { color: var(--color-coral); }
+  .amber { color: var(--color-amber); }
+  .green { color: var(--color-green); }
+  .blue { color: var(--color-blue); }
+  .label {
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  /* ── Floating shapes (bento garnish) ── */
+  .hero-visual {
+    position: relative;
+    height: 480px;
+  }
+  .shape {
+    position: absolute;
+    transform: translate3d(
+      calc(var(--px, 0) * var(--depth)),
+      calc(var(--py, 0) * var(--depth)),
+      0
+    );
+    will-change: transform;
+  }
+  .shape i {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 26%;
+    animation: float 7s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(var(--rot, 0deg)); }
+    50% { transform: translateY(-16px) rotate(var(--rot, 0deg)); }
+  }
+
+  .shape-coral {
+    width: 128px;
+    height: 128px;
+    top: 3rem;
+    right: 1.5rem;
+    --rot: -9deg;
+  }
+  .shape-coral i {
+    background: linear-gradient(145deg, color-mix(in srgb, var(--color-coral) 80%, #fff), var(--color-coral));
+    box-shadow: 0 0 90px 4px color-mix(in srgb, var(--color-coral) 55%, transparent);
+  }
+  .shape-green {
+    width: 62px;
+    height: 62px;
+    top: 0.5rem;
+    left: 5.5rem;
+    --rot: 13deg;
+  }
+  .shape-green i {
+    animation-duration: 6.2s;
+    animation-delay: -2s;
+    background: linear-gradient(145deg, color-mix(in srgb, var(--color-green) 80%, #fff), var(--color-green));
+    box-shadow: 0 0 60px 2px color-mix(in srgb, var(--color-green) 50%, transparent);
+  }
+  .shape-amber {
+    width: 84px;
+    height: 84px;
+    bottom: 7.5rem;
+    left: 1.5rem;
+    --rot: 7deg;
+  }
+  .shape-amber i {
+    animation-duration: 7.8s;
+    animation-delay: -4s;
+    background: linear-gradient(145deg, color-mix(in srgb, var(--color-amber) 80%, #fff), var(--color-amber));
+    box-shadow: 0 0 70px 3px color-mix(in srgb, var(--color-amber) 50%, transparent);
+  }
+  .shape-blue {
+    width: 46px;
+    height: 46px;
+    bottom: 3.5rem;
+    right: 6rem;
+  }
+  .shape-blue i {
+    border-radius: 50%;
+    animation-duration: 5.6s;
+    animation-delay: -1s;
+    background: linear-gradient(145deg, color-mix(in srgb, var(--color-blue) 80%, #fff), var(--color-blue));
+    box-shadow: 0 0 55px 4px color-mix(in srgb, var(--color-blue) 55%, transparent);
+  }
+  .shape-pink {
+    width: 26px;
+    height: 26px;
+    top: 9rem;
+    right: 11rem;
+    --rot: 20deg;
+  }
+  .shape-pink i {
+    animation-duration: 5s;
+    animation-delay: -3s;
+    background: linear-gradient(145deg, color-mix(in srgb, var(--color-pink) 80%, #fff), var(--color-pink));
+    box-shadow: 0 0 40px 3px color-mix(in srgb, var(--color-pink) 55%, transparent);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .hero-inner {
+      grid-template-columns: 1fr;
+      padding-top: 3rem;
+    }
+    .hero-visual {
+      height: 300px;
+      order: -1;
+      margin-bottom: -1rem;
+    }
+    .shape-coral { width: 96px; height: 96px; top: 2.5rem; right: 8%; }
+    .shape-green { width: 48px; height: 48px; top: 0.5rem; left: 22%; }
+    .shape-amber { width: 64px; height: 64px; bottom: 3rem; left: 8%; }
+    .shape-blue { width: 36px; height: 36px; bottom: 1.5rem; right: 30%; }
+    .shape-pink { display: none; }
+  }
+  @media (max-width: 520px) {
+    .stats {
+      gap: 1.5rem;
+    }
+    .cmd {
+      font-size: 0.85rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .shape i,
+    .badge-dot {
+      animation: none;
+    }
+  }
+</style>

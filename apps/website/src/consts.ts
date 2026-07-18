@@ -3,9 +3,10 @@ import type { Route, SiteConfig } from '@/types';
 // Single source of truth for the site's name. Rename the project here once and
 // the browser tab, the header brand, and the footer all follow.
 export const SITE: SiteConfig = {
-  name: 'website',
-  description: 'A simple, scalable Astro base — ready to grow from a portfolio to a full app.',
-  url: 'https://example.com',
+  name: 'jilatax',
+  description:
+    'Jilatax — Android-first application framework for Lynx and Rspeedy. Scaffold, build and ship Android apps with one command: npm create jilatax@latest.',
+  url: 'https://jilatax.dev',
 };
 
 // The "connected routes" registry. Header builds its nav from this, and 404.astro
@@ -15,6 +16,13 @@ export const SITE: SiteConfig = {
 // not hand-listed here. See ARCHITECTURE.md → "Routing convention".
 export const ROUTES: Route[] = [
   { href: '/', label: 'Home' },
-  { href: '/work', label: 'Work' },
-  { href: '/contact', label: 'Contact' },
+  { href: '/#box', label: 'Box' },
+  { href: '/#packages', label: 'Packages' },
 ];
+
+/** External links used across the landing page. */
+export const LINKS = {
+  npm: 'https://www.npmjs.com/package/create-jilatax',
+  github: 'https://github.com/jilatax/jilatax',
+  command: 'npm create jilatax@latest',
+} as const;
