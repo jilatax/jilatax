@@ -120,22 +120,15 @@ import { LINKS } from '@/consts';
     letter-spacing: 0.05em;
   }
   .announcement-banner .banner-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.35rem 0.85rem;
-    margin-left: 0.4rem;
-    background: var(--color-coral);
-    color: #fff;
-    border-radius: 999px;
-    font-size: 0.85rem;
-    font-weight: 800;
-    text-decoration: none;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    color: var(--color-coral);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    margin-left: 0.3rem;
+    font-weight: 600;
+    transition: color 0.2s ease;
   }
   .announcement-banner .banner-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px -4px var(--color-coral);
+    color: var(--color-orange);
   }
 
   .title {
