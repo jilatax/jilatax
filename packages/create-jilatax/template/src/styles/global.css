@@ -41,17 +41,11 @@
 .brand__icon-wrap {
   align-items: center;
   background-color: #e3eee9;
-  border-radius: 18px;
+  border-radius: 15px;
   display: flex;
-  height: 58px;
+  height: 48px;
   justify-content: center;
   overflow: hidden;
-  width: 58px;
-}
-
-.brand__icon-wrap--compact {
-  border-radius: 15px;
-  height: 48px;
   width: 48px;
 }
 

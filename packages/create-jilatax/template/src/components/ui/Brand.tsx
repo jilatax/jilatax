@@ -7,7 +7,7 @@ interface BrandProps {
 export function Brand({ compact = false }: BrandProps) {
   return (
     <view className={`brand${compact ? ' brand--compact' : ''}`}>
-      <view className={`brand__icon-wrap${compact ? ' brand__icon-wrap--compact' : ''}`}>
+      <view className="brand__icon-wrap">
         <image className="brand__icon" mode="aspectFit" src={jilataxIcon} />
       </view>
       <view className="brand__copy">
