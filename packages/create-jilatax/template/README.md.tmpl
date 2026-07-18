@@ -5,17 +5,18 @@ Android-first Lynx application created with Jilatax.
 ## Development
 
 ```bash
-bun install
-bun run run:android
+bun i
+bun run dev
 ```
 
 The Android command starts Rspeedy, builds and installs the debug APK, verifies
-the ADB reverse tunnel, and launches the app once.
+the ADB reverse tunnel, and launches the app once. The generated APK is located
+at `android/app/build/outputs/apk/debug/app-debug.apk`.
 
-To run only the Lynx development server:
+To run only the Lynx development APK (Real Mobile):
 
 ```bash
-bun run dev
+bun run run:android
 ```
 
 When the build is ready, scan the printed QR code with the Lynx application on

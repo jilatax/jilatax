@@ -33,7 +33,8 @@ Generated projects include:
 - a Lynx and Rspeedy application;
 - `app.json` as the Jilatax application configuration;
 - an Android Gradle project linked to `jilatax/android`;
-- `bun run run:android` for development on a connected device;
+- `bun run run:android` for development on a connected device; the generated
+  APK is located at `android/app/build/outputs/apk/debug/app-debug.apk`;
 - `bun run create:aab` for a Play Store Android App Bundle.
 
 The creator only writes the project and can run `bun install`. Device, Gradle,
