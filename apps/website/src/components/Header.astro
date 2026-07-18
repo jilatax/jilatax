@@ -36,10 +36,13 @@ const currentPath = stripTrailingSlash(Astro.url.pathname);
       ))}
     </ul>
 
-    <button id="theme-toggle" type="button" aria-label="Toggle light and dark theme">
-      <Sun id="icon-sun" aria-hidden="true" />
-      <Moon id="icon-moon" aria-hidden="true" />
-    </button>
+    <div class="nav-right">
+      <!-- code here -->
+      <button id="theme-toggle" type="button" aria-label="Toggle light and dark theme">
+        <Sun id="icon-sun" aria-hidden="true" />
+        <Moon id="icon-moon" aria-hidden="true" />
+      </button>
+    </div>
   </nav>
 </header>
 
