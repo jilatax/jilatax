@@ -5,9 +5,13 @@ import { LINKS } from '@/consts';
 ---
 
 <section class="hero">
+  <div class="announcement-banner">
+    🎉 Jilatax v0.0.1 has launched!
+    <a href="https://docs.jilatax.dev" target="_blank" rel="noopener noreferrer">Learn more</a>
+  </div>
+
   <div class="hero-inner">
     <div class="hero-copy">
-      <p class="badge"><span class="badge-dot" aria-hidden="true"></span> MIT License · TypeScript · Node ≥ 22.18</p>
 
       <h1 class="title">
         One command.<br />
@@ -84,32 +88,29 @@ import { LINKS } from '@/consts';
     align-items: center;
   }
 
-  /* ── Copy column ── */
-  .badge {
-    display: inline-flex;
+  /* ── Announcement Banner ── */
+  .announcement-banner {
+    display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 0.55rem;
-    margin: 0 0 1.75rem;
-    padding: 0.45rem 1rem;
-    border: 1px solid var(--color-border);
-    border-radius: 999px;
-    background: var(--color-bg-elevated);
-    color: var(--color-text-muted);
-    font-size: 0.82rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
+    gap: 0.25rem;
+    width: 100%;
+    padding: 0.9rem 1.5rem;
+    background: #0a0907; /* Darker bg that takes up the full height of the banner */
+    border-bottom: 1px solid color-mix(in srgb, var(--color-coral) 25%, transparent);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #f5f1e4;
   }
-  .badge-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--color-coral);
-    box-shadow: 0 0 10px var(--color-coral);
-    animation: pulse 2.4s ease-in-out infinite;
+  .announcement-banner a {
+    color: var(--color-coral);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    margin-left: 0.3rem;
+    transition: color 0.2s ease;
   }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.45; }
+  .announcement-banner a:hover {
+    color: var(--color-orange);
   }
 
   .title {
