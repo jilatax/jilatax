@@ -1,8 +1,47 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import GXB from '@/components/GXB.astro';
+import Hero from '@/sections/Hero.astro';
+import Bento from '@/sections/Bento.astro';
 ---
 
-<Layout title="Home">
-  <GXB text="Welcome — the starting point of your new Astro project." />
+<Layout>
+  <Hero />
+  <Bento />
 </Layout>
+
+<script is:inline>
+  // Landing-page interactions. Guarded so View Transitions never double-bind:
+  // the listeners and the rAF loop live for the whole session, only the DOM
+  // they read is swapped.
+  (function () {
+    if (window.__jlx) return;
+    window.__jlx = true;
+
+
+    // ── Card spotlight ──
+    addEventListener(
+      'mousemove',
+      (e) => {
+        const card = e.target && e.target.closest ? e.target.closest('[data-spotlight]') : null;
+        if (!card) return;
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty('--mx', `${e.clientX - rect.left}px`);
+        card.style.setProperty('--my', `${e.clientY - rect.top}px`);
+      },
+      { passive: true },
+    );
+
+    // ── Copy install command ──
+    addEventListener('click', async (e) => {
+      const btn = e.target && e.target.closest ? e.target.closest('[data-copy]') : null;
+      if (!btn) return;
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy);
+        btn.classList.add('copied');
+        setTimeout(() => btn.classList.remove('copied'), 1600);
+      } catch {
+        // Clipboard unavailable (non-secure context) — leave the icon as-is.
+      }
+    });
+  })();
+</script>

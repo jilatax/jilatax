@@ -1,31 +1,47 @@
+@font-face {
+  font-family: 'Nunito';
+  src: url('/fonts/nunito-latin.woff2') format('woff2');
+  font-weight: 400 1000;
+  font-display: swap;
+}
+
 :root {
-  /* backgrounds */
-  --color-bg: #fafaf8;
-  --color-bg-elevated: #ffffff;
-  --color-bg-subtle: #f4f3ef;
+  /* backgrounds — warm cream (light theme of the bento palette) */
+  --color-bg: #f5efe1;
+  --color-bg-elevated: #fdfaf1;
+  --color-bg-subtle: #ede6d3;
 
   /* borders */
-  --color-border: #e7e5df;
+  --color-border: #e0d6bf;
 
   /* text */
-  --color-text: #161616;
-  --color-text-muted: #6b6b6b;
+  --color-text: #2b2517;
+  --color-text-muted: #71684f;
 
   /* premium accent */
-  --color-accent: #2d2d2d;
-  --color-accent-hover: #111111;
-  --color-on-accent: #ffffff;
+  --color-accent: #2b2517;
+  --color-accent-hover: #000000;
+  --color-on-accent: #fdfaf1;
+
+  /* bento accents - updated to green/turquoise brand */
+  --color-coral: #059669; /* emerald */
+  --color-orange: #0d9488; /* turquoise/teal */
+  --color-amber: #0284c7; /* ocean blue */
+  --color-green: #10b981; /* bright green */
+  --color-blue: #0ea5e9; /* sky blue */
+  --color-pink: #3b82f6; /* royal blue */
+  --gradient-hero: linear-gradient(92deg, var(--color-coral) 0%, var(--color-orange) 45%, var(--color-amber) 100%);
 
   /* navigation */
-  --color-nav-bg: rgba(250, 250, 248, 0.8);
-  --color-nav-text: #4a4a4a;
-  --color-nav-text-active: #111111;
+  --color-nav-bg: rgba(245, 239, 225, 0.82);
+  --color-nav-text: #6d6449;
+  --color-nav-text-active: #2b2517;
 
   /* effects */
-  --color-shadow: rgba(0, 0, 0, 0.04);
-  --color-focus-ring: rgba(0, 0, 0, 0.12);
+  --color-shadow: rgba(80, 60, 20, 0.08);
+  --color-focus-ring: rgba(43, 37, 23, 0.25);
 
-  --color-link: #222222;
+  --color-link: #2b2517;
   --color-link-hover: #000000;
 
   --transition-theme:
@@ -34,39 +50,49 @@
     border-color 0.25s ease;
 }
 
-[data-theme="dark"] {
-  --color-bg: #111111;
-  --color-bg-elevated: #171717;
-  --color-bg-subtle: #1f1f1f;
+[data-theme='dark'] {
+  /* warm near-black (dark theme of the bento palette) */
+  --color-bg: #17140e;
+  --color-bg-elevated: #211d15;
+  --color-bg-subtle: #1d1a12;
 
-  --color-border: #2a2a2a;
+  --color-border: #332d1f;
 
-  --color-text: #f5f5f5;
-  --color-text-muted: #9b9b9b;
+  --color-text: #f5f1e4;
+  --color-text-muted: #a29a85;
 
-  --color-accent: #f5f5f5;
+  --color-accent: #f5f1e4;
   --color-accent-hover: #ffffff;
-  --color-on-accent: #111111;
+  --color-on-accent: #17140e;
 
-  --color-nav-bg: rgba(17, 17, 17, 0.8);
-  --color-nav-text: #b0b0b0;
-  --color-nav-text-active: #ffffff;
+  --color-coral: #10b981; /* bright emerald for dark mode */
+  --color-orange: #14b8a6; /* bright turquoise */
+  --color-amber: #06b6d4; /* bright cyan */
+  --color-green: #34d399; /* light green */
+  --color-blue: #38bdf8; /* light blue */
+  --color-pink: #60a5fa; /* light indigo */
 
-  --color-shadow: rgba(0, 0, 0, 0.35);
-  --color-focus-ring: rgba(255, 255, 255, 0.12);
+  --color-nav-bg: rgba(23, 20, 14, 0.82);
+  --color-nav-text: #a29a85;
+  --color-nav-text-active: #f5f1e4;
 
-  --color-link: #ffffff;
-  --color-link-hover: #d9d9d9;
+  --color-shadow: rgba(0, 0, 0, 0.4);
+  --color-focus-ring: rgba(245, 241, 228, 0.25);
+
+  --color-link: #f5f1e4;
+  --color-link-hover: #ffffff;
 }
 
 * {
   transition: var(--transition-theme);
+    scrollbar-color: var(--color-text-muted) transparent;
 }
 
 /* Always reserve space for the vertical scrollbar so navigating between a page
    that scrolls and one that doesn't never shifts centered content sideways. */
 html {
   scrollbar-gutter: stable;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -76,17 +102,21 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-family: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* <main> fills the height left below the header. Full-height pages (the centered
-   Home hero) then size to exactly that space via flex:1 instead of a hard-coded
-   `100vh - header` guess — which is what caused a scrollbar on Home only. Short
-   pages (Work/Contact) just leave empty space below their content. */
+/* <main> fills the height left below the header so short pages leave the empty
+   space below their content instead of growing a phantom scrollbar. */
 main {
   flex: 1;
   display: flex;
   flex-direction: column;
+}
+
+::selection {
+  background: var(--color-coral);
+  color: #fff;
 }
 
 /* Footer — kept here (global, render-blocking) rather than scoped in
@@ -111,7 +141,7 @@ main {
   margin: 0;
   padding: 1.25rem 1.5rem;
   text-align: center;
-  color: #555; /* as grey/dim as possible, same in both themes */
+  color: var(--color-text-muted);
   font-size: 0.9rem;
   cursor: default; /* keep the normal arrow on hover, not the text I-beam */
 }

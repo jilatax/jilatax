@@ -3,6 +3,7 @@ import { ROUTES } from '@/consts';
 import { stripTrailingSlash } from '@/lib/utils';
 import Sun from '@/assets/icons/theme/sun.svg';
 import Moon from '@/assets/icons/theme/moon.svg';
+import Github from '@/assets/icons/github.svg';
 
 interface Props {
   projectName: string;
@@ -14,6 +15,21 @@ const { projectName } = Astro.props;
 // compares the current path to each route; trailing slashes are normalised so it
 // matches in both `bun run dev` (`/work`) and the static build/preview (`/work/`).
 const currentPath = stripTrailingSlash(Astro.url.pathname);
+
+let stars = "0";
+try {
+  const response = await fetch('https://api.github.com/repos/jilatax/jilatax');
+  if (response.ok) {
+    const data = await response.json();
+    if (data.stargazers_count >= 1000) {
+      stars = (data.stargazers_count / 1000).toFixed(1).replace(/\.0$/, '') + "K";
+    } else {
+      stars = data.stargazers_count.toString();
+    }
+  }
+} catch (e) {
+  console.error("Failed to fetch github stars");
+}
 ---
 
 <header class="site-header">
@@ -36,10 +52,22 @@ const currentPath = stripTrailingSlash(Astro.url.pathname);
       ))}
     </ul>
 
-    <button id="theme-toggle" type="button" aria-label="Toggle light and dark theme">
-      <Sun id="icon-sun" aria-hidden="true" />
-      <Moon id="icon-moon" aria-hidden="true" />
-    </button>
+    <div class="nav-right">
+      <a
+        href="https://github.com/jilatax/jilatax"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="github-link"
+        aria-label="GitHub Stars"
+      >
+        <Github class="icon-github" aria-hidden="true" />
+        <span class="stars-count">{stars}</span>
+      </a>
+      <button id="theme-toggle" type="button" aria-label="Toggle light and dark theme">
+        <Sun id="icon-sun" aria-hidden="true" />
+        <Moon id="icon-moon" aria-hidden="true" />
+      </button>
+    </div>
   </nav>
 </header>
 
@@ -63,8 +91,8 @@ const currentPath = stripTrailingSlash(Astro.url.pathname);
     justify-self: start;
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
-    font-weight: 700;
+    gap: 0.3rem;
+    font-weight: 800;
     color: var(--color-nav-text);
     text-decoration: none;
   }
@@ -75,8 +103,8 @@ const currentPath = stripTrailingSlash(Astro.url.pathname);
      brand's currentColor — so the logo follows the in-app theme toggle. This
      only *references* the file; the scaffold never modifies or replaces it. */
   .brand-logo {
-    width: 26px;
-    height: 26px;
+    width: 28px;
+    height: 28px;
     flex-shrink: 0;
     background-color: currentColor;
     -webkit-mask: url(/favicon.svg) center / contain no-repeat;
@@ -103,8 +131,36 @@ const currentPath = stripTrailingSlash(Astro.url.pathname);
     color: var(--color-nav-text-active);
   }
 
-  #theme-toggle {
+  .nav-right {
     justify-self: end;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .github-link {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--color-nav-text);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.2s;
+    height: 36px;
+  }
+  .github-link:hover {
+    color: var(--color-nav-text-active);
+  }
+
+  .github-link :global(.icon-github) {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    display: block;
+  }
+
+  #theme-toggle {
     background: none;
     border: 1px solid var(--color-border);
     border-radius: 10px; /* square with generously rounded corners (not a circle) */
