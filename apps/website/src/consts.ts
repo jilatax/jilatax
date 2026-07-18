@@ -16,7 +16,7 @@ export const SITE: SiteConfig = {
 // not hand-listed here. See ARCHITECTURE.md → "Routing convention".
 export const ROUTES: Route[] = [
   { href: '/', label: 'Home' },
-  { href: '/#box', label: 'Box' },
+  { href: '/#use', label: 'Use' },
   { href: '/#packages', label: 'Packages' },
 ];
 
