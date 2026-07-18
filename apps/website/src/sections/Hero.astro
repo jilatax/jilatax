@@ -6,8 +6,8 @@ import { LINKS } from '@/consts';
 
 <section class="hero">
   <div class="announcement-banner">
-    🎉 Jilatax v0.0.1 has launched!
-    <a href="https://docs.jilatax.dev" target="_blank" rel="noopener noreferrer">Learn more</a>
+    <span class="banner-text">🎉 Jilatax v0.0.1 is officially out! Scaffold production-ready Android apps in seconds.</span>
+    <a href="https://docs.jilatax.dev" target="_blank" rel="noopener noreferrer" class="banner-btn">Read the docs</a>
   </div>
 
   <div class="hero-inner">
@@ -93,24 +93,36 @@ import { LINKS } from '@/consts';
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.25rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
     width: 100%;
     padding: 0.9rem 1.5rem;
-    background: #0a0907; /* Darker bg that takes up the full height of the banner */
-    border-bottom: 1px solid color-mix(in srgb, var(--color-coral) 25%, transparent);
+    /* An intermediate background: a mix of the page background and black */
+    background: color-mix(in srgb, var(--color-bg) 40%, #080705);
     font-size: 0.95rem;
     font-weight: 600;
-    color: #f5f1e4;
+    color: var(--color-text);
   }
-  .announcement-banner a {
-    color: var(--color-coral);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    margin-left: 0.3rem;
-    transition: color 0.2s ease;
+  .banner-text {
+    opacity: 0.95;
   }
-  .announcement-banner a:hover {
-    color: var(--color-orange);
+  .announcement-banner .banner-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.35rem 0.85rem;
+    margin-left: 0.4rem;
+    background: var(--color-coral);
+    color: #fff;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .announcement-banner .banner-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px -4px var(--color-coral);
   }
 
   .title {
