@@ -293,20 +293,20 @@ function createInitialConfig(
       android: {
         adaptiveIcon: {
           backgroundColor: '#E8FFF2',
-          foregroundImage: './assets/icon.png',
+          foregroundImage: './public/assets/icon.png',
         },
         package: packageId,
         predictiveBackGestureEnabled: false,
         versionCode: 1,
       },
-      icon: './assets/icon.png',
+      icon: './public/assets/icon.png',
       name: displayName,
       orientation: 'portrait',
       scheme: schemeBase || 'jilatax-app',
       slug,
       splash: {
         backgroundColor: '#041A17',
-        image: './assets/splash-icon.png',
+        image: './public/assets/splash-icon.png',
         imageWidth: 96,
         resizeMode: 'contain',
       },

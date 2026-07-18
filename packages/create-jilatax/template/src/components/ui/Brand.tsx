@@ -1,4 +1,4 @@
-import jilataxIcon from '../../../assets/jilatax-icon.png';
+import jilataxIcon from '../../../public/assets/jilatax-icon.png';
 
 interface BrandProps {
   compact?: boolean;

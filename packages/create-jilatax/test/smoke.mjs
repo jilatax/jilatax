@@ -93,8 +93,8 @@ async function testGeneratedProject(root) {
   assert.equal(appJson.jilatax.name, 'Sample Android App');
   assert.equal(appJson.jilatax.slug, 'sample-app');
   assert.equal(appJson.jilatax.version, '1.0.0');
-  assert.equal(appJson.jilatax.icon, './assets/icon.png');
-  assert.equal(appJson.jilatax.splash.image, './assets/splash-icon.png');
+  assert.equal(appJson.jilatax.icon, './public/assets/icon.png');
+  assert.equal(appJson.jilatax.splash.image, './public/assets/splash-icon.png');
   assert.equal(appJson.jilatax.splash.imageWidth, 96);
   assert.equal(appJson.jilatax.splash.resizeMode, 'contain');
   assert.equal(appJson.jilatax.splash.backgroundColor, '#041A17');
@@ -102,7 +102,7 @@ async function testGeneratedProject(root) {
   assert.equal(appJson.jilatax.android.versionCode, 1);
   assert.deepEqual(appJson.jilatax.android.adaptiveIcon, {
     backgroundColor: '#E8FFF2',
-    foregroundImage: './assets/icon.png',
+    foregroundImage: './public/assets/icon.png',
   });
 
   const androidProperties = await readFile(
@@ -153,8 +153,10 @@ async function testGeneratedProject(root) {
 
   const projectFiles = await listFiles(projectDirectory);
   assert(projectFiles.includes('.gitignore'));
-  assert(projectFiles.includes('assets/icon.png'));
-  assert(projectFiles.includes('assets/splash-icon.png'));
+  assert(projectFiles.includes('public/assets/icon.png'));
+  assert(projectFiles.includes('public/assets/jilatax-icon.png'));
+  assert(projectFiles.includes('public/assets/splash-icon.png'));
+  assert(projectFiles.includes('public/fonts/Monocraft.otf'));
   assert(projectFiles.includes('src/app/App.tsx'));
   assert(projectFiles.includes('src/app/navigation.ts'));
   assert(projectFiles.includes('src/components/navigation/BottomBar.tsx'));
@@ -195,6 +197,7 @@ async function testGeneratedProject(root) {
   );
   assert.match(globalStyles, /\.bottom-bar/u);
   assert.match(globalStyles, /prefers-color-scheme: dark/u);
+  assert.doesNotMatch(globalStyles, /Monocraft/iu);
 
   const allGeneratedText = await readGeneratedText(projectDirectory, projectFiles);
   assert.doesNotMatch(allGeneratedText, /\{\{[A-Za-z][A-Za-z0-9]*\}\}/u);
