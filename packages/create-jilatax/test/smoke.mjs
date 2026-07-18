@@ -156,7 +156,7 @@ async function testGeneratedProject(root) {
   assert(projectFiles.includes('public/assets/icon.png'));
   assert(projectFiles.includes('public/assets/jilatax-icon.png'));
   assert(projectFiles.includes('public/assets/splash-icon.png'));
-  assert(projectFiles.includes('public/fonts/Monocraft.otf'));
+  assert(projectFiles.includes('public/fonts/JilataX.otf'));
   assert(projectFiles.includes('src/app/App.tsx'));
   assert(projectFiles.includes('src/app/navigation.ts'));
   assert(projectFiles.includes('src/components/navigation/BottomBar.tsx'));
@@ -197,7 +197,9 @@ async function testGeneratedProject(root) {
   );
   assert.match(globalStyles, /\.bottom-bar/u);
   assert.match(globalStyles, /prefers-color-scheme: dark/u);
-  assert.doesNotMatch(globalStyles, /Monocraft/iu);
+  assert.match(globalStyles, /@font-face\s*\{[^}]*font-family:\s*JilataX/isu);
+  assert.match(globalStyles, /src:\s*url\('\.\.\/\.\.\/public\/fonts\/JilataX\.otf'\)/u);
+  assert.match(globalStyles, /\.brand__caption\s*\{[^}]*font-family:\s*JilataX/isu);
 
   const allGeneratedText = await readGeneratedText(projectDirectory, projectFiles);
   assert.doesNotMatch(allGeneratedText, /\{\{[A-Za-z][A-Za-z0-9]*\}\}/u);

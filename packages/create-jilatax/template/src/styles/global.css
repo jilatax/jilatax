@@ -1,3 +1,8 @@
+@font-face {
+  font-family: JilataX;
+  src: url('../../public/fonts/JilataX.otf');
+}
+
 :root {
   background-color: #f3f7f5;
   color: #10241d;
@@ -71,8 +76,8 @@
 
 .brand__caption {
   color: #688078;
+  font-family: JilataX;
   font-size: 9px;
-  font-weight: 700;
   letter-spacing: 1.5px;
   line-height: 14px;
   margin-top: 2px;
