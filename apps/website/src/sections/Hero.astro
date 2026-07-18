@@ -1,4 +1,5 @@
 ---
+import Marquee from '@/components/Marquee.astro';
 import { Check, Copy } from '@lucide/astro';
 import NpmIcon from '@/assets/icons/package-managers/npm.svg';
 import YarnIcon from '@/assets/icons/package-managers/yarn.svg';
@@ -77,23 +78,36 @@ import BunIcon from '@/assets/icons/package-managers/bun.svg';
         </div>
       </div>
     </div>
-
+  </div>
+  <div class="marquee-wrapper">
+    <Marquee />
   </div>
 </section>
 
 <style>
   .hero {
     position: relative;
-    overflow: hidden;
+    overflow-x: clip;
+    overflow-y: visible;
+  }
+  .marquee-wrapper {
+    position: absolute;
+    bottom: -3rem;
+    left: -2%;
+    width: 104%;
+    transform: rotate(-2deg);
+    z-index: 0;
   }
   .hero-inner {
     max-width: 1000px;
     margin: 0 auto;
-    padding: 4.5rem 1.5rem 4rem;
+    padding: 4.5rem 1.5rem 8rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
+    position: relative;
+    z-index: 1;
   }
   .hero-copy {
     display: flex;
