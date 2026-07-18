@@ -35,12 +35,12 @@ The default configuration file is `app.json` in the generated project root:
     "slug": "my-lynx-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./public/assets/icon.png",
     "scheme": "mylynxapp",
     "userInterfaceStyle": "automatic",
     "splash": {
       "backgroundColor": "#208AEF",
-      "image": "./assets/splash.png",
+      "image": "./public/assets/splash-icon.png",
       "imageWidth": 76
     },
     "android": {
@@ -48,9 +48,7 @@ The default configuration file is `app.json` in the generated project root:
       "versionCode": 1,
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
+        "foregroundImage": "./public/assets/icon.png"
       },
       "predictiveBackGestureEnabled": false
     }
