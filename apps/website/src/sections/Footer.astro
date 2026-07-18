@@ -55,7 +55,19 @@ const columns = [
 ---
 
 <footer class="site-footer">
-  <div class="footer-glow" aria-hidden="true"></div>
+  <div class="footer-glow-wrap" aria-hidden="true">
+    <div class="footer-lightings">
+      <div class="glow-one">
+        <div class="glow-two">
+          <div class="glow-three">
+            <div class="glow-four">
+              <div class="glow-five"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="footer-inner">
     <nav class="footer-grid" aria-label="Footer">
@@ -123,95 +135,79 @@ const columns = [
     background: var(--color-bg);
   }
 
-  /* Soft horizon glow — green → turquoise, rises high with no hard edge */
-  .footer-glow {
+  .footer-glow-wrap {
     position: absolute;
-    inset: auto -15% -12%;
-    height: min(72vh, 560px);
+    inset: 0;
+    overflow: hidden;
     pointer-events: none;
     z-index: 0;
-    background:
-      radial-gradient(
-        120% 110% at 50% 108%,
-        color-mix(in srgb, var(--color-coral) 52%, transparent) 0%,
-        color-mix(in srgb, var(--color-orange) 36%, transparent) 30%,
-        color-mix(in srgb, var(--color-amber) 18%, transparent) 52%,
-        transparent 76%
-      ),
-      radial-gradient(
-        90% 80% at 20% 118%,
-        color-mix(in srgb, var(--color-green) 34%, transparent) 0%,
-        transparent 70%
-      ),
-      radial-gradient(
-        85% 75% at 80% 115%,
-        color-mix(in srgb, var(--color-orange) 30%, transparent) 0%,
-        transparent 68%
-      );
-    filter: blur(32px);
-    opacity: 0.58;
-    animation: footer-wave 9s ease-in-out infinite;
   }
 
-  :global([data-theme='dark']) .footer-glow {
-    opacity: 0.9;
-    filter: blur(24px);
-  }
-
-  .footer-glow::after {
-    content: '';
+  .footer-lightings {
+    bottom: -60px;
     position: absolute;
-    inset: 0 -25% -15%;
-    background: linear-gradient(
-      100deg,
-      transparent 0%,
-      color-mix(in srgb, var(--color-coral) 38%, transparent) 25%,
-      color-mix(in srgb, var(--color-orange) 55%, transparent) 50%,
-      color-mix(in srgb, var(--color-amber) 32%, transparent) 75%,
-      transparent 100%
-    );
-    background-size: 220% 100%;
-    filter: blur(48px);
-    opacity: 0.5;
-    animation: footer-shimmer 11s ease-in-out infinite;
+    width: 100%;
   }
 
-  :global([data-theme='dark']) .footer-glow::after {
-    opacity: 0.72;
+  .footer-lightings div {
+    border-radius: 50%;
+    height: 20px;
+    position: relative;
+    margin: auto;
   }
 
-  @keyframes footer-wave {
-    0%,
-    100% {
-      transform: translate3d(0, 0, 0) scale(1);
-      opacity: 0.82;
-    }
-    40% {
-      transform: translate3d(-2.5%, -1.5%, 0) scale(1.04);
-      opacity: 1;
-    }
-    70% {
-      transform: translate3d(2%, 1%, 0) scale(0.98);
-      opacity: 0.88;
-    }
+  .glow-one {
+    width: 100%;
+    animation: glow-one 5s ease-in-out infinite alternate;
+  }
+  @keyframes glow-one {
+    from { box-shadow: 0 0 250px 20px var(--color-green); }
+    to { box-shadow: 0 0 100px 15px var(--color-orange); }
   }
 
-  @keyframes footer-shimmer {
-    0%,
-    100% {
-      background-position: 0% 50%;
-      opacity: 0.4;
-    }
-    50% {
-      background-position: 100% 50%;
-      opacity: 0.7;
-    }
+  .glow-two {
+    width: 90%;
+    animation: glow-two 4s ease-in-out infinite alternate;
+  }
+  @keyframes glow-two {
+    from { box-shadow: 0 0 250px 20px var(--color-orange); }
+    to { box-shadow: 0 0 100px 15px var(--color-green); }
+  }
+
+  .glow-three {
+    width: 80%;
+    animation: glow-three 3s ease-in-out infinite alternate;
+  }
+  @keyframes glow-three {
+    from { box-shadow: 0 0 250px 20px var(--color-coral); }
+    to { box-shadow: 0 0 100px 15px var(--color-orange); }
+  }
+
+  .glow-four {
+    width: 70%;
+    animation: glow-four 2s ease-in-out infinite alternate;
+  }
+  @keyframes glow-four {
+    from { box-shadow: 0 0 250px 20px var(--color-green); }
+    to { box-shadow: 0 0 100px 15px var(--color-coral); }
+  }
+
+  .glow-five {
+    width: 60%;
+    animation: glow-five 1s ease-in-out infinite alternate;
+  }
+  @keyframes glow-five {
+    from { box-shadow: 0 0 250px 20px var(--color-orange); }
+    to { box-shadow: 0 0 100px 15px var(--color-green); }
+  }
+
+  :global([data-theme='dark']) .footer-lightings {
+    opacity: 0.85;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .footer-glow,
-    .footer-glow::after {
-      animation: none;
+    .footer-lightings div {
+      animation: none !important;
     }
   }
 
