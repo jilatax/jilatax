@@ -3,7 +3,7 @@ import type { Route, SiteConfig } from '@/types';
 // Single source of truth for the site's name. Rename the project here once and
 // the browser tab, the header brand, and the footer all follow.
 export const SITE: SiteConfig = {
-  name: 'jilatax',
+  name: 'JilataX',
   description:
     'Jilatax — Android-first application framework for Lynx and Rspeedy. Scaffold, build and ship Android apps with one command: npm create jilatax@latest.',
   url: 'https://jilatax.dev',
