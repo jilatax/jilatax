@@ -19,33 +19,6 @@ import Marquee from '@/sections/Marquee.astro';
     if (window.__jlx) return;
     window.__jlx = true;
 
-    // ── Mouse parallax ──
-    // Elements opt in via `--depth` and read the global --px/--py (lerped
-    // -1..1) in their CSS transform, so one write per frame moves everything.
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      let tx = 0;
-      let ty = 0;
-      let cx = 0;
-      let cy = 0;
-
-      addEventListener(
-        'mousemove',
-        (e) => {
-          tx = (e.clientX / innerWidth) * 2 - 1;
-          ty = (e.clientY / innerHeight) * 2 - 1;
-        },
-        { passive: true },
-      );
-
-      (function tick() {
-        cx += (tx - cx) * 0.055;
-        cy += (ty - cy) * 0.055;
-        const style = document.documentElement.style;
-        style.setProperty('--px', cx.toFixed(4));
-        style.setProperty('--py', cy.toFixed(4));
-        requestAnimationFrame(tick);
-      })();
-    }
 
     // ── Card spotlight ──
     addEventListener(
