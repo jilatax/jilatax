@@ -58,7 +58,7 @@ const packages = [
 <span class="t-green">◇</span>  Template
 <span class="t-coral">│</span>  <span class="t-cmd">Lynx + Rspeedy</span> <span class="t-dim">· Android</span>
 <span class="t-coral">│</span>
-<span class="t-amber">└</span>  <span class="t-green">Ready!</span>  <span class="t-dim">cd my-app &&amp; jilatax run android</span></code></pre>
+<span class="t-amber">└</span>  <span class="t-green">Ready!</span>  <span class="t-dim" id="bento-term-cmd">cd my-app && jilatax run android</span></code></pre>
     </article>
 
     <!-- Android-first -->
@@ -463,3 +463,52 @@ const packages = [
     }
   }
 </style>
+
+<script>
+  (function () {
+    const el = document.getElementById('bento-term-cmd');
+    const card = el?.closest('.card-terminal');
+    if (!el || !card) return;
+
+    const original = 'cd my-app && jilatax run android';
+    const cmds = ['bun run run:android', 'bun run create:aab'];
+    let cmdIndex = 0;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    let isAnimating = false;
+
+    function typeDelete(text: string, cb: () => void) {
+      if (text.length === 0) { cb(); return; }
+      el!.textContent = text.slice(0, -1);
+      timer = setTimeout(() => typeDelete(text.slice(0, -1), cb), 28);
+    }
+
+    function typeWrite(target: string, current: string, cb: () => void) {
+      if (current.length === target.length) { cb(); return; }
+      const next = target.slice(0, current.length + 1);
+      el!.textContent = next;
+      timer = setTimeout(() => typeWrite(target, next, cb), 40);
+    }
+
+    function clearTimer() {
+      if (timer !== null) { clearTimeout(timer); timer = null; }
+    }
+
+    card.addEventListener('mouseenter', () => {
+      if (isAnimating) return;
+      isAnimating = true;
+      const target = cmds[cmdIndex % cmds.length];
+      cmdIndex++;
+      typeDelete(el!.textContent ?? original, () => {
+        typeWrite(target, '', () => { isAnimating = false; });
+      });
+    });
+
+    card.addEventListener('mouseleave', () => {
+      if (isAnimating) return;
+      isAnimating = true;
+      typeDelete(el!.textContent ?? '', () => {
+        typeWrite(original, '', () => { isAnimating = false; });
+      });
+    });
+  })();
+</script>
