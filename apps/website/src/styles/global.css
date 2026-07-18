@@ -11,6 +11,10 @@
   --color-bg-elevated: #fdfaf1;
   --color-bg-subtle: #ede6d3;
 
+  /* notice banner */
+  --color-notice-bg: var(--color-bg-elevated); /* Light background for clear mode */
+  --color-notice-text: var(--color-text);
+
   /* borders */
   --color-border: #e0d6bf;
 
@@ -55,6 +59,10 @@
   --color-bg: #17140e;
   --color-bg-elevated: #211d15;
   --color-bg-subtle: #1d1a12;
+
+  /* notice banner */
+  --color-notice-bg: #0e0c09; /* Specific dark background requested */
+  --color-notice-text: var(--color-text);
 
   --color-border: #332d1f;
 
