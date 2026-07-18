@@ -23,14 +23,14 @@
   --color-accent-hover: #000000;
   --color-on-accent: #fdfaf1;
 
-  /* bento accents */
-  --color-coral: #ff5a45;
-  --color-orange: #ff8a3d;
-  --color-amber: #ffb62e;
-  --color-green: #4fae62;
-  --color-blue: #2f9fe4;
-  --color-pink: #ff5ca8;
-  --gradient-hero: linear-gradient(92deg, #ff5a45 0%, #ff8a3d 45%, #ff5ca8 100%);
+  /* bento accents - updated to green/turquoise brand */
+  --color-coral: #059669; /* emerald */
+  --color-orange: #0d9488; /* turquoise/teal */
+  --color-amber: #0284c7; /* ocean blue */
+  --color-green: #10b981; /* bright green */
+  --color-blue: #0ea5e9; /* sky blue */
+  --color-pink: #3b82f6; /* royal blue */
+  --gradient-hero: linear-gradient(92deg, var(--color-coral) 0%, var(--color-orange) 45%, var(--color-amber) 100%);
 
   /* navigation */
   --color-nav-bg: rgba(245, 239, 225, 0.82);
@@ -65,12 +65,12 @@
   --color-accent-hover: #ffffff;
   --color-on-accent: #17140e;
 
-  --color-coral: #ff6b54;
-  --color-orange: #ff9a52;
-  --color-amber: #ffc02e;
-  --color-green: #5cb877;
-  --color-blue: #43aded;
-  --color-pink: #ff70b2;
+  --color-coral: #10b981; /* bright emerald for dark mode */
+  --color-orange: #14b8a6; /* bright turquoise */
+  --color-amber: #06b6d4; /* bright cyan */
+  --color-green: #34d399; /* light green */
+  --color-blue: #38bdf8; /* light blue */
+  --color-pink: #60a5fa; /* light indigo */
 
   --color-nav-bg: rgba(23, 20, 14, 0.82);
   --color-nav-text: #a29a85;
