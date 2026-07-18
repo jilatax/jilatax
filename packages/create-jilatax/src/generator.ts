@@ -294,7 +294,7 @@ function createInitialConfig(
       android: {
         adaptiveIcon: {
           backgroundColor: '#E8FFF2',
-          foregroundImage: './assets/splash-icon.png',
+          foregroundImage: './assets/icon.png',
         },
         package: packageId,
         predictiveBackGestureEnabled: false,

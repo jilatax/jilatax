@@ -102,7 +102,7 @@ async function testGeneratedProject(root) {
   assert.equal(appJson.jilatax.android.versionCode, 1);
   assert.deepEqual(appJson.jilatax.android.adaptiveIcon, {
     backgroundColor: '#E8FFF2',
-    foregroundImage: './assets/splash-icon.png',
+    foregroundImage: './assets/icon.png',
   });
 
   const androidProperties = await readFile(
