@@ -1,7 +1,7 @@
 ---
 // Bottom ticker, modelled on the reference's category strip: words separated by
-// colored diamonds, scrolling seamlessly. The track is rendered twice so the
-// -50% translate loops without a gap.
+// colored diamonds, scrolling seamlessly. The track is rendered 10 times so the
+// -10% translate loops without a gap on ultra-wide screens.
 const words = [
   'ANDROID',
   'LYNX',
@@ -27,7 +27,7 @@ const colors = [
 <div class="marquee" aria-hidden="true">
   <div class="track">
     {
-      [0, 1].map(() => (
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(() => (
         <div class="lap">
           {words.map((word, i) => (
             <>
@@ -65,7 +65,7 @@ const colors = [
   }
   @keyframes marquee {
     to {
-      transform: translateX(-50%);
+      transform: translateX(-10%);
     }
   }
   .lap {
