@@ -473,42 +473,64 @@ const packages = [
     const original = 'cd my-app && jilatax run android';
     const cmds = ['bun run run:android', 'bun run create:aab'];
     let cmdIndex = 0;
-    let timer: ReturnType<typeof setTimeout> | null = null;
-    let isAnimating = false;
+    let currentAnimationId = 0;
+    const cursor = '█';
 
-    function typeDelete(text: string, cb: () => void) {
-      if (text.length === 0) { cb(); return; }
-      el!.textContent = text.slice(0, -1);
-      timer = setTimeout(() => typeDelete(text.slice(0, -1), cb), 28);
-    }
+    function animateTyping(target: string) {
+      const animationId = ++currentAnimationId;
+      let current = (el!.textContent || original).replace(cursor, '');
+      let isDeleting = current !== '';
+      let text = current;
 
-    function typeWrite(target: string, current: string, cb: () => void) {
-      if (current.length === target.length) { cb(); return; }
-      const next = target.slice(0, current.length + 1);
-      el!.textContent = next;
-      timer = setTimeout(() => typeWrite(target, next, cb), 40);
-    }
+      function nextStep() {
+        if (currentAnimationId !== animationId) return;
 
-    function clearTimer() {
-      if (timer !== null) { clearTimeout(timer); timer = null; }
+        if (isDeleting) {
+          const delCount = Math.floor(Math.random() * 3) + 1;
+          text = text.slice(0, -delCount);
+          el!.textContent = text + cursor;
+
+          if (text.length === 0) {
+            isDeleting = false;
+            setTimeout(nextStep, 120);
+          } else {
+            setTimeout(nextStep, 15 + Math.random() * 15);
+          }
+        } else {
+          if (text.length === target.length) {
+            el!.textContent = target;
+            return;
+          }
+
+          const trueChar = target[text.length];
+          if (Math.random() < 0.25) {
+            const glitchChars = '!<>-_/[]{}—=+*^?#';
+            const glitch = glitchChars[Math.floor(Math.random() * glitchChars.length)];
+            el!.textContent = text + glitch + cursor;
+            setTimeout(() => {
+              if (currentAnimationId !== animationId) return;
+              text += trueChar;
+              el!.textContent = text + cursor;
+              setTimeout(nextStep, 20 + Math.random() * 30);
+            }, 25);
+          } else {
+            text += trueChar;
+            el!.textContent = text + cursor;
+            setTimeout(nextStep, 20 + Math.random() * 40);
+          }
+        }
+      }
+      nextStep();
     }
 
     card.addEventListener('mouseenter', () => {
-      if (isAnimating) return;
-      isAnimating = true;
       const target = cmds[cmdIndex % cmds.length];
       cmdIndex++;
-      typeDelete(el!.textContent ?? original, () => {
-        typeWrite(target, '', () => { isAnimating = false; });
-      });
+      animateTyping(target);
     });
 
     card.addEventListener('mouseleave', () => {
-      if (isAnimating) return;
-      isAnimating = true;
-      typeDelete(el!.textContent ?? '', () => {
-        typeWrite(original, '', () => { isAnimating = false; });
-      });
+      animateTyping(original);
     });
   })();
 </script>
