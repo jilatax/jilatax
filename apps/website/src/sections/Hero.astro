@@ -6,7 +6,7 @@ import { LINKS } from '@/consts';
 
 <section class="hero">
   <div class="announcement-banner">
-    <span class="banner-text">🎉 Jilatax v0.0.1 is officially out! Scaffold production-ready Android apps in seconds.</span>
+    <span class="banner-text">🎉 Jilatax v0.0.1 <span class="beta-badge">Beta</span> is officially out! Scaffold production-ready Android apps in seconds.</span>
     <a href="https://docs.jilatax.dev" target="_blank" rel="noopener noreferrer" class="banner-btn">Read the docs</a>
   </div>
 
@@ -97,14 +97,27 @@ import { LINKS } from '@/consts';
     gap: 0.5rem;
     width: 100%;
     padding: 0.9rem 1.5rem;
-    /* An intermediate background: a mix of the page background and black */
-    background: color-mix(in srgb, var(--color-bg) 40%, #080705);
+    background: #0e0c09; /* Specific dark background requested */
+    border: none;
     font-size: 0.95rem;
     font-weight: 600;
     color: var(--color-text);
   }
   .banner-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
     opacity: 0.95;
+  }
+  .beta-badge {
+    background: #c0c0c0; /* Silver bg */
+    color: #110f0b; /* Dark text for contrast */
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    padding: 0.15rem 0.45rem;
+    border-radius: 6px;
+    letter-spacing: 0.05em;
   }
   .announcement-banner .banner-btn {
     display: inline-flex;
