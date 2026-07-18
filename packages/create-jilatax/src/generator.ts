@@ -49,7 +49,6 @@ const RSPEEDY_VERSION = '^0.13.3';
 const TEXT_TEMPLATE_FILES = new Set([
   'README.md.tmpl',
   'android/settings.gradle.kts.tmpl',
-  'src/App.tsx.tmpl',
 ]);
 
 export async function createProject(

@@ -1,6 +1,6 @@
 import { root } from '@lynx-js/react';
 
-import { App } from './App.js';
+import { App } from './app/App.js';
 
 root.render(<App />);
 

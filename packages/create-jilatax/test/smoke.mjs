@@ -155,6 +155,15 @@ async function testGeneratedProject(root) {
   assert(projectFiles.includes('.gitignore'));
   assert(projectFiles.includes('assets/icon.png'));
   assert(projectFiles.includes('assets/splash-icon.png'));
+  assert(projectFiles.includes('src/app/App.tsx'));
+  assert(projectFiles.includes('src/app/navigation.ts'));
+  assert(projectFiles.includes('src/components/navigation/BottomBar.tsx'));
+  assert(projectFiles.includes('src/components/ui/Brand.tsx'));
+  assert(projectFiles.includes('src/screens/AboutScreen.tsx'));
+  assert(projectFiles.includes('src/screens/HomeScreen.tsx'));
+  assert(projectFiles.includes('src/styles/global.css'));
+  assert(!projectFiles.includes('src/App.tsx'));
+  assert(!projectFiles.includes('src/App.css'));
   assert(
     projectFiles.includes(
       '.jilatax/android-res/drawable/jilatax_splash_icon.xml',
@@ -171,6 +180,21 @@ async function testGeneratedProject(root) {
   assert(!projectFiles.some((file) => file.startsWith('dist/')));
   assert(!projectFiles.some((file) => file.endsWith('.tmpl')));
   assert(!projectFiles.some((file) => file.endsWith('.base64')));
+
+  const appSource = await readFile(
+    path.join(projectDirectory, 'src', 'app', 'App.tsx'),
+    'utf8',
+  );
+  assert.match(appSource, /<HomeScreen \/>/u);
+  assert.match(appSource, /<AboutScreen \/>/u);
+  assert.match(appSource, /<BottomBar activeTab=/u);
+
+  const globalStyles = await readFile(
+    path.join(projectDirectory, 'src', 'styles', 'global.css'),
+    'utf8',
+  );
+  assert.match(globalStyles, /\.bottom-bar/u);
+  assert.match(globalStyles, /prefers-color-scheme: dark/u);
 
   const allGeneratedText = await readGeneratedText(projectDirectory, projectFiles);
   assert.doesNotMatch(allGeneratedText, /\{\{[A-Za-z][A-Za-z0-9]*\}\}/u);
