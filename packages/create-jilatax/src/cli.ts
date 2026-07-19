@@ -255,14 +255,12 @@ async function printWelcome(version: string): Promise<void> {
   const bold = '\u001B[1m';
   const dim = '\u001B[2m';
   const mascotTop = `${cyan} /\\_/\\ ${reset}`;
-  const renderMascot = (eyes: string): string =>
-    `${cyan} (${green}${eyes}${cyan}ᴗ${green}${eyes}${cyan}) ${reset}`;
+  const renderMascot = (eyes: string): string => `${cyan} (${green}${eyes}${cyan}ᴗ${green}${eyes}${cyan}) ${reset}`;
   const welcome = [
     `${bold}${brightCyan}JilataX:${reset} ${dim}v${version}${reset}`,
     `${dim}Welcome.${reset} Build your next ${greenBackground}${black}Android${reset}-first app.`,
   ];
-  const renderHeader = (eyes: string): string =>
-    `${mascotTop}  ${welcome[0]}\n${renderMascot(eyes)}  ${welcome[1]}`;
+  const renderHeader = (eyes: string): string => `${mascotTop}  ${welcome[0]}\n${renderMascot(eyes)}  ${welcome[1]}`;
 
   stdout.write(`\n${renderHeader('●')}`);
   await pause(160);
@@ -346,15 +344,10 @@ function startInstallProgress(): InstallProgress {
   };
 }
 
-function printResult(
-  result: CreateProjectResult,
-  log: (message: string) => void,
-  interactive: boolean,
-): void {
+function printResult(result: CreateProjectResult, log: (message: string) => void, interactive: boolean): void {
   const lines = [
-    '🛠️ Next steps:',
-    `  cd ${formatProjectDirectory(result.projectDirectory)}`,
-    ...(result.installed ? [] : ['  bun install']),
+    '🛠️ build:',
+    ...(result.installed ? [] : ['  bun i']),
     '  bun run dev',
     '',
     '🤖 Android:',
@@ -362,15 +355,38 @@ function printResult(
     '  bun run create:aab',
   ];
   const message = lines.join('\n');
-  const farewell = `Good luck out there, ${result.projectName}! 🎉`;
+  const farewell = `cd ${formatProjectDirectory(result.projectDirectory)}, Good luck! 🎉`;
 
   if (interactive) {
-    prompts.note(message, 'Result');
-    prompts.outro(farewell);
+    printResultPanel(lines);
+    stdout.write(`\n${farewell}\n`);
     return;
   }
 
   log(`${message}\n\n${farewell}`);
+}
+
+function printResultPanel(lines: readonly string[]): void {
+  const terminalWidth = stdout.columns || 80;
+  const panelWidth = Math.max(24, terminalWidth - 2);
+  const contentWidth = panelWidth - 4;
+  const titlePrefix = '╭─ Lynx / Jilatax ';
+  const titleRuleWidth = Math.max(0, panelWidth - displayWidth(titlePrefix) - 1);
+  const top = `${titlePrefix}${'─'.repeat(titleRuleWidth)}╮`;
+  const content = ['', ...lines, ''].map((line) => {
+    const padding = Math.max(0, contentWidth - displayWidth(line));
+    return `│ ${line}${' '.repeat(padding)} │`;
+  });
+  const bottom = `╰${'─'.repeat(panelWidth - 2)}╯`;
+
+  stdout.write(`${[top, ...content, bottom].join('\n')}\n`);
+}
+
+function displayWidth(value: string): number {
+  return [...value].reduce((width, character) => {
+    if (/^[\uFE0E\uFE0F\u200D]$/u.test(character)) return width;
+    return width + (/\p{Extended_Pictographic}/u.test(character) ? 2 : 1);
+  }, 0);
 }
 
 function formatProjectDirectory(projectDirectory: string): string {
@@ -388,8 +404,7 @@ function formatProjectDirectory(projectDirectory: string): string {
       : homeRelative.startsWith('..') || path.isAbsolute(homeRelative)
         ? undefined
         : `~/${homeRelative.split(path.sep).join('/')}`;
-  const shortestPath =
-    homePath !== undefined && homePath.length < cwdPath.length ? homePath : cwdPath;
+  const shortestPath = homePath !== undefined && homePath.length < cwdPath.length ? homePath : cwdPath;
 
   return /\s/u.test(shortestPath) ? JSON.stringify(shortestPath) : shortestPath;
 }
