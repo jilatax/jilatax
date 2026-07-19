@@ -1,5 +1,7 @@
 import * as prompts from '@clack/prompts';
 import { readFile } from 'node:fs/promises';
+import { homedir } from 'node:os';
+import path from 'node:path';
 import { stdin, stdout } from 'node:process';
 
 import {
@@ -66,7 +68,7 @@ export async function runCreateCli(
     }
 
     progress?.succeed();
-    printResult(result, log);
+    printResult(result, log, interactive);
     return 0;
   } catch (error) {
     if (error instanceof PromptCancelledError) return 0;
@@ -306,16 +308,52 @@ function startInstallProgress(): InstallProgress {
   };
 }
 
-function printResult(result: CreateProjectResult, log: (message: string) => void): void {
-  const installStep = result.installed ? '' : '  bun install\n';
-  log(`Created ${result.displayName} in ${result.projectDirectory}.
+function printResult(
+  result: CreateProjectResult,
+  log: (message: string) => void,
+  interactive: boolean,
+): void {
+  const lines = [
+    '🛠️ Next steps:',
+    `  cd ${formatProjectDirectory(result.projectDirectory)}`,
+    ...(result.installed ? [] : ['  bun install']),
+    '  bun run dev',
+    '',
+    '🤖 Android:',
+    '  bun run run:android',
+    '  bun run create:aab',
+  ];
+  const message = lines.join('\n');
+  const farewell = `Good luck out there, ${result.projectName}! 🎉`;
 
-Next steps:
-  cd ${JSON.stringify(result.projectDirectory)}
-${installStep}  bun run run:android
+  if (interactive) {
+    prompts.note(message, 'Result');
+    prompts.outro(farewell);
+    return;
+  }
 
-Release bundle:
-  bun run create:aab`);
+  log(`${message}\n\n${farewell}`);
+}
+
+function formatProjectDirectory(projectDirectory: string): string {
+  const relativeDirectory = path.relative(process.cwd(), projectDirectory);
+  const cwdPath =
+    relativeDirectory.length === 0
+      ? '.'
+      : relativeDirectory.startsWith('..') || path.isAbsolute(relativeDirectory)
+        ? relativeDirectory
+        : `.${path.sep}${relativeDirectory}`;
+  const homeRelative = path.relative(homedir(), projectDirectory);
+  const homePath =
+    homeRelative.length === 0
+      ? '~'
+      : homeRelative.startsWith('..') || path.isAbsolute(homeRelative)
+        ? undefined
+        : `~/${homeRelative.split(path.sep).join('/')}`;
+  const shortestPath =
+    homePath !== undefined && homePath.length < cwdPath.length ? homePath : cwdPath;
+
+  return /\s/u.test(shortestPath) ? JSON.stringify(shortestPath) : shortestPath;
 }
 
 async function readCreatorVersion(): Promise<string> {
