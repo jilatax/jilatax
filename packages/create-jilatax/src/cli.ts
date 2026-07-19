@@ -250,18 +250,20 @@ function printWelcome(version: string): void {
   const cyan = '\u001B[36m';
   const brightCyan = '\u001B[96m';
   const green = '\u001B[32m';
+  const greenBackground = '\u001B[42m';
+  const black = '\u001B[30m';
   const bold = '\u001B[1m';
   const dim = '\u001B[2m';
   const mascot = [
-    `${cyan}╲╲_${brightCyan}╱╱${reset}`,
-    `${cyan}(${green}●${cyan}▽${green}●${cyan})${reset}`,
+    `${cyan} /\\_/\\ ${reset}`,
+    `${cyan}(${green}●${cyan}ᴗ${green}●${cyan})${reset}`,
   ];
   const welcome = [
-    `${bold}${brightCyan}JILATAX${reset} ${dim}v${version}${reset}`,
-    `${dim}Welcome.${reset} Build your next Android-first app.`,
+    `${bold}${brightCyan}Jilatax:${reset} ${dim}v${version}${reset}`,
+    `${dim}Welcome.${reset} Build your next ${greenBackground}${black}Android${reset}-first app.`,
   ];
 
-  console.log(`${mascot.map((line, index) => `${line}  ${welcome[index]}`).join('\n')}\n`);
+  console.log(`\n${mascot.map((line, index) => `${line}  ${welcome[index]}`).join('\n')}\n`);
 }
 
 interface InstallProgress {
