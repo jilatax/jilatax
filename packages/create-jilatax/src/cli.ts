@@ -339,7 +339,7 @@ function startInstallProgress(): InstallProgress {
     },
     succeed() {
       finish([
-        `${green}✓${reset}  ${bold}Dependencies installed${reset}  ${green}━━━━━━━━━${reset}`,
+        `${green}✓${reset}  ${bold}Dependencies installed${reset}`,
         `   ${dim}Your ${reset}${brightCyan}JilataX${reset}${dim} project is ready.${reset}`,
       ]);
     },
