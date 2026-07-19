@@ -282,47 +282,49 @@ interface InstallProgress {
 
 function startInstallProgress(): InstallProgress {
   const reset = '\u001B[0m';
-  const cyan = '\u001B[36m';
+  const brightCyan = '\u001B[96m';
   const dim = '\u001B[2m';
   const green = '\u001B[32m';
-  const frames = [
-    [45, 105, 44, 46],
-    [105, 44, 46, 45],
-    [44, 46, 45, 105],
-    [46, 45, 105, 44],
-  ] as const;
+  const red = '\u001B[31m';
+  const bold = '\u001B[1m';
+  const frames = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
   let frameIndex = 0;
 
-  const renderBar = (): string => {
-    const colors = frames[frameIndex % frames.length] ?? frames[0];
+  const renderInstalling = (): [string, string] => {
+    const frame = frames[frameIndex % frames.length] ?? frames[0];
     frameIndex += 1;
-    return `${colors.map((color) => `\u001B[${color}m  `).join('')}${reset}`;
+    return [
+      `${brightCyan}${frame}${reset}  ${bold}Installing dependencies${reset}`,
+      `   ${dim}Bun is preparing your JilataX project…${reset}`,
+    ];
   };
-  const renderTitle = (): string => `${renderBar()}  Project initializing...`;
+  const redraw = (lines: readonly [string, string]): void => {
+    stdout.write(`\r\u001B[2K${lines[0]}\n\r\u001B[2K${lines[1]}\u001B[1A\r`);
+  };
 
-  stdout.write(
-    `\u001B[?25l${renderTitle()}\n         ${cyan}▸ Installing dependencies with Bun...${reset}\u001B[1A\r`,
-  );
+  stdout.write('\u001B[?25l');
+  redraw(renderInstalling());
   const timer = setInterval(() => {
-    stdout.write(`\u001B[2K${renderTitle()}\r`);
-  }, 120);
+    redraw(renderInstalling());
+  }, 90);
 
-  const finish = (title: string, detail: string): void => {
+  const finish = (lines: readonly [string, string]): void => {
     clearInterval(timer);
-    stdout.write(
-      `\u001B[2K\r\u001B[1B\r\u001B[2K\u001B[1A\r${title}\n${detail}\n\u001B[?25h`,
-    );
+    stdout.write(`\r\u001B[2K${lines[0]}\n\r\u001B[2K${lines[1]}\n\u001B[?25h`);
   };
 
   return {
     fail() {
-      finish(`${cyan}▲${reset} Project initialization failed.`, '');
+      finish([
+        `${red}×${reset}  ${bold}Dependency installation failed${reset}`,
+        `   ${dim}Review the error above, then run bun install in your project.${reset}`,
+      ]);
     },
     succeed() {
-      finish(
-        `${green}✓ Project initialized!${reset}`,
-        `  ${dim}▪ Dependencies installed${reset}\n`,
-      );
+      finish([
+        `${green}✓${reset}  ${bold}Dependencies installed${reset}`,
+        `   ${dim}Your JilataX project is ready.${reset}`,
+      ]);
     },
   };
 }
