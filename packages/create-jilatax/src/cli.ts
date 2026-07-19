@@ -47,9 +47,7 @@ export async function runCreateCli(
     }
 
     const interactive = services.interactive ?? (stdin.isTTY && stdout.isTTY);
-    const options = interactive
-      ? await promptForOptions(parsed)
-      : nonInteractiveOptions(parsed);
+    const options = interactive ? await promptForOptions(parsed) : nonInteractiveOptions(parsed);
     const generate = services.create ?? createProject;
     const result = await generate({
       displayName: options.displayName,
@@ -123,10 +121,8 @@ function parseArgs(args: readonly string[]): CreateCliOptions {
   };
 }
 
-async function promptForOptions(
-  options: CreateCliOptions,
-): Promise<RequiredProjectOptions> {
-  prompts.intro('Jilatax · Android-first Lynx application');
+async function promptForOptions(options: CreateCliOptions): Promise<RequiredProjectOptions> {
+  printWelcome(await readCreatorVersion());
   const targetDirectory =
     options.targetDirectory ??
     unwrapPrompt(
@@ -176,23 +172,15 @@ async function promptForOptions(
   };
 }
 
-function nonInteractiveOptions(
-  options: CreateCliOptions,
-): RequiredProjectOptions {
+function nonInteractiveOptions(options: CreateCliOptions): RequiredProjectOptions {
   if (options.targetDirectory === undefined) {
     throw new Error('Project directory is required in a non-interactive terminal.');
   }
-  const projectName = normalizeProjectNameFromDirectory(
-    options.targetDirectory,
-  );
+  const projectName = normalizeProjectNameFromDirectory(options.targetDirectory);
   return {
-    displayName: normalizeDisplayName(
-      options.displayName ?? titleCase(projectName),
-    ),
+    displayName: normalizeDisplayName(options.displayName ?? titleCase(projectName)),
     install: options.install ?? false,
-    packageId: validatePackageId(
-      options.packageId ?? defaultPackageId(projectName),
-    ),
+    packageId: validatePackageId(options.packageId ?? defaultPackageId(projectName)),
     targetDirectory: options.targetDirectory,
   };
 }
@@ -222,11 +210,7 @@ function validationMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
 }
 
-function readOptionValue(
-  args: readonly string[],
-  index: number,
-  option: string,
-): string {
+function readOptionValue(args: readonly string[], index: number, option: string): string {
   const value = args[index + 1];
   if (value === undefined || value.startsWith('-') || value.trim().length === 0) {
     throw new Error(`${option} requires a value.`);
@@ -248,6 +232,17 @@ function titleCase(value: string): string {
     .join(' ');
 }
 
+function printWelcome(version: string): void {
+  const reset = '\u001B[0m';
+  const cyan = '\u001B[36m';
+  const greenBackground = '\u001B[42m';
+  const black = '\u001B[30m';
+  const mascot = `${cyan}◢▀▀▀   ▀▀▀◣${reset}\n${cyan}  ◉     ◉${reset}\n${cyan}    ╲▽╱${reset}`;
+  const badge = `${greenBackground}${black} jilatax ${reset}`;
+
+  console.log(`${mascot}  ${cyan}Jilatax:${reset}\n         Welcome to ${badge} ${cyan}v${version}${reset}!\n`);
+}
+
 function printResult(result: CreateProjectResult, log: (message: string) => void): void {
   const installStep = result.installed ? '' : '  bun install\n';
   log(`Created ${result.displayName} in ${result.projectDirectory}.
@@ -261,8 +256,8 @@ Release bundle:
 }
 
 async function readCreatorVersion(): Promise<string> {
-  const packageJson = JSON.parse(
-    await readFile(new URL('../package.json', import.meta.url), 'utf8'),
-  ) as { version?: unknown };
+  const packageJson = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8')) as {
+    version?: unknown;
+  };
   return typeof packageJson.version === 'string' ? packageJson.version : 'unknown';
 }
