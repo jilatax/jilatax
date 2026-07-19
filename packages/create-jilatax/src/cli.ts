@@ -346,7 +346,7 @@ function startInstallProgress(): InstallProgress {
 
 function printResult(result: CreateProjectResult, log: (message: string) => void, interactive: boolean): void {
   const lines = [
-    '🛠️ build:',
+    '🛠️  build:',
     ...(result.installed ? [] : ['  bun install']),
     '  bun run dev',
     '',
@@ -358,35 +358,12 @@ function printResult(result: CreateProjectResult, log: (message: string) => void
   const farewell = `cd ${formatProjectDirectory(result.projectDirectory)}, Good luck! 🎉`;
 
   if (interactive) {
-    printResultPanel(lines);
+    prompts.note(message, 'Result');
     stdout.write(`\n${farewell}\n`);
     return;
   }
 
   log(`${message}\n\n${farewell}`);
-}
-
-function printResultPanel(lines: readonly string[]): void {
-  const terminalWidth = stdout.columns || 80;
-  const panelWidth = Math.max(24, terminalWidth - 2);
-  const contentWidth = panelWidth - 4;
-  const titlePrefix = '╭─ Lynx / Jilatax ';
-  const titleRuleWidth = Math.max(0, panelWidth - displayWidth(titlePrefix) - 1);
-  const top = `${titlePrefix}${'─'.repeat(titleRuleWidth)}╮`;
-  const content = ['', ...lines, ''].map((line) => {
-    const padding = Math.max(0, contentWidth - displayWidth(line));
-    return `│ ${line}${' '.repeat(padding)} │`;
-  });
-  const bottom = `╰${'─'.repeat(panelWidth - 2)}╯`;
-
-  stdout.write(`${[top, ...content, bottom].join('\n')}\n`);
-}
-
-function displayWidth(value: string): number {
-  return [...value].reduce((width, character) => {
-    if (/^[\uFE0E\uFE0F\u200D]$/u.test(character)) return width;
-    return width + (/\p{Extended_Pictographic}/u.test(character) ? 2 : 1);
-  }, 0);
 }
 
 function formatProjectDirectory(projectDirectory: string): string {
