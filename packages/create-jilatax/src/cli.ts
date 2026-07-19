@@ -355,7 +355,7 @@ function printResult(result: CreateProjectResult, log: (message: string) => void
     '  bun run create:aab',
   ];
   const message = lines.join('\n');
-  const farewell = `cd ${formatProjectDirectory(result.projectDirectory)}, Good luck! 🎉`;
+  const farewell = `Good luck out there, cd ${formatProjectDirectory(result.projectDirectory)}, 🎉`;
 
   if (interactive) {
     printResultPanel(lines);
