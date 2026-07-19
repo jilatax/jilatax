@@ -135,7 +135,7 @@ function parseArgs(args: readonly string[]): CreateCliOptions {
 }
 
 async function promptForOptions(options: CreateCliOptions): Promise<RequiredProjectOptions> {
-  printWelcome(await readCreatorVersion());
+  await printWelcome(await readCreatorVersion());
   const targetDirectory =
     options.targetDirectory ??
     unwrapPrompt(
@@ -245,7 +245,7 @@ function titleCase(value: string): string {
     .join(' ');
 }
 
-function printWelcome(version: string): void {
+async function printWelcome(version: string): Promise<void> {
   const reset = '\u001B[0m';
   const cyan = '\u001B[36m';
   const brightCyan = '\u001B[96m';
@@ -254,16 +254,25 @@ function printWelcome(version: string): void {
   const black = '\u001B[30m';
   const bold = '\u001B[1m';
   const dim = '\u001B[2m';
-  const mascot = [
-    `${cyan} /\\_/\\ ${reset}`,
-    `${cyan}(${green}●${cyan}ᴗ${green}●${cyan})${reset}`,
-  ];
+  const mascotTop = `${cyan} /\\_/\\ ${reset}`;
+  const renderMascot = (eyes: string): string =>
+    `${cyan} (${green}${eyes}${cyan}ᴗ${green}${eyes}${cyan}) ${reset}`;
   const welcome = [
-    `${bold}${brightCyan}Jilatax:${reset} ${dim}v${version}${reset}`,
+    `${bold}${brightCyan}JilataX:${reset} ${dim}v${version}${reset}`,
     `${dim}Welcome.${reset} Build your next ${greenBackground}${black}Android${reset}-first app.`,
   ];
+  const renderHeader = (eyes: string): string =>
+    `${mascotTop}  ${welcome[0]}\n${renderMascot(eyes)}  ${welcome[1]}`;
 
-  console.log(`\n${mascot.map((line, index) => `${line}  ${welcome[index]}`).join('\n')}\n`);
+  stdout.write(`\n${renderHeader('●')}`);
+  await pause(160);
+  stdout.write(`\r\u001B[2K${renderMascot('−')}  ${welcome[1]}`);
+  await pause(90);
+  stdout.write(`\r\u001B[2K${renderMascot('●')}  ${welcome[1]}\n\n`);
+}
+
+function pause(milliseconds: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
 
 interface InstallProgress {
