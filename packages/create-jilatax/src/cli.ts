@@ -358,8 +358,9 @@ function printResult(result: CreateProjectResult, log: (message: string) => void
   const farewell = `Good luck out there 🎉, cd ${formatProjectDirectory(result.projectDirectory)}`;
 
   if (interactive) {
+    stdout.write('\n');
     printResultPanel(lines);
-    prompts.outro(farewell);
+    printFarewell(farewell);
     return;
   }
 
@@ -370,17 +371,28 @@ function printResultPanel(lines: readonly string[]): void {
   const reset = '\u001B[0m';
   const gray = '\u001B[90m';
   const green = '\u001B[32m';
+  const brightCyan = '\u001B[96m';
+  const bold = '\u001B[1m';
   const title = 'Result';
+  const headings = new Set(['🛠️  build:', '🤖 Android:']);
   const contentWidth = Math.max(displayWidth(title), ...lines.map(displayWidth)) + 5;
   const topRule = '─'.repeat(contentWidth - displayWidth(title) - 1);
   const content = ['', ...lines, ''].map((line) => {
     const padding = ' '.repeat(contentWidth - displayWidth(line));
-    return `${gray}│${reset}  ${line}${padding}${gray}│${reset}`;
+    const text = headings.has(line) ? `${bold}${brightCyan}${line}${reset}` : line;
+    return `${gray}│${reset}  ${text}${padding}${gray}│${reset}`;
   });
-  const top = `${green}◇${reset}  ${title} ${gray}${topRule}╮${reset}`;
+  const top = `${green}◇${reset}  ${bold}${title}${reset} ${gray}${topRule}╮${reset}`;
   const bottom = `${gray}├${'─'.repeat(contentWidth + 2)}╯${reset}`;
 
   stdout.write(`${[top, ...content, bottom].join('\n')}\n`);
+}
+
+function printFarewell(message: string): void {
+  const reset = '\u001B[0m';
+  const gray = '\u001B[90m';
+
+  stdout.write(`${gray}│\n└──${reset} ${message}\n\n`);
 }
 
 function displayWidth(value: string): number {
