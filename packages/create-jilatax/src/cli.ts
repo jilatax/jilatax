@@ -248,12 +248,20 @@ function titleCase(value: string): string {
 function printWelcome(version: string): void {
   const reset = '\u001B[0m';
   const cyan = '\u001B[36m';
-  const greenBackground = '\u001B[42m';
-  const black = '\u001B[30m';
-  const mascot = `${cyan}◢▀▀▀   ▀▀▀◣${reset}\n${cyan}  ◉     ◉${reset}\n${cyan}    ╲▽╱${reset}`;
-  const badge = `${greenBackground}${black} jilatax ${reset}`;
+  const brightCyan = '\u001B[96m';
+  const green = '\u001B[32m';
+  const bold = '\u001B[1m';
+  const dim = '\u001B[2m';
+  const mascot = [
+    `${cyan}╲╲_${brightCyan}╱╱${reset}`,
+    `${cyan}(${green}●${cyan}▽${green}●${cyan})${reset}`,
+  ];
+  const welcome = [
+    `${bold}${brightCyan}JILATAX${reset} ${dim}v${version}${reset}`,
+    `${dim}Welcome.${reset} Build your next Android-first app.`,
+  ];
 
-  console.log(`${mascot}  ${cyan}Jilatax:${reset}\n         Welcome to ${badge} ${cyan}v${version}${reset}!\n`);
+  console.log(`${mascot.map((line, index) => `${line}  ${welcome[index]}`).join('\n')}\n`);
 }
 
 interface InstallProgress {
