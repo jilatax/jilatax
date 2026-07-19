@@ -143,21 +143,7 @@ async function promptForOptions(
       }),
     );
   const projectName = normalizeProjectNameFromDirectory(targetDirectory);
-  const displayName =
-    options.displayName ??
-    unwrapPrompt(
-      await prompts.text({
-        initialValue: titleCase(projectName),
-        message: 'Application name',
-        validate(value) {
-          try {
-            normalizeDisplayName(value ?? '');
-          } catch (error) {
-            return validationMessage(error);
-          }
-        },
-      }),
-    );
+  const displayName = options.displayName ?? titleCase(projectName);
   const packageId =
     options.packageId ??
     unwrapPrompt(
@@ -177,7 +163,7 @@ async function promptForOptions(
     options.install ??
     unwrapPrompt(
       await prompts.confirm({
-        initialValue: true,
+        initialValue: false,
         message: 'Install dependencies with Bun?',
       }),
     );

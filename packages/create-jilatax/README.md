@@ -17,8 +17,9 @@ cd my-app
 bun run run:android
 ```
 
-The creator asks for the application name, Android package ID, and whether to
-install dependencies. In non-interactive environments, pass the directory and
+The creator derives the application name from the project directory, then asks
+for the Android package ID and whether to install dependencies. Installation is
+disabled by default. In non-interactive environments, pass the directory and
 options explicitly:
 
 ```bash
