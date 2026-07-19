@@ -285,17 +285,34 @@ function startInstallProgress(): InstallProgress {
   const brightCyan = '\u001B[96m';
   const dim = '\u001B[2m';
   const green = '\u001B[32m';
+  const brightGreen = '\u001B[92m';
+  const blue = '\u001B[94m';
+  const magenta = '\u001B[95m';
+  const muted = '\u001B[90m';
   const red = '\u001B[31m';
   const bold = '\u001B[1m';
   const frames = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
+  const cometPositions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 7, 6, 5, 4, 3, 2, 1];
   let frameIndex = 0;
 
+  const renderComet = (position: number): string => {
+    const track = Array.from({ length: 9 }, (_, index) => {
+      const distance = Math.abs(index - position);
+      if (distance === 0) return `${brightGreen}◆`;
+      if (distance === 1) return `${brightCyan}━`;
+      if (distance === 2) return `${magenta}━`;
+      if (distance === 3) return `${blue}·`;
+      return `${muted}·`;
+    }).join('');
+    return `${track}${reset}`;
+  };
   const renderInstalling = (): [string, string] => {
     const frame = frames[frameIndex % frames.length] ?? frames[0];
+    const cometPosition = cometPositions[frameIndex % cometPositions.length] ?? 0;
     frameIndex += 1;
     return [
-      `${brightCyan}${frame}${reset}  ${bold}Installing dependencies${reset}`,
-      `   ${dim}Bun is preparing your JilataX project…${reset}`,
+      `${brightCyan}${frame}${reset}  ${bold}Installing dependencies${reset}  ${renderComet(cometPosition)}`,
+      `   ${dim}Bun is assembling your ${reset}${brightCyan}JilataX${reset}${dim} project…${reset}`,
     ];
   };
   const redraw = (lines: readonly [string, string]): void => {
@@ -322,8 +339,8 @@ function startInstallProgress(): InstallProgress {
     },
     succeed() {
       finish([
-        `${green}✓${reset}  ${bold}Dependencies installed${reset}`,
-        `   ${dim}Your JilataX project is ready.${reset}`,
+        `${green}✓${reset}  ${bold}Dependencies installed${reset}  ${green}━━━━━━━━━${reset}`,
+        `   ${dim}Your ${reset}${brightCyan}JilataX${reset}${dim} project is ready.${reset}`,
       ]);
     },
   };
