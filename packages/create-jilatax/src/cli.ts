@@ -358,12 +358,33 @@ function printResult(result: CreateProjectResult, log: (message: string) => void
   const farewell = `cd ${formatProjectDirectory(result.projectDirectory)}, Good luck! 🎉`;
 
   if (interactive) {
-    prompts.note(message, 'Result');
-    stdout.write(`\n${farewell}\n`);
+    printResultPanel(lines);
+    prompts.outro(farewell);
     return;
   }
 
   log(`${message}\n\n${farewell}`);
+}
+
+function printResultPanel(lines: readonly string[]): void {
+  const reset = '\u001B[0m';
+  const gray = '\u001B[90m';
+  const green = '\u001B[32m';
+  const title = 'Result';
+  const contentWidth = Math.max(displayWidth(title), ...lines.map(displayWidth)) + 5;
+  const topRule = '─'.repeat(contentWidth - displayWidth(title) - 1);
+  const content = ['', ...lines, ''].map((line) => {
+    const padding = ' '.repeat(contentWidth - displayWidth(line));
+    return `${gray}│${reset}  ${line}${padding}${gray}│${reset}`;
+  });
+  const top = `${green}◇${reset}  ${title} ${gray}${topRule}╮${reset}`;
+  const bottom = `${gray}├${'─'.repeat(contentWidth + 2)}╯${reset}`;
+
+  stdout.write(`${[top, ...content, bottom].join('\n')}\n`);
+}
+
+function displayWidth(value: string): number {
+  return [...value].filter((character) => !/^[\uFE0E\uFE0F\u200D]$/u.test(character)).length;
 }
 
 function formatProjectDirectory(projectDirectory: string): string {
