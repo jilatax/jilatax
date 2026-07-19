@@ -49,12 +49,23 @@ export async function runCreateCli(
     const interactive = services.interactive ?? (stdin.isTTY && stdout.isTTY);
     const options = interactive ? await promptForOptions(parsed) : nonInteractiveOptions(parsed);
     const generate = services.create ?? createProject;
-    const result = await generate({
-      displayName: options.displayName,
-      install: options.install,
-      packageId: options.packageId,
-      targetDirectory: options.targetDirectory,
-    });
+    const progress = interactive && options.install ? startInstallProgress() : undefined;
+
+    let result: CreateProjectResult;
+    try {
+      result = await generate({
+        displayName: options.displayName,
+        install: options.install,
+        packageId: options.packageId,
+        ...(progress === undefined ? {} : { silentInstall: true }),
+        targetDirectory: options.targetDirectory,
+      });
+    } catch (error) {
+      progress?.fail();
+      throw error;
+    }
+
+    progress?.succeed();
     printResult(result, log);
     return 0;
   } catch (error) {
@@ -241,6 +252,58 @@ function printWelcome(version: string): void {
   const badge = `${greenBackground}${black} jilatax ${reset}`;
 
   console.log(`${mascot}  ${cyan}Jilatax:${reset}\n         Welcome to ${badge} ${cyan}v${version}${reset}!\n`);
+}
+
+interface InstallProgress {
+  fail(): void;
+  succeed(): void;
+}
+
+function startInstallProgress(): InstallProgress {
+  const reset = '\u001B[0m';
+  const cyan = '\u001B[36m';
+  const dim = '\u001B[2m';
+  const green = '\u001B[32m';
+  const frames = [
+    [45, 105, 44, 46],
+    [105, 44, 46, 45],
+    [44, 46, 45, 105],
+    [46, 45, 105, 44],
+  ] as const;
+  let frameIndex = 0;
+
+  const renderBar = (): string => {
+    const colors = frames[frameIndex % frames.length] ?? frames[0];
+    frameIndex += 1;
+    return `${colors.map((color) => `\u001B[${color}m  `).join('')}${reset}`;
+  };
+  const renderTitle = (): string => `${renderBar()}  Project initializing...`;
+
+  stdout.write(
+    `\u001B[?25l${renderTitle()}\n         ${cyan}▸ Installing dependencies with Bun...${reset}\u001B[1A\r`,
+  );
+  const timer = setInterval(() => {
+    stdout.write(`\u001B[2K${renderTitle()}\r`);
+  }, 120);
+
+  const finish = (title: string, detail: string): void => {
+    clearInterval(timer);
+    stdout.write(
+      `\u001B[2K\r\u001B[1B\r\u001B[2K\u001B[1A\r${title}\n${detail}\n\u001B[?25h`,
+    );
+  };
+
+  return {
+    fail() {
+      finish(`${cyan}▲${reset} Project initialization failed.`, '');
+    },
+    succeed() {
+      finish(
+        `${green}✓ Project initialized!${reset}`,
+        `  ${dim}▪ Dependencies installed${reset}\n`,
+      );
+    },
+  };
 }
 
 function printResult(result: CreateProjectResult, log: (message: string) => void): void {

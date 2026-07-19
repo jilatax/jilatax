@@ -25,6 +25,7 @@ export interface CreateProjectOptions {
   readonly install?: boolean;
   readonly installer?: ProjectInstaller;
   readonly packageId?: string;
+  readonly silentInstall?: boolean;
   readonly targetDirectory: string;
 }
 
@@ -85,7 +86,9 @@ export async function createProject(
 
   const shouldInstall = options.install === true;
   if (shouldInstall) {
-    const installer = options.installer ?? installWithBun;
+    const installer =
+      options.installer ??
+      ((directory: string) => installWithBun(directory, options.silentInstall === true));
     await installer(projectDirectory);
   }
 
@@ -334,12 +337,12 @@ function titleCase(value: string): string {
     .join(' ');
 }
 
-function installWithBun(projectDirectory: string): Promise<void> {
+function installWithBun(projectDirectory: string, silent: boolean): Promise<void> {
   return new Promise((resolveInstall, rejectInstall) => {
     const child = spawn('bun', ['install'], {
       cwd: projectDirectory,
       env: process.env,
-      stdio: 'inherit',
+      stdio: silent ? 'ignore' : 'inherit',
       windowsHide: true,
     });
     child.once('error', rejectInstall);
