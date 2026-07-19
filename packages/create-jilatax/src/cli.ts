@@ -347,7 +347,7 @@ function startInstallProgress(): InstallProgress {
 function printResult(result: CreateProjectResult, log: (message: string) => void, interactive: boolean): void {
   const lines = [
     '🛠️ build:',
-    ...(result.installed ? [] : ['  bun i']),
+    ...(result.installed ? [] : ['  bun install']),
     '  bun run dev',
     '',
     '🤖 Android:',
