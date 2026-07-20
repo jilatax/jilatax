@@ -28,7 +28,7 @@
   "keywords": ["android", "creator", "jilatax", "lynx", "rspeedy"],
   "author": "Gohit X (bastndev)",
   "license": "MIT",
-  "homepage": "https://jilatax.dev/jilatax",
+  "homepage": "https://jilatax.dev",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jilatax/jilatax.git"
