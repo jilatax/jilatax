@@ -1,4 +1,5 @@
 import type { AppTab } from '../../app/navigation.js';
+import './BottomBar.css';
 
 interface BottomBarProps {
   activeTab: AppTab;
@@ -8,6 +9,7 @@ interface BottomBarProps {
 const tabs: ReadonlyArray<{ id: AppTab; label: string }> = [
   { id: 'home', label: 'Home' },
   { id: 'about', label: 'About' },
+  { id: 'setting', label: 'Setting' },
 ];
 
 export function BottomBar({ activeTab, onSelect }: BottomBarProps) {

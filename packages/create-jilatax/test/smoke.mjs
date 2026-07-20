@@ -154,18 +154,23 @@ async function testGeneratedProject(root) {
   const projectFiles = await listFiles(projectDirectory);
   assert(projectFiles.includes('.gitignore'));
   assert(projectFiles.includes('public/assets/icon.png'));
-  assert(projectFiles.includes('public/assets/jilatax-icon.png'));
   assert(projectFiles.includes('public/assets/splash-icon.png'));
-  assert(projectFiles.includes('public/fonts/JilataX.otf'));
+  assert(projectFiles.includes('public/fonts/jilatax.ttf'));
+  assert(projectFiles.includes('src/assets/images/logo.png'));
   assert(projectFiles.includes('src/app/App.tsx'));
   assert(projectFiles.includes('src/app/navigation.ts'));
+  assert(projectFiles.includes('src/components/navigation/BottomBar.css'));
   assert(projectFiles.includes('src/components/navigation/BottomBar.tsx'));
-  assert(projectFiles.includes('src/components/ui/Brand.tsx'));
+  assert(projectFiles.includes('src/components/ui/Logo.tsx'));
   assert(projectFiles.includes('src/screens/AboutScreen.tsx'));
   assert(projectFiles.includes('src/screens/HomeScreen.tsx'));
+  assert(projectFiles.includes('src/screens/SettingScreen.tsx'));
   assert(projectFiles.includes('src/styles/global.css'));
   assert(!projectFiles.includes('src/App.tsx'));
   assert(!projectFiles.includes('src/App.css'));
+  assert(!projectFiles.includes('public/assets/jilatax-icon.png'));
+  assert(!projectFiles.includes('public/fonts/JilataX.otf'));
+  assert(!projectFiles.includes('src/components/ui/Brand.tsx'));
   assert(
     projectFiles.includes(
       '.jilatax/android-res/drawable/jilatax_splash_icon.xml',
@@ -189,17 +194,25 @@ async function testGeneratedProject(root) {
   );
   assert.match(appSource, /<HomeScreen \/>/u);
   assert.match(appSource, /<AboutScreen \/>/u);
+  assert.match(appSource, /<SettingScreen \/>/u);
   assert.match(appSource, /<BottomBar activeTab=/u);
 
   const globalStyles = await readFile(
     path.join(projectDirectory, 'src', 'styles', 'global.css'),
     'utf8',
   );
-  assert.match(globalStyles, /\.bottom-bar/u);
   assert.match(globalStyles, /prefers-color-scheme: dark/u);
-  assert.match(globalStyles, /@font-face\s*\{[^}]*font-family:\s*JilataX/isu);
-  assert.match(globalStyles, /src:\s*url\('\.\.\/\.\.\/public\/fonts\/JilataX\.otf'\)/u);
-  assert.match(globalStyles, /\.brand__caption\s*\{[^}]*font-family:\s*JilataX/isu);
+  assert.match(globalStyles, /@font-face\s*\{[^}]*font-family:\s*jilatax/isu);
+  assert.match(globalStyles, /src:\s*url\('\.\.\/\.\.\/public\/fonts\/jilatax\.ttf'\)/u);
+  assert.match(globalStyles, /\.centered-message\s*\{[^}]*font-family:\s*jilatax/isu);
+
+  const bottomBarStyles = await readFile(
+    path.join(projectDirectory, 'src', 'components', 'navigation', 'BottomBar.css'),
+    'utf8',
+  );
+  assert.match(bottomBarStyles, /\.bottom-bar/u);
+  assert.match(bottomBarStyles, /border-radius:\s*999px/u);
+  assert.match(bottomBarStyles, /prefers-color-scheme: dark/u);
 
   const allGeneratedText = await readGeneratedText(projectDirectory, projectFiles);
   assert.doesNotMatch(allGeneratedText, /\{\{[A-Za-z][A-Za-z0-9]*\}\}/u);

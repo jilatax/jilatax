@@ -1,0 +1,78 @@
+.bottom-bar-wrap {
+  bottom: 11px;
+  left: 0;
+  padding: 0 22px;
+  position: absolute;
+  width: 100%;
+}
+
+.bottom-bar {
+  background-color: #ffffff;
+  border-color: #dfe9e5;
+  border-radius: 999px;
+  border-style: solid;
+  border-width: 1px;
+  display: flex;
+  flex-direction: row;
+  padding: 7px;
+  width: 100%;
+}
+
+.bottom-bar__button {
+  align-items: center;
+  border-radius: 999px;
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  height: 54px;
+  justify-content: center;
+}
+
+.bottom-bar__button--active {
+  background-color: #e8f7ef;
+}
+
+.bottom-bar__mark {
+  border-color: #879990;
+  border-radius: 999px;
+  border-style: solid;
+  border-width: 2px;
+  height: 10px;
+  margin-right: 8px;
+  width: 10px;
+}
+
+.bottom-bar__mark--active {
+  background-color: #00aa6b;
+  border-color: #00aa6b;
+}
+
+.bottom-bar__label {
+  color: #72847c;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.bottom-bar__label--active {
+  color: #08774f;
+  font-weight: 800;
+}
+
+@media (prefers-color-scheme: dark) {
+  .bottom-bar {
+    background-color: #0d2119;
+    border-color: #1b382d;
+  }
+
+  .bottom-bar__button--active {
+    background-color: #15392b;
+  }
+
+  .bottom-bar__label {
+    color: #82978e;
+  }
+
+  .bottom-bar__label--active {
+    color: #79efb5;
+  }
+}
