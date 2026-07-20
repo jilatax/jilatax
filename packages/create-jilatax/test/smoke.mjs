@@ -81,6 +81,22 @@ async function testGeneratedProject(root) {
   );
   assert.equal(typeof packageJson.devDependencies?.['@lynx-js/rspeedy'], 'string');
 
+  const nodeTsconfig = await readJson(
+    path.join(projectDirectory, 'tsconfig.node.json'),
+  );
+  assert.equal(
+    nodeTsconfig.compilerOptions?.tsBuildInfoFile,
+    './node_modules/.cache/jilatax/tsconfig.node.tsbuildinfo',
+  );
+
+  const appTsconfig = await readJson(
+    path.join(projectDirectory, 'src', 'tsconfig.json'),
+  );
+  assert.equal(
+    appTsconfig.compilerOptions?.tsBuildInfoFile,
+    '../node_modules/.cache/jilatax/tsconfig.tsbuildinfo',
+  );
+
   for (const dependencyName of [
     ...Object.keys(packageJson.dependencies ?? {}),
     ...Object.keys(packageJson.devDependencies ?? {}),

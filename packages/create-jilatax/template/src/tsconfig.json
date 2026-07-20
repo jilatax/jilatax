@@ -7,6 +7,7 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "lib": ["ES2022"],
+    "tsBuildInfoFile": "../node_modules/.cache/jilatax/tsconfig.tsbuildinfo",
     "noEmit": true
   },
   "include": ["./**/*.ts", "./**/*.tsx"]

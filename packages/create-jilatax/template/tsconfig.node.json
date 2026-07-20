@@ -6,6 +6,7 @@
     "moduleResolution": "NodeNext",
     "lib": ["ES2022"],
     "types": ["node"],
+    "tsBuildInfoFile": "./node_modules/.cache/jilatax/tsconfig.node.tsbuildinfo",
     "noEmit": true
   },
   "include": ["./lynx.config.ts"]
