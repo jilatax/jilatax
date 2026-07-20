@@ -153,6 +153,8 @@ async function testGeneratedProject(root) {
 
   const projectFiles = await listFiles(projectDirectory);
   assert(projectFiles.includes('.gitignore'));
+  assert(projectFiles.includes('AGENTS.md'));
+  assert(projectFiles.includes('CLAUDE.md'));
   assert(projectFiles.includes('public/assets/icon.png'));
   assert(projectFiles.includes('public/assets/splash-icon.png'));
   assert(projectFiles.includes('public/fonts/jilatax.ttf'));
@@ -187,6 +189,20 @@ async function testGeneratedProject(root) {
   assert(!projectFiles.some((file) => file.startsWith('dist/')));
   assert(!projectFiles.some((file) => file.endsWith('.tmpl')));
   assert(!projectFiles.some((file) => file.endsWith('.base64')));
+
+  const agentsSource = await readFile(
+    path.join(projectDirectory, 'AGENTS.md'),
+    'utf8',
+  );
+  assert.match(agentsSource, /This project is self-contained/u);
+  assert.match(agentsSource, /treat them as independent projects/u);
+  assert.doesNotMatch(agentsSource, /test-[12]/u);
+
+  const claudeSource = await readFile(
+    path.join(projectDirectory, 'CLAUDE.md'),
+    'utf8',
+  );
+  assert.equal(claudeSource, '@AGENTS.md\n');
 
   const appSource = await readFile(
     path.join(projectDirectory, 'src', 'app', 'App.tsx'),
