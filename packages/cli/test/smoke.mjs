@@ -78,6 +78,16 @@ try {
     ),
     'fixture-bundle',
   );
+  assert.equal(
+    await readFile(
+      path.join(
+        projectRoot,
+        '.jilatax/android-assets/static/font/fixture.ttf',
+      ),
+      'utf8',
+    ),
+    'fixture-font',
+  );
 
   assertOrdered(development.events, [
     'adb:devices',
@@ -276,10 +286,14 @@ function createFakeServices(root, mode) {
       if (command.endsWith('rspeedy') || command.endsWith('rspeedy.cmd')) {
         assert.equal(args[0], 'build');
         events.push('rspeedy:build');
-        await mkdir(path.join(root, 'dist'), { recursive: true });
+        await mkdir(path.join(root, 'dist/static/font'), { recursive: true });
         await writeFile(
           path.join(root, 'dist/main.lynx.bundle'),
           'fixture-bundle',
+        );
+        await writeFile(
+          path.join(root, 'dist/static/font/fixture.ttf'),
+          'fixture-font',
         );
         return result();
       }

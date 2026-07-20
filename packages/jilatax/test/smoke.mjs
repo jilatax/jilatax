@@ -202,11 +202,31 @@ const androidBundleSource = await readFile(
   ),
   'utf8',
 );
+const androidFontFaceLoader = await readFile(
+  resolveAndroidProjectPath(
+    'src/main/java/dev/jilatax/android/JilataxFontFaceLoader.kt',
+  ),
+  'utf8',
+);
+const androidRuntime = await readFile(
+  resolveAndroidProjectPath(
+    'src/main/java/dev/jilatax/android/JilataxRuntime.kt',
+  ),
+  'utf8',
+);
 assert.equal(existsSync(androidProjectPath), true);
 assert.equal(androidBuildFile.includes('sparkling-debug-tool'), false);
 assert.equal(androidBuildFile.includes('debugImplementation'), false);
 assert.equal(androidBundleSource.includes(ANDROID_BUNDLE_SOURCE_EXTRA), true);
 assert.equal(androidBundleSource.includes('SharedPreferences'), false);
+assert.match(androidFontFaceLoader, /ANDROID_ASSET_PREFIX = "asset:\/\/\/"/u);
+assert.match(androidFontFaceLoader, /Typeface\.createFromAsset/u);
+assert.match(androidFontFaceLoader, /TypefaceUtils\.createFromBytes/u);
+assert.match(androidFontFaceLoader, /source\.startsWith\("http:\/\/"\)/u);
+assert.match(
+  androidRuntime,
+  /LynxFontFaceLoader\.setLoader\(JilataxFontFaceLoader\(application\)\)/u,
+);
 
 const schemaPath = resolveAppSchemaPath();
 const schema = JSON.parse(await readFile(schemaPath, 'utf8'));
