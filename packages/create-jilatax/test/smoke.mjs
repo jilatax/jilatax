@@ -141,9 +141,17 @@ async function testGeneratedProject(root) {
     path.join(projectDirectory, 'android', 'app', 'src', 'main', 'AndroidManifest.xml'),
     'utf8',
   );
-  assert.match(mainManifest, /dev\.jilatax\.android\.JilataxApplication/u);
+  assert.match(mainManifest, /dev\.jilatax\.app\.MainApplication/u);
+  assert.match(mainManifest, /dev\.jilatax\.app\.MainActivity/u);
   assert.match(mainManifest, /dev\.jilatax\.android\.JilataxActivity/u);
+  assert.match(mainManifest, /android:targetActivity="dev\.jilatax\.app\.MainActivity"/u);
   assert.match(mainManifest, /android:usesCleartextTraffic="false"/u);
+
+  const androidStyles = await readFile(
+    path.join(projectDirectory, 'android', 'app', 'src', 'main', 'res', 'values', 'styles.xml'),
+    'utf8',
+  );
+  assert.match(androidStyles, /<item name="android:forceDarkAllowed">false<\/item>/u);
 
   const debugManifest = await readFile(
     path.join(projectDirectory, 'android', 'app', 'src', 'debug', 'AndroidManifest.xml'),
@@ -168,6 +176,8 @@ async function testGeneratedProject(root) {
   assert(projectFiles.includes('src/screens/HomeScreen.tsx'));
   assert(projectFiles.includes('src/screens/SettingScreen.tsx'));
   assert(projectFiles.includes('src/styles/global.css'));
+  assert(projectFiles.includes('android/app/src/main/java/dev/jilatax/app/MainActivity.kt'));
+  assert(projectFiles.includes('android/app/src/main/java/dev/jilatax/app/MainApplication.kt'));
   assert(!projectFiles.includes('src/App.tsx'));
   assert(!projectFiles.includes('src/App.css'));
   assert(!projectFiles.includes('public/assets/jilatax-icon.png'));
@@ -212,12 +222,51 @@ async function testGeneratedProject(root) {
   assert.match(appSource, /<AboutScreen \/>/u);
   assert.match(appSource, /<SettingScreen \/>/u);
   assert.match(appSource, /<BottomBar activeTab=/u);
+  assert.match(appSource, /useInitData/u);
+  assert.match(appSource, /theme-\$\{appTheme\}/u);
+
+  const mainActivitySource = await readFile(
+    path.join(
+      projectDirectory,
+      'android',
+      'app',
+      'src',
+      'main',
+      'java',
+      'dev',
+      'jilatax',
+      'app',
+      'MainActivity.kt',
+    ),
+    'utf8',
+  );
+  assert.match(mainActivitySource, /override fun initialDataJson\(\): String/u);
+  assert.match(mainActivitySource, /"appTheme"/u);
+
+  const mainApplicationSource = await readFile(
+    path.join(
+      projectDirectory,
+      'android',
+      'app',
+      'src',
+      'main',
+      'java',
+      'dev',
+      'jilatax',
+      'app',
+      'MainApplication.kt',
+    ),
+    'utf8',
+  );
+  assert.match(mainApplicationSource, /override fun onConfigurationChanged/u);
+  assert.match(mainApplicationSource, /Intent\.makeRestartActivityTask/u);
 
   const globalStyles = await readFile(
     path.join(projectDirectory, 'src', 'styles', 'global.css'),
     'utf8',
   );
-  assert.match(globalStyles, /prefers-color-scheme: dark/u);
+  assert.match(globalStyles, /\.app-shell\.theme-dark/u);
+  assert.doesNotMatch(globalStyles, /prefers-color-scheme/u);
   assert.match(globalStyles, /@font-face\s*\{[^}]*font-family:\s*jilatax/isu);
   assert.match(globalStyles, /src:\s*url\('\.\.\/\.\.\/public\/fonts\/jilatax\.ttf'\)/u);
   assert.match(globalStyles, /\.centered-message\s*\{[^}]*font-family:\s*jilatax/isu);
@@ -228,7 +277,8 @@ async function testGeneratedProject(root) {
   );
   assert.match(bottomBarStyles, /\.bottom-bar/u);
   assert.match(bottomBarStyles, /border-radius:\s*999px/u);
-  assert.match(bottomBarStyles, /prefers-color-scheme: dark/u);
+  assert.match(bottomBarStyles, /\.theme-dark \.bottom-bar/u);
+  assert.doesNotMatch(bottomBarStyles, /prefers-color-scheme/u);
 
   const allGeneratedText = await readGeneratedText(projectDirectory, projectFiles);
   assert.doesNotMatch(allGeneratedText, /\{\{[A-Za-z][A-Za-z0-9]*\}\}/u);

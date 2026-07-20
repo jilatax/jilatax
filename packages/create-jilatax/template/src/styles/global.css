@@ -4,18 +4,17 @@
 }
 
 :root {
-  --bg-color: #f3f7f5;
-  --text-color: #10241d;
-  background-color: var(--bg-color);
-  color: var(--text-color);
   font-family: system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-color: #071510;
-    --text-color: #f3fff8;
-  }
+.app-shell {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.app-shell.theme-dark {
+  background-color: #000000;
+  color: #ffffff;
 }
 
 /**
@@ -25,7 +24,6 @@
  */
 
 .app-shell {
-  background-color: var(--bg-color);
   height: 100vh;
   overflow: hidden;
   position: relative;
@@ -35,7 +33,6 @@
 .screen {
   height: 100%;
   width: 100%;
-  background-color: var(--bg-color);
 }
 
 .screen__content {
@@ -48,7 +45,6 @@
 .centered-message {
   font-family: jilatax;
   font-size: 32px;
-  text-align: center;
   margin: auto;
-  color: var(--text-color);
+  text-align: center;
 }

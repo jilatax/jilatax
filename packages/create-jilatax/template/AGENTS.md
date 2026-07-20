@@ -47,6 +47,7 @@
 - `lynx.config.ts` configures Rspeedy, React Lynx, QR development, bundle naming, and the required `asset:///` prefix.
 - `app.json` is the source of truth for Jilatax application and Android metadata.
 - `android/` contains the committed native project and Gradle wrapper. Jilatax synchronizes configuration and resources before Android builds.
+- `android/app/src/main/java/dev/jilatax/app/` bridges the Android device theme into Lynx init data and restarts the task when the device theme changes.
 
 ## Implementation conventions
 
