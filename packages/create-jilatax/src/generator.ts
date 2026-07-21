@@ -47,9 +47,9 @@ interface PackageMetadata {
 const require = createRequire(import.meta.url);
 const svgPackageJson = require('@jilatax/svg/package.json') as PackageMetadata;
 
-const JILATAX_CLI_VERSION = '^0.1.0';
+const JILATAX_CLI_VERSION = '^0.1.2';
 const JILATAX_SVG_VERSION = `^${svgPackageJson.version}`;
-const JILATAX_VERSION = '^0.0.7';
+const JILATAX_VERSION = '^0.0.8';
 const LYNX_QRCODE_PLUGIN_VERSION = '^0.4.4';
 const LYNX_REACT_VERSION = '^0.116.2';
 const LYNX_TYPES_VERSION = '^3.7.0';
