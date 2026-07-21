@@ -39,8 +39,8 @@ export interface CreateProjectResult {
 
 export type ProjectInstaller = (projectDirectory: string) => Promise<void>;
 
-const JILATAX_CLI_VERSION = '^0.0.9';
-const JILATAX_VERSION = '^0.0.6';
+const JILATAX_CLI_VERSION = '^0.1.0';
+const JILATAX_VERSION = '^0.0.7';
 const LYNX_QRCODE_PLUGIN_VERSION = '^0.4.4';
 const LYNX_REACT_VERSION = '^0.116.2';
 const LYNX_TYPES_VERSION = '^3.7.0';
