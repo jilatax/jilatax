@@ -10,16 +10,23 @@
 .app-shell {
   background-color: #ffffff;
   color: #000000;
+}
+.app-shell.theme-dark {
+  background-color: #000000;
+  color: #ffffff;
+}
+/**
+ * ------------------------------------------------
+ *  ⚡ APP SHELL
+ * ------------------------------------------------
+ */
+.app-shell {
   height: 100vh;
   overflow: hidden;
   position: relative;
   width: 100%;
 }
 
-.app-shell.theme-dark {
-  background-color: #000000;
-  color: #ffffff;
-}
 
 .screen {
   height: 100%;
