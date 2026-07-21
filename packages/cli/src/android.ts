@@ -12,6 +12,10 @@ import {
 
 import { CliError, errorMessage } from './errors.js';
 import {
+  startLiveReload,
+  type LiveReloadHandle,
+} from './live-reload.js';
+import {
   defaultCliServices,
   type CliServices,
   type CommandResult,
@@ -41,6 +45,7 @@ export interface RunAndroidResult {
   readonly bundleSource: string;
   readonly deviceSerial: string;
   readonly devServer?: RunningCommand;
+  readonly liveReload?: LiveReloadHandle;
   readonly mode: 'development' | 'packaged';
   readonly startedDevServer: boolean;
 }
@@ -74,6 +79,7 @@ export async function runAndroid(
   await syncAndroidProjectConfig(projectRoot, config);
 
   let startedDevServer = false;
+  let liveReload: LiveReloadHandle | undefined;
   let devServerProcess:
     | Awaited<ReturnType<typeof ensureRspeedyDevServer>>['process']
     | undefined;
@@ -165,6 +171,44 @@ export async function runAndroid(
       services,
     );
 
+    if (options.packaged !== true) {
+      const monitor = await startLiveReload(
+        {
+          bundleUrl: bundleSource,
+          async onBundleChange() {
+            await configureAdbReverse(
+              device.serial,
+              port,
+              projectRoot,
+              services,
+            );
+            await stopAndroidApp(
+              device.serial,
+              packageId,
+              projectRoot,
+              services,
+            );
+            await launchAndroidApp(
+              device.serial,
+              packageId,
+              bundleSource,
+              projectRoot,
+              services,
+            );
+            services.log(`Android app reloaded on ${device.serial}.`);
+          },
+        },
+        services,
+      );
+      liveReload = {
+        stopped: monitor.stopped,
+        stop() {
+          monitor.stop();
+          devServerProcess?.kill();
+        },
+      };
+    }
+
     return {
       apkPath,
       bundleSource,
@@ -172,11 +216,13 @@ export async function runAndroid(
       ...(devServerProcess === undefined
         ? {}
         : { devServer: devServerProcess }),
+      ...(liveReload === undefined ? {} : { liveReload }),
       mode: options.packaged === true ? 'packaged' : 'development',
       startedDevServer,
     };
   } catch (error) {
-    devServerProcess?.kill();
+    if (liveReload === undefined) devServerProcess?.kill();
+    else liveReload.stop();
     throw error;
   }
 }

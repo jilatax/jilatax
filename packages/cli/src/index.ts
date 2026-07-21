@@ -12,6 +12,8 @@ export type {
   RunAndroidResult,
 } from './android.js';
 
+export type { LiveReloadHandle } from './live-reload.js';
+
 export { helpText, runCli } from './cli.js';
 export type { RunCliOptions } from './cli.js';
 

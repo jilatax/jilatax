@@ -64,6 +64,7 @@ try {
   assert.equal(runResult.mode, 'development');
   assert.equal(runResult.startedDevServer, true);
   assert.equal(typeof runResult.devServer?.kill, 'function');
+  assert.equal(typeof runResult.liveReload?.stop, 'function');
   assert.equal(
     runResult.bundleSource,
     'http://127.0.0.1:5969/main.lynx.bundle',
@@ -121,6 +122,21 @@ try {
   );
   assert.ok(development.launchArgs.includes(runResult.bundleSource));
 
+  development.publishBundle('fixture-bundle-updated');
+  await waitFor(
+    () =>
+      development.events.filter((event) => event === 'adb:start').length ===
+      2,
+    'Android live reload did not relaunch the fixture app.',
+  );
+  assert.equal(
+    development.events.filter((event) => event === 'adb:reverse:set').length,
+    2,
+  );
+  runResult.liveReload?.stop();
+  await runResult.liveReload?.stopped;
+  assert.equal(development.serverKilled, true);
+
   const conflict = createFakeServices(projectRoot, 'conflict');
   await assert.rejects(
     runAndroid({ projectRoot }, conflict.services),
@@ -146,6 +162,7 @@ try {
   );
   assert.equal(packagedResult.mode, 'packaged');
   assert.equal(packagedResult.startedDevServer, false);
+  assert.equal(packagedResult.liveReload, undefined);
   assert.equal(packagedResult.bundleSource, DEFAULT_ANDROID_BUNDLE);
   assert.equal(packaged.events.includes('bundle:probe'), false);
   assert.equal(packaged.events.includes('rspeedy:dev'), false);
@@ -239,6 +256,7 @@ function createFakeServices(root, mode) {
   const events = [];
   let serverStarted = mode === 'conflict';
   let serverKilled = false;
+  let bundle = 'fixture-bundle';
   let launchArgs = [];
 
   const services = {
@@ -325,7 +343,7 @@ function createFakeServices(root, mode) {
     async fetch() {
       events.push('bundle:probe');
       return serverStarted
-        ? new Response('fixture-bundle')
+        ? new Response(bundle, { headers: { etag: `"${bundle}"` } })
         : new Response('', { status: 503 });
     },
     log() {},
@@ -349,6 +367,9 @@ function createFakeServices(root, mode) {
 
   return {
     events,
+    publishBundle(nextBundle) {
+      bundle = nextBundle;
+    },
     get launchArgs() {
       return launchArgs;
     },
@@ -395,5 +416,13 @@ function assertOrdered(actual, expected) {
     const index = actual.indexOf(event, previous + 1);
     assert.notEqual(index, -1, `Missing ordered event ${event}: ${actual}`);
     previous = index;
+  }
+}
+
+async function waitFor(predicate, message) {
+  const deadline = Date.now() + 3_000;
+  while (!predicate()) {
+    if (Date.now() >= deadline) throw new Error(message);
+    await new Promise((resolve) => setTimeout(resolve, 25));
   }
 }

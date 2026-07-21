@@ -3,7 +3,12 @@ import { resolve } from 'node:path';
 
 import { createAab, runAndroid } from './android.js';
 import { CliError, errorMessage } from './errors.js';
-import { defaultCliServices, type CliServices } from './process.js';
+import type { LiveReloadHandle } from './live-reload.js';
+import {
+  defaultCliServices,
+  type CliServices,
+  type RunningCommand,
+} from './process.js';
 
 export interface RunCliOptions {
   readonly services?: CliServices;
@@ -48,12 +53,19 @@ export async function runCli(
         services,
       );
       services.log(
-        `Android app installed and launched once on ${result.deviceSerial}.`,
+        `Android app installed and launched on ${result.deviceSerial}.`,
       );
       services.log(`APK: ${result.apkPath}`);
       services.log(`Bundle source: ${result.bundleSource}`);
-      if (result.startedDevServer) {
-        services.log('Rspeedy remains attached for development. Press Ctrl+C to stop it.');
+      if (result.liveReload !== undefined) {
+        services.log(
+          'Live reload is active. Successful source rebuilds refresh the Android app.',
+        );
+        services.log('Press Ctrl+C to stop the development session.');
+        await waitForDevelopmentSession(
+          result.liveReload,
+          result.devServer,
+        );
       }
       return 0;
     }
@@ -90,7 +102,7 @@ Usage:
   jilatax create:aab [options]
 
 Commands:
-  run:android  Build, install, and launch once on an Android device
+  run:android  Build, install, and live-reload on an Android device
   create:aab   Build the packaged Android App Bundle for release
 
 Options:
@@ -100,6 +112,42 @@ Options:
   --project-root <path>   Jilatax application root (default: current folder)
   -h, --help              Show this help
   -V, --version           Show the installed CLI version`;
+}
+
+async function waitForDevelopmentSession(
+  liveReload: LiveReloadHandle,
+  devServer: RunningCommand | undefined,
+): Promise<void> {
+  let stopping = false;
+  const stop = (): void => {
+    if (stopping) return;
+    stopping = true;
+    liveReload.stop();
+  };
+  process.once('SIGINT', stop);
+  process.once('SIGTERM', stop);
+
+  try {
+    if (devServer === undefined) {
+      await liveReload.stopped;
+      return;
+    }
+    const outcome = await Promise.race([
+      liveReload.stopped.then(() => ({ source: 'reload' as const })),
+      devServer.exited.then((result) => ({ result, source: 'server' as const })),
+    ]);
+    if (outcome.source === 'server' && !stopping) {
+      liveReload.stop();
+      await liveReload.stopped;
+      throw new CliError(
+        'JTX_COMMAND_FAILED',
+        `Rspeedy stopped during the development session (exit ${outcome.result.code}).`,
+      );
+    }
+  } finally {
+    process.removeListener('SIGINT', stop);
+    process.removeListener('SIGTERM', stop);
+  }
 }
 
 function parseCommand(args: readonly string[]): ParsedCommand {

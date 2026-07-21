@@ -20,12 +20,19 @@ The development command:
 2. starts or reuses the Rspeedy server on `127.0.0.1:5969`;
 3. builds and synchronizes `main.lynx.bundle` into `.jilatax/android-assets`;
 4. assembles and installs the debug APK without launching it;
-5. creates and verifies `adb reverse` after installation; and
-6. launches the Jilatax activity exactly once with an explicit bundle source.
+5. creates and verifies `adb reverse` after installation;
+6. launches the Jilatax activity with an explicit bundle source; and
+7. watches successful Rspeedy rebuilds and automatically refreshes the app over
+   the existing USB connection.
 
 Use `--device <serial>` when multiple devices are connected, `--port <number>`
 to select another development port, or `--packaged` to skip the server and open
 the bundled Lynx application.
+
+Keep the command running while you edit the project. Rspeedy continues to use
+its HMR pipeline, while the CLI verifies the rebuilt bundle and relaunches the
+Android activity as a reliable device fallback. Compilation errors do not
+reload the last working app, and `Ctrl+C` stops the session.
 
 The development server started by this command removes the QR code plugin from
 the project's Lynx configuration; run `bun run dev` in another terminal when
@@ -45,7 +52,9 @@ accepted as CLI arguments or stored by this package.
 ```ts
 import { createAab, runAndroid } from '@jilatax/cli';
 
-await runAndroid({ projectRoot: process.cwd() });
+const development = await runAndroid({ projectRoot: process.cwd() });
+// Keep the process running while developing, then stop the returned session.
+development.liveReload?.stop();
 await createAab({ projectRoot: process.cwd() });
 ```
 
