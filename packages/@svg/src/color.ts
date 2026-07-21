@@ -17,5 +17,6 @@ export function applySvgColor(content: string, color: string): string {
       `Unsupported SVG color: ${color}`,
     );
   }
-  return content.replaceAll('currentColor', escapeXml(normalizedColor));
+  const escapedColor = escapeXml(normalizedColor);
+  return content.replace(/currentColor/gu, () => escapedColor);
 }

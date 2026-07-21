@@ -101,7 +101,7 @@
   "scripts": {
     "build": "tsdown",
     "typecheck": "tsc --noEmit",
-    "test": "bun run build && node test/smoke.mjs",
+    "test": "bun run build && node test/smoke.mjs && node test/runtime-compat.mjs",
     "check": "bun run typecheck && bun run test",
     "prepack": "bun run check"
   }
