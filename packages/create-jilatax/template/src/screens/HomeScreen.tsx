@@ -1,12 +1,7 @@
 import { useMainThreadRef } from '@lynx-js/react';
 import { Logo } from '../components/ui/Logo.js';
-import { SettingsButton } from '../components/ui/buttons/SettingsButton.js';
 
-interface HomeScreenProps {
-  onSettingsTap: () => void;
-}
-
-export function HomeScreen({ onSettingsTap }: HomeScreenProps) {
+export function HomeScreen() {
   const showImage = useMainThreadRef(false);
 
   const handleScreenTap = () => {
@@ -24,7 +19,6 @@ export function HomeScreen({ onSettingsTap }: HomeScreenProps) {
 
   return (
     <view className="screen" main-thread:bindtap={handleScreenTap}>
-      <SettingsButton onTap={onSettingsTap} />
       <view className="screen__content">
         <Logo />
       </view>

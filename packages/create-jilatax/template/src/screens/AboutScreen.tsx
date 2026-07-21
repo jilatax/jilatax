@@ -1,13 +1,6 @@
-import { SettingsButton } from '../components/ui/buttons/SettingsButton.js';
-
-interface AboutScreenProps {
-  onSettingsTap: () => void;
-}
-
-export function AboutScreen({ onSettingsTap }: AboutScreenProps) {
+export function AboutScreen() {
   return (
     <view className="screen">
-      <SettingsButton onTap={onSettingsTap} />
       <view className="screen__content">
         <text className="centered-message">About</text>
       </view>

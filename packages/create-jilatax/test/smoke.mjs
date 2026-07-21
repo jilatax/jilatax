@@ -266,12 +266,27 @@ async function testGeneratedProject(root) {
     'utf8',
   );
   assert.match(appSource, /useState\(false\)/u);
-  assert.match(appSource, /<HomeScreen onSettingsTap=/u);
-  assert.match(appSource, /<AboutScreen onSettingsTap=/u);
-  assert.match(appSource, /<MeScreen onSettingsTap=/u);
-  assert.match(appSource, /<SettingScreen onBack=/u);
-  assert.match(appSource, /<BottomBar activeTab=/u);
-  assert.match(appSource, /isSettingsOpen \? null/u);
+  assert.match(
+    appSource,
+    /from\s+['"]\.\.\/components\/ui\/buttons\/SettingsButton\.js['"]/u,
+  );
+  assert.match(appSource, /<HomeScreen\b/u);
+  assert.match(appSource, /<AboutScreen\b/u);
+  assert.match(appSource, /<MeScreen\b/u);
+  assert.doesNotMatch(appSource, /\bonSettingsTap\b/u);
+  assert.match(
+    appSource,
+    /<SettingScreen\b[^>]*\bonBack=\{handleNavigateBack\}/su,
+  );
+  assert.match(
+    appSource,
+    /\{isSettingsOpen\s*\?\s*null\s*:\s*\(\s*<SettingsButton\b[^>]*\bonTap=\{handleNavigateToSettings\}/su,
+  );
+  assert.equal((appSource.match(/<SettingsButton\b/gu) ?? []).length, 1);
+  assert.match(
+    appSource,
+    /\{isSettingsOpen\s*\?\s*null\s*:\s*\(\s*<BottomBar\b/su,
+  );
   assert.match(appSource, /useInitData/u);
   assert.match(appSource, /theme-\$\{appTheme\}/u);
 
@@ -310,14 +325,26 @@ async function testGeneratedProject(root) {
   assert.match(homeScreenSource, /lynx\.querySelector\('#logo-emoji'\)/u);
   assert.match(homeScreenSource, /lynx\.querySelector\('#logo-image'\)/u);
   assert.match(homeScreenSource, /setStyleProperty\(/u);
-  assert.match(homeScreenSource, /<SettingsButton onTap=\{onSettingsTap\}/u);
+
+  const aboutScreenSource = await readFile(
+    path.join(projectDirectory, 'src', 'screens', 'AboutScreen.tsx'),
+    'utf8',
+  );
 
   const meScreenSource = await readFile(
     path.join(projectDirectory, 'src', 'screens', 'MeScreen.tsx'),
     'utf8',
   );
   assert.match(meScreenSource, /<text className="centered-message">Me<\/text>/u);
-  assert.match(meScreenSource, /<SettingsButton onTap=\{onSettingsTap\}/u);
+
+  for (const screenSource of [
+    homeScreenSource,
+    aboutScreenSource,
+    meScreenSource,
+  ]) {
+    assert.doesNotMatch(screenSource, /\bSettingsButton\b/u);
+    assert.doesNotMatch(screenSource, /\bonSettingsTap\b/u);
+  }
 
   const settingsButtonSource = await readFile(
     path.join(

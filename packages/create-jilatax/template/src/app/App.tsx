@@ -1,6 +1,7 @@
 import { useInitData, useState } from '@lynx-js/react';
 
 import { BottomBar } from '../components/navigation/BottomBar.js';
+import { SettingsButton } from '../components/ui/buttons/SettingsButton.js';
 import { AboutScreen } from '../screens/AboutScreen.js';
 import { HomeScreen } from '../screens/HomeScreen.js';
 import { MeScreen } from '../screens/MeScreen.js';
@@ -35,11 +36,14 @@ export function App() {
       {isSettingsOpen ? (
         <SettingScreen onBack={handleNavigateBack} />
       ) : activeTab === 'home' ? (
-        <HomeScreen onSettingsTap={handleNavigateToSettings} />
+        <HomeScreen />
       ) : activeTab === 'about' ? (
-        <AboutScreen onSettingsTap={handleNavigateToSettings} />
+        <AboutScreen />
       ) : (
-        <MeScreen onSettingsTap={handleNavigateToSettings} />
+        <MeScreen />
+      )}
+      {isSettingsOpen ? null : (
+        <SettingsButton onTap={handleNavigateToSettings} />
       )}
       {isSettingsOpen ? null : (
         <BottomBar activeTab={activeTab} onSelect={setActiveTab} />
