@@ -1,6 +1,6 @@
 {
   "name": "@jilatax/svg",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "packageManager": "bun@1.3.4",
   "description": "Compile SVG icons into typed ReactLynx components for Jilatax applications.",
   "type": "module",
@@ -47,7 +47,8 @@
         "types": "./types/svg.d.cts",
         "default": "./dist/types.cjs"
       }
-    }
+    },
+    "./package.json": "./package.json"
   },
   "typesVersions": {
     "*": {

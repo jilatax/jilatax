@@ -11,6 +11,7 @@ import {
   rm,
   writeFile,
 } from 'node:fs/promises';
+import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -39,7 +40,15 @@ export interface CreateProjectResult {
 
 export type ProjectInstaller = (projectDirectory: string) => Promise<void>;
 
+interface PackageMetadata {
+  readonly version: string;
+}
+
+const require = createRequire(import.meta.url);
+const svgPackageJson = require('@jilatax/svg/package.json') as PackageMetadata;
+
 const JILATAX_CLI_VERSION = '^0.1.0';
+const JILATAX_SVG_VERSION = `^${svgPackageJson.version}`;
 const JILATAX_VERSION = '^0.0.7';
 const LYNX_QRCODE_PLUGIN_VERSION = '^0.4.4';
 const LYNX_REACT_VERSION = '^0.116.2';
@@ -249,6 +258,7 @@ async function writeGeneratedMetadata(
       'create:aab': 'jilatax create:aab',
     },
     dependencies: {
+      '@jilatax/svg': JILATAX_SVG_VERSION,
       '@lynx-js/react': LYNX_REACT_VERSION,
       jilatax: JILATAX_VERSION,
     },

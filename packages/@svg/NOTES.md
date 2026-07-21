@@ -1,29 +1,12 @@
-# @jilatax/svg — First Publish
+# @jilatax/svg — Release
 
-This file is a manual guide. The package skill does not execute these commands or create the workflow described below.
+The package is published from the monorepo by `.github/workflows/svg.yml`.
+The workflow uses npm trusted publishing with provenance; it does not require an
+`NPM_TOKEN` repository secret.
 
-```bash
-# Login (only once)
-npm login --auth-type=web
+## npm trusted publisher
 
-# Verify session
-npm whoami
-
-# Check if the package name is available
-npm view @jilatax/svg
-
-# Review the files that will be published
-npm pack --dry-run
-
-# Publish
-npm publish
-```
-
-<!-- -- -- --- ---- --- TODO: Update --- --- -- -- -->
-
-# Verify `@jilatax/svg` NPM package ✅
-
-## 1 — npm Token **Settings**
+Configure the package connection at:
 
 ```text
 https://www.npmjs.com/package/@jilatax/svg/access
@@ -31,71 +14,33 @@ https://www.npmjs.com/package/@jilatax/svg/access
 
 | Field | Value |
 | --- | --- |
-| Organization or user | `bastndev` |
-| Repository | `@JILATAX/SVG` |
-| Workflow filename | `publish.yml` |
+| Organization or user | `jilatax` |
+| Repository | `jilatax` |
+| Workflow filename | `svg.yml` |
 | Environment name | None |
 | Allowed actions | `Allow npm publish` |
 
-Select **Set up connection**.
+## Release checklist
 
-## 2 — Create the workflow manually
-
-Create `.github/workflows/publish.yml` yourself when you are ready:
-
-```yaml
-name: Publish
-
-on:
-  push:
-    tags:
-      - "v*"
-
-jobs:
-  publish:
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-
-      - name: Install dependencies
-        run: bun install
-
-      - name: Build
-        run: bun run build
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-          registry-url: "https://registry.npmjs.org"
-
-      - name: Update npm
-        run: npm install -g npm@latest
-
-      - name: Publish with provenance
-        run: npm publish --provenance --access public
-```
-
-Commit and push the workflow to `main` manually.
-
-## 3 — Publish and deploy
+After updating `name` or `version` in `package.json`, verify from
+`packages/@svg`:
 
 ```bash
-git checkout main
-git pull
+bun run check
+npm pack --dry-run
 ```
-**Update in package.json** `v0.0.1` to `v0.0.2`
+
+Commit the complete release, merge it to the branch used for publishing, and
+create a tag whose version exactly matches `package.json`:
 
 ```bash
-git tag -a svg-v0.0.3 -m "svg 0.0.3"
-git push origin svg-v0.0.3
+git tag -a svg-v<version> -m "svg <version>"
+git push origin svg-v<version>
 ```
 
-> Use the tag created by `npm version`; update the example tag when the version changes.
+The tag namespace must remain `svg-v*`; a plain `v*` tag publishes `jilatax`
+instead. Confirm the completed workflow and then verify the registry:
+
+```bash
+npm view @jilatax/svg version
+```

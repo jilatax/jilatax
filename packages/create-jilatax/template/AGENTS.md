@@ -3,7 +3,7 @@
 ## Project
 
 - Android-first Lynx application generated with Jilatax.
-- Stack: TypeScript, Lynx, React, Rspeedy, and the Jilatax CLI.
+- Stack: TypeScript, Lynx, React, Rspeedy, `@jilatax/svg`, and the Jilatax CLI.
 - This project is self-contained. Its `package.json`, `bun.lock`, `app.json`, source tree, and Android project belong to this app only.
 - If the parent directory contains other generated apps, treat them as independent projects. Do not edit or run commands in sibling apps unless explicitly requested.
 
@@ -41,10 +41,10 @@
 - `src/screens/` contains screen-level components: Home, About, and Setting.
 - `src/components/` contains reusable UI and navigation components.
 - `src/components/navigation/BottomBar.css` is colocated with the bottom navigation; shared app styles live in `src/styles/global.css`.
-- `src/assets/` contains assets imported by application source, such as the interactive logo image.
+- `src/assets/` contains source-imported images and SVG icons. Plain `.svg` imports compile into typed ReactLynx components.
 - `public/assets/` contains launcher and splash artwork referenced by `app.json`.
 - `public/fonts/` contains fonts loaded by CSS.
-- `lynx.config.ts` configures Rspeedy, React Lynx, QR development, bundle naming, and the required `asset:///` prefix.
+- `lynx.config.ts` configures Rspeedy, React Lynx, SVG compilation, QR development, bundle naming, and the required `asset:///` prefix.
 - `app.json` is the source of truth for Jilatax application and Android metadata.
 - `android/` contains the committed native project and Gradle wrapper. Jilatax synchronizes configuration and resources before Android builds.
 - `android/app/src/main/java/dev/jilatax/app/` bridges the Android device theme into Lynx init data and restarts the task when the device theme changes.
@@ -57,6 +57,7 @@
 - Use Lynx elements and events such as `<view>`, `<text>`, `<image>`, and `bindtap`; do not assume browser DOM APIs or React DOM event names.
 - Keep component-specific styles colocated when they are not shared. Put only cross-app styles and theme variables in `src/styles/global.css`.
 - Import source assets from `src/assets/`. Keep launcher and splash paths stable unless `app.json` is updated at the same time.
+- Import an SVG directly and render its default export as a component. Keep `pluginJilataxSvg()` before `pluginReactLynx()` in `lynx.config.ts`.
 - Preserve `output.assetPrefix: 'asset:///'` in `lynx.config.ts`; Android bundle loading depends on it.
 
 ## Generated and sensitive files

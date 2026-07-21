@@ -76,6 +76,7 @@ Validation: `publint` + `@arethetypeswrong/core`
 | Workflow | Trigger | Publishes |
 |----------|---------|-----------|
 | `publish.yml` | `v*` | `jilatax` |
+| `svg.yml` | `svg-v*` | `@jilatax/svg` |
 | `cli.yml` | `cli-v*` | `@jilatax/cli` |
 | `create-jilatax.yml` | `create-jilatax-v*` | `create-jilatax` |
 

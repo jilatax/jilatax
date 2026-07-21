@@ -1,4 +1,9 @@
+import type { SvgIconComponent } from '@jilatax/svg/react';
+
 import type { AppTab } from '../../app/navigation.js';
+import AboutIcon from '../../assets/icons/about.svg';
+import HomeIcon from '../../assets/icons/home.svg';
+import SettingsIcon from '../../assets/icons/settings.svg';
 import './BottomBar.css';
 
 interface BottomBarProps {
@@ -6,10 +11,16 @@ interface BottomBarProps {
   onSelect: (tab: AppTab) => void;
 }
 
-const tabs: ReadonlyArray<{ id: AppTab; label: string }> = [
-  { id: 'home', label: 'Home' },
-  { id: 'about', label: 'About' },
-  { id: 'setting', label: 'Setting' },
+interface BottomBarTab {
+  readonly icon: SvgIconComponent;
+  readonly id: AppTab;
+  readonly label: string;
+}
+
+const tabs: readonly BottomBarTab[] = [
+  { icon: HomeIcon, id: 'home', label: 'Home' },
+  { icon: AboutIcon, id: 'about', label: 'About' },
+  { icon: SettingsIcon, id: 'setting', label: 'Setting' },
 ];
 
 export function BottomBar({ activeTab, onSelect }: BottomBarProps) {
@@ -18,6 +29,7 @@ export function BottomBar({ activeTab, onSelect }: BottomBarProps) {
       <view className="bottom-bar">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;
+          const Icon = tab.icon;
 
           return (
             <view
@@ -25,7 +37,12 @@ export function BottomBar({ activeTab, onSelect }: BottomBarProps) {
               bindtap={() => onSelect(tab.id)}
               key={tab.id}
             >
-              <view className={`bottom-bar__mark${isActive ? ' bottom-bar__mark--active' : ''}`} />
+              <Icon
+                accessibility-element={false}
+                className="bottom-bar__icon"
+                color={isActive ? '#00aa6b' : '#879990'}
+                size={20}
+              />
               <text className={`bottom-bar__label${isActive ? ' bottom-bar__label--active' : ''}`}>
                 {tab.label}
               </text>
