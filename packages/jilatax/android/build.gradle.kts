@@ -35,6 +35,9 @@ dependencies {
         exclude(group = "org.lynxsdk.lynx", module = "base-devtool")
     }
     implementation("com.tiktok.sparkling:sparkling-method:2.1.0-rc.33")
+    implementation("org.lynxsdk.lynx:xelement:3.7.0")
+    implementation("org.lynxsdk.lynx:xelement-svg:3.7.0")
+    implementation("org.lynxsdk.lynx:servalsvg:0.0.1-alpha.3")
     implementation("com.facebook.fresco:fresco:2.3.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.0")
 }

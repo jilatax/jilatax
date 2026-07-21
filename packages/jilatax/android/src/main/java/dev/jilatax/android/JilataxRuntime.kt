@@ -5,6 +5,7 @@ import android.app.Application
 import android.content.pm.ApplicationInfo
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.lynx.tasm.loader.LynxFontFaceLoader
+import com.lynx.xelement.XElementBehaviors
 import com.tiktok.sparkling.Sparkling
 import com.tiktok.sparkling.SparklingContext
 import com.tiktok.sparkling.hybridkit.HybridKit
@@ -30,6 +31,7 @@ object JilataxRuntime {
             val lynxConfig =
                 SparklingLynxConfig.build(application) {
                     setTemplateProvider(JilataxTemplateProvider(application))
+                    addBehaviors(XElementBehaviors().create())
                 }
             val hybridConfig =
                 SparklingHybridConfig.build(

@@ -217,6 +217,18 @@ const androidRuntime = await readFile(
 assert.equal(existsSync(androidProjectPath), true);
 assert.equal(androidBuildFile.includes('sparkling-debug-tool'), false);
 assert.equal(androidBuildFile.includes('debugImplementation'), false);
+assert.match(
+  androidBuildFile,
+  /implementation\("org\.lynxsdk\.lynx:xelement:3\.7\.0"\)/u,
+);
+assert.match(
+  androidBuildFile,
+  /implementation\("org\.lynxsdk\.lynx:xelement-svg:3\.7\.0"\)/u,
+);
+assert.match(
+  androidBuildFile,
+  /implementation\("org\.lynxsdk\.lynx:servalsvg:0\.0\.1-alpha\.3"\)/u,
+);
 assert.equal(androidBundleSource.includes(ANDROID_BUNDLE_SOURCE_EXTRA), true);
 assert.equal(androidBundleSource.includes('SharedPreferences'), false);
 assert.match(androidFontFaceLoader, /ANDROID_ASSET_PREFIX = "asset:\/\/\/"/u);
@@ -226,6 +238,14 @@ assert.match(androidFontFaceLoader, /source\.startsWith\("http:\/\/"\)/u);
 assert.match(
   androidRuntime,
   /LynxFontFaceLoader\.setLoader\(JilataxFontFaceLoader\(application\)\)/u,
+);
+assert.match(
+  androidRuntime,
+  /import com\.lynx\.xelement\.XElementBehaviors/u,
+);
+assert.match(
+  androidRuntime,
+  /addBehaviors\(XElementBehaviors\(\)\.create\(\)\)/u,
 );
 
 const schemaPath = resolveAppSchemaPath();
