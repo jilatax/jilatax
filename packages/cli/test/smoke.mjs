@@ -207,7 +207,7 @@ assert.ok(binSource.startsWith('#!/usr/bin/env node'));
 assert.notEqual((await stat(cliBin)).mode & 0o111, 0);
 
 assert.equal(packageJson.bin.jilatax, './dist/bin.js');
-assert.equal(packageJson.dependencies.jilatax, '^0.0.6');
+assert.equal(packageJson.dependencies.jilatax, '^0.0.7');
 assert.equal('sparkling-app-cli' in packageJson.dependencies, false);
 assert.equal('sparkling-debug-tool' in packageJson.dependencies, false);
 
