@@ -23,6 +23,7 @@ interface BundlerChain {
       readonly oneOfs: {
         delete(name: string): void;
       };
+      test(pattern: RegExp): void;
     };
   };
 }
@@ -48,6 +49,9 @@ export function pluginJilataxSvg(
     setup(api: RsbuildPluginApi): void {
       api.modifyBundlerChain((chain) => {
         chain.module.rule('svg').oneOfs.delete('svg-asset');
+        chain.module
+          .rule('js')
+          .test(/\.(?:js|jsx|mjs|cjs|ts|tsx|mts|cts|svg)$/u);
       });
       api.transform({ resourceQuery: /^$/u, test: /\.svg$/u }, ({ code, resourcePath }) =>
         svgComponentModule(
@@ -72,9 +76,12 @@ export function svgComponentModule(
     .replaceAll('\u2028', '\\u2028')
     .replaceAll('\u2029', '\\u2029');
   return [
-    "import { createSvgIcon } from '@jilatax/svg/react';",
+    "import { resolveSvgIconProps } from '@jilatax/svg/react';",
     `export const svg = Object.freeze(${value});`,
-    `export default createSvgIcon(svg, ${JSON.stringify(displayName)});`,
+    `function ${displayName}(props) {`,
+    '  return <svg {...resolveSvgIconProps({ ...props, icon: svg })} />;',
+    '}',
+    `export default ${displayName};`,
     '',
   ].join('\n');
 }

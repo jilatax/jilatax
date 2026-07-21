@@ -79,6 +79,7 @@ assert.match(moduleSource, /satisfies import\('@jilatax\/svg'\)\.CompiledSvg/u);
 assert.match(moduleSource, /export default homeIcon/u);
 
 let transform;
+let scriptPattern;
 const plugin = pluginJilataxSvg();
 assert.equal(plugin.name, 'jilatax:svg');
 plugin.setup({
@@ -87,18 +88,24 @@ plugin.setup({
     handler({
       module: {
         rule(name) {
-          assert.equal(name, 'svg');
           return {
             oneOfs: {
               delete(ruleName) {
+                assert.equal(name, 'svg');
                 deletedRule = ruleName;
               },
+            },
+            test(pattern) {
+              assert.equal(name, 'js');
+              scriptPattern = pattern;
             },
           };
         },
       },
     });
     assert.equal(deletedRule, 'svg-asset');
+    assert.match('icon.svg', scriptPattern);
+    assert.match('component.tsx', scriptPattern);
   },
   transform(descriptor, handler) {
     assert.match('home.svg', descriptor.test);
@@ -111,7 +118,9 @@ const componentModule = transform({
   code: source,
   resourcePath: '/project/src/icons/home.svg',
 });
-assert.match(componentModule, /createSvgIcon/u);
+assert.match(componentModule, /resolveSvgIconProps/u);
+assert.match(componentModule, /function HomeIcon/u);
+assert.match(componentModule, /<svg/u);
 assert.match(componentModule, /HomeIcon/u);
 assert.match(componentModule, /currentColor/u);
 assert.equal(

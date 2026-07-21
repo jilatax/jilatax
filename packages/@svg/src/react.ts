@@ -38,6 +38,10 @@ export interface SvgIconComponent {
 }
 
 export function SvgIcon(props: SvgIconProps): ReactElement {
+  return createElement('svg', resolveSvgIconProps(props));
+}
+
+export function resolveSvgIconProps(props: SvgIconProps): SVGProps {
   const {
     color,
     height,
@@ -58,7 +62,7 @@ export function SvgIcon(props: SvgIconProps): ReactElement {
     elementProps['accessibility-element'] ??
     elementProps['accessibility-label'] !== undefined;
 
-  const nativeProps: SVGProps = {
+  return {
     ...elementProps,
     'accessibility-element': accessibilityElement,
     style: resolvedStyle,
@@ -71,7 +75,6 @@ export function SvgIcon(props: SvgIconProps): ReactElement {
         }
       : { src }),
   };
-  return createElement('svg', nativeProps);
 }
 
 export function createSvgIcon(
