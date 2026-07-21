@@ -6,6 +6,7 @@
     "apps/*",
     "packages/jilatax",
     "packages/@cli",
+    "packages/@svg",
     "packages/create-jilatax"
   ]
 }

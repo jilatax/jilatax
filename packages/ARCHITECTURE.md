@@ -11,6 +11,7 @@ jilatax/
 ├── packages/                            # Publishable npm packages
 │   ├── jilatax/                         # Public framework API
 │   ├── @cli/                            # CLI implementation
+│   ├── @svg/                            # SVG compiler and ReactLynx icons
 │   └── create-jilatax/                  # Project scaffolder
 │
 ├── plan/                                # Internal planning (gitignored)
@@ -39,17 +40,19 @@ Application code
 |---------|-----|------|
 | `jilatax` | `jilatax` | Public API, app configuration, Android host |
 | `@cli` | `@jilatax/cli` | Command parsing, user output |
+| `@svg` | `@jilatax/svg` | SVG validation, Rspeedy compilation, ReactLynx icon components |
 | `create-jilatax` | `create-jilatax` | Scaffolding, templates |
 
 ### Internal boundaries
 
-These remain modules inside the three public packages; they are not additional npm packages.
+These remain modules inside the four public packages; they are not additional npm packages.
 
 | Boundary | Owner | Role |
 |----------|-------|------|
 | Config and schema | `jilatax` | Load, validate, and normalize `app.json` |
 | Android host | `jilatax` | Native runtime and packaged-bundle boundary |
 | Commands | `@jilatax/cli` | Development, device, APK, and AAB orchestration |
+| SVG compiler | `@svg` | Build-time icon validation and ReactLynx module generation |
 | Templates | `create-jilatax` | Initial project files and assets |
 
 ## 🔧 Build
