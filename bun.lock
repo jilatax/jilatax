@@ -29,7 +29,7 @@
         "jilatax": "./dist/bin.js",
       },
       "dependencies": {
-        "jilatax": "^0.0.7",
+        "jilatax": "^0.0.8",
       },
       "devDependencies": {
         "@arethetypeswrong/core": "^0.18.5",
@@ -41,7 +41,7 @@
     },
     "packages/@svg": {
       "name": "@jilatax/svg",
-      "version": "0.0.3",
+      "version": "0.0.6",
       "dependencies": {
         "saxes": "^6.0.0",
       },
@@ -63,7 +63,7 @@
     },
     "packages/create-jilatax": {
       "name": "create-jilatax",
-      "version": "0.2.4",
+      "version": "0.2.5",
       "bin": {
         "create-jilatax": "./dist/bin.js",
       },
@@ -82,7 +82,7 @@
     },
     "packages/jilatax": {
       "name": "jilatax",
-      "version": "0.0.7",
+      "version": "0.0.8",
       "devDependencies": {
         "@arethetypeswrong/core": "^0.18.5",
         "@types/node": "^22.20.1",
@@ -1190,6 +1190,8 @@
     "@types/sax/@types/node": ["@types/node@24.13.3", "", { "dependencies": { "undici-types": "~7.18.0" } }, "sha512-Dh8vAsV36ig5wa9OX4pXvMc9D3Veibfw2wix0CUwYODLD8nkj9UsLjASr49nPg+2eKzxhBV+v7L8pXvT4e639Q=="],
 
     "anymatch/picomatch": ["picomatch@2.3.2", "", {}, "sha512-V7+vQEJ06Z+c5tSye8S+nHUfI51xoXIXjHQ99cQtKUkQqqO1kO/KCJUfZXuB47h/YBlDhah2H3hdUGXn8ie0oA=="],
+
+    "create-jilatax/jilatax": ["jilatax@0.0.7", "", {}, "sha512-n0QCHwzy/saxpTkbdwzWIH+j+JM9tbTj7EtI16XeJ4HWF+gtMc0ytoqzVkW5eNWiRz6baOhCJT+GoM8aDitTTg=="],
 
     "csso/css-tree": ["css-tree@2.2.1", "", { "dependencies": { "mdn-data": "2.0.28", "source-map-js": "^1.0.1" } }, "sha512-OA0mILzGc1kCOCSJerOeqDxDQ4HOh+G8NbOJFOTgOCzpw7fCBubk0fEyxp8AgOL/jvLgYA/uV0cMbe43ElF1JA=="],
 
