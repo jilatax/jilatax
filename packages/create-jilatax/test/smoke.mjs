@@ -159,6 +159,11 @@ async function testGeneratedProject(root) {
   assert.match(lynxConfig, /pluginJilataxSvg\(\)/u);
   assert.match(lynxConfig, /pluginQRCode/u);
   assert.match(lynxConfig, /\?fullscreen=true/u);
+  assert.match(lynxConfig, /assetPrefix:\s*'asset:\/\/\/'/u);
+  assert(
+    lynxConfig.indexOf('pluginJilataxSvg()') <
+      lynxConfig.indexOf('pluginReactLynx()'),
+  );
 
   const mainManifest = await readFile(
     path.join(projectDirectory, 'android', 'app', 'src', 'main', 'AndroidManifest.xml'),
@@ -205,6 +210,7 @@ async function testGeneratedProject(root) {
   assert(projectFiles.includes('android/app/src/main/java/dev/jilatax/app/MainActivity.kt'));
   assert(projectFiles.includes('android/app/src/main/java/dev/jilatax/app/MainApplication.kt'));
   assert(!projectFiles.includes('src/App.tsx'));
+  assert(!projectFiles.includes('src/App.tsx.tmpl'));
   assert(!projectFiles.includes('src/App.css'));
   assert(!projectFiles.includes('public/assets/jilatax-icon.png'));
   assert(!projectFiles.includes('public/fonts/JilataX.otf'));
@@ -240,6 +246,15 @@ async function testGeneratedProject(root) {
   );
   assert.equal(claudeSource, '@AGENTS.md\n');
 
+  const readmeSource = await readFile(
+    path.join(projectDirectory, 'README.md'),
+    'utf8',
+  );
+  const generatedGuidance = `${readmeSource}\n${agentsSource}\n${claudeSource}`;
+  assert.doesNotMatch(generatedGuidance, /\bon1\b/iu);
+  assert.doesNotMatch(generatedGuidance, /analizar(?:-base)?/iu);
+  assert.doesNotMatch(generatedGuidance, /test-[12]/iu);
+
   const appSource = await readFile(
     path.join(projectDirectory, 'src', 'app', 'App.tsx'),
     'utf8',
@@ -262,7 +277,43 @@ async function testGeneratedProject(root) {
     'utf8',
   );
   assert.match(bottomBarSource, /from '\.\.\/\.\.\/assets\/icons\/home\.svg'/u);
+  assert.match(bottomBarSource, /from '\.\.\/\.\.\/assets\/icons\/about\.svg'/u);
+  assert.match(bottomBarSource, /from '\.\.\/\.\.\/assets\/icons\/settings\.svg'/u);
+  assert.match(bottomBarSource, /SvgIconComponent/u);
   assert.match(bottomBarSource, /<Icon/u);
+
+  const homeScreenSource = await readFile(
+    path.join(projectDirectory, 'src', 'screens', 'HomeScreen.tsx'),
+    'utf8',
+  );
+  assert.match(homeScreenSource, /useMainThreadRef\(false\)/u);
+  assert.match(
+    homeScreenSource,
+    /const handleScreenTap = \(\) => \{\s*'main thread';/u,
+  );
+  assert.match(homeScreenSource, /main-thread:bindtap=\{handleScreenTap\}/u);
+  assert.match(homeScreenSource, /lynx\.querySelector\('#logo-emoji'\)/u);
+  assert.match(homeScreenSource, /lynx\.querySelector\('#logo-image'\)/u);
+  assert.match(homeScreenSource, /setStyleProperty\(/u);
+
+  const logoSource = await readFile(
+    path.join(projectDirectory, 'src', 'components', 'ui', 'Logo.tsx'),
+    'utf8',
+  );
+  assert.match(
+    logoSource,
+    /const iconWrapperStyle = \{[^}]*position:\s*'relative'[^}]*width:\s*'32px'[^}]*height:\s*'32px'/su,
+  );
+  assert.match(
+    logoSource,
+    /const textStyle = \{[^}]*position:\s*'absolute'/su,
+  );
+  assert.match(
+    logoSource,
+    /const imageStyle = \{[^}]*width:\s*'32px'[^}]*height:\s*'32px'[^}]*opacity:\s*0[^}]*position:\s*'absolute'/su,
+  );
+  assert.match(logoSource, /<image id="logo-image"/u);
+  assert.match(logoSource, /<text id="logo-emoji"/u);
 
   const rspeedyTypes = await readFile(
     path.join(projectDirectory, 'src', 'rspeedy-env.d.ts'),
@@ -328,6 +379,9 @@ async function testGeneratedProject(root) {
   const allGeneratedText = await readGeneratedText(projectDirectory, projectFiles);
   assert.doesNotMatch(allGeneratedText, /\{\{[A-Za-z][A-Za-z0-9]*\}\}/u);
   assert.doesNotMatch(allGeneratedText, /sparkling(?:-app-cli|-debug-tool)?/iu);
+  assert.doesNotMatch(allGeneratedText, /com\.example\.on1/iu);
+  assert.doesNotMatch(allGeneratedText, /\/home\//u);
+  assert.doesNotMatch(allGeneratedText, /\bon1\b/iu);
 
   const gradlewPath = path.join(projectDirectory, 'android', 'gradlew');
   const gradlew = await readFile(gradlewPath, 'utf8');
