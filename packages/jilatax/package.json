@@ -1,6 +1,6 @@
 {
   "name": "jilatax",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "packageManager": "bun@1.3.4",
   "description": "Android-first application framework for Lynx and Rspeedy.",
   "type": "module",
