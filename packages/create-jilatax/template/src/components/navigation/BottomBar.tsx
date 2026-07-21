@@ -1,9 +1,4 @@
-import type { SvgIconComponent } from '@jilatax/svg/react';
-
-import type { AppTab } from '../../app/navigation.js';
-import AboutIcon from '../../assets/icons/about.svg';
-import HomeIcon from '../../assets/icons/home.svg';
-import SettingsIcon from '../../assets/icons/settings.svg';
+import { APP_TABS, type AppTab } from '../../app/navigation.js';
 import './BottomBar.css';
 
 interface BottomBarProps {
@@ -11,25 +6,12 @@ interface BottomBarProps {
   onSelect: (tab: AppTab) => void;
 }
 
-interface BottomBarTab {
-  readonly icon: SvgIconComponent;
-  readonly id: AppTab;
-  readonly label: string;
-}
-
-const tabs: readonly BottomBarTab[] = [
-  { icon: HomeIcon, id: 'home', label: 'Home' },
-  { icon: AboutIcon, id: 'about', label: 'About' },
-  { icon: SettingsIcon, id: 'setting', label: 'Setting' },
-];
-
 export function BottomBar({ activeTab, onSelect }: BottomBarProps) {
   return (
     <view className="bottom-bar-wrap">
       <view className="bottom-bar">
-        {tabs.map((tab) => {
+        {APP_TABS.map((tab) => {
           const isActive = activeTab === tab.id;
-          const Icon = tab.icon;
 
           return (
             <view
@@ -37,11 +19,8 @@ export function BottomBar({ activeTab, onSelect }: BottomBarProps) {
               bindtap={() => onSelect(tab.id)}
               key={tab.id}
             >
-              <Icon
-                accessibility-element={false}
-                className="bottom-bar__icon"
-                color={isActive ? '#00aa6b' : '#879990'}
-                size={20}
+              <view
+                className={`bottom-bar__dot${isActive ? ' bottom-bar__dot--active' : ''}`}
               />
               <text className={`bottom-bar__label${isActive ? ' bottom-bar__label--active' : ''}`}>
                 {tab.label}

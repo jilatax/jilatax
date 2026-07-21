@@ -36,11 +36,11 @@
 ## Architecture
 
 - `src/index.tsx` is the runtime entry point and renders `src/app/App.tsx`.
-- `src/app/App.tsx` owns the active-tab state and screen composition.
-- `src/app/navigation.ts` defines the valid app tabs.
-- `src/screens/` contains screen-level components: Home, About, and Setting.
+- `src/app/App.tsx` owns active-tab state, settings visibility, and screen composition.
+- `src/app/navigation.ts` defines the Home, About, and Me tabs.
+- `src/screens/` contains the Home, About, Me, and nested Setting screens.
 - `src/components/` contains reusable UI and navigation components.
-- `src/components/navigation/BottomBar.css` is colocated with the bottom navigation; shared app styles live in `src/styles/global.css`.
+- Component styles are colocated with bottom navigation, settings buttons, and the Setting screen; shared app styles live in `src/styles/global.css`.
 - `src/assets/` contains source-imported images and SVG icons. Plain `.svg` imports compile into typed ReactLynx components.
 - `public/assets/` contains launcher and splash artwork referenced by `app.json`.
 - `public/fonts/` contains fonts loaded by CSS.

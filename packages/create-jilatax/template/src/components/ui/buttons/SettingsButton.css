@@ -1,0 +1,19 @@
+.settings-button {
+  align-items: center;
+  display: flex;
+  height: 48px;
+  justify-content: center;
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  width: 48px;
+  z-index: 10;
+}
+
+.settings-button__icon {
+  color: #08774f;
+}
+
+.theme-dark .settings-button__icon {
+  color: #79efb5;
+}

@@ -1,0 +1,35 @@
+.setting-screen__header {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  height: 72px;
+  padding: 12px 16px;
+  width: 100%;
+}
+
+.setting-screen__back {
+  align-items: center;
+  display: flex;
+  height: 48px;
+  justify-content: center;
+  width: 48px;
+}
+
+.setting-screen__back-icon {
+  color: #08774f;
+}
+
+.setting-screen__title {
+  color: #101815;
+  font-size: 22px;
+  font-weight: 700;
+  margin-left: 4px;
+}
+
+.theme-dark .setting-screen__back-icon {
+  color: #79efb5;
+}
+
+.theme-dark .setting-screen__title {
+  color: #f2f8f5;
+}

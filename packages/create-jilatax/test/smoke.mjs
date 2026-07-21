@@ -195,23 +195,29 @@ async function testGeneratedProject(root) {
   assert(projectFiles.includes('public/assets/splash-icon.png'));
   assert(projectFiles.includes('public/fonts/jilatax.ttf'));
   assert(projectFiles.includes('src/assets/images/logo.png'));
-  assert(projectFiles.includes('src/assets/icons/about.svg'));
-  assert(projectFiles.includes('src/assets/icons/home.svg'));
+  assert(projectFiles.includes('src/assets/icons/arrow-left.svg'));
   assert(projectFiles.includes('src/assets/icons/settings.svg'));
   assert(projectFiles.includes('src/app/App.tsx'));
   assert(projectFiles.includes('src/app/navigation.ts'));
   assert(projectFiles.includes('src/components/navigation/BottomBar.css'));
   assert(projectFiles.includes('src/components/navigation/BottomBar.tsx'));
   assert(projectFiles.includes('src/components/ui/Logo.tsx'));
+  assert(projectFiles.includes('src/components/ui/buttons/SettingsButton.css'));
+  assert(projectFiles.includes('src/components/ui/buttons/SettingsButton.tsx'));
   assert(projectFiles.includes('src/screens/AboutScreen.tsx'));
   assert(projectFiles.includes('src/screens/HomeScreen.tsx'));
-  assert(projectFiles.includes('src/screens/SettingScreen.tsx'));
+  assert(projectFiles.includes('src/screens/MeScreen.tsx'));
+  assert(projectFiles.includes('src/screens/settings/SettingScreen.css'));
+  assert(projectFiles.includes('src/screens/settings/SettingScreen.tsx'));
   assert(projectFiles.includes('src/styles/global.css'));
   assert(projectFiles.includes('android/app/src/main/java/dev/jilatax/app/MainActivity.kt'));
   assert(projectFiles.includes('android/app/src/main/java/dev/jilatax/app/MainApplication.kt'));
   assert(!projectFiles.includes('src/App.tsx'));
   assert(!projectFiles.includes('src/App.tsx.tmpl'));
   assert(!projectFiles.includes('src/App.css'));
+  assert(!projectFiles.includes('src/assets/icons/about.svg'));
+  assert(!projectFiles.includes('src/assets/icons/home.svg'));
+  assert(!projectFiles.includes('src/screens/SettingScreen.tsx'));
   assert(!projectFiles.includes('public/assets/jilatax-icon.png'));
   assert(!projectFiles.includes('public/fonts/JilataX.otf'));
   assert(!projectFiles.includes('src/components/ui/Brand.tsx'));
@@ -259,12 +265,23 @@ async function testGeneratedProject(root) {
     path.join(projectDirectory, 'src', 'app', 'App.tsx'),
     'utf8',
   );
-  assert.match(appSource, /<HomeScreen \/>/u);
-  assert.match(appSource, /<AboutScreen \/>/u);
-  assert.match(appSource, /<SettingScreen \/>/u);
+  assert.match(appSource, /useState\(false\)/u);
+  assert.match(appSource, /<HomeScreen onSettingsTap=/u);
+  assert.match(appSource, /<AboutScreen onSettingsTap=/u);
+  assert.match(appSource, /<MeScreen onSettingsTap=/u);
+  assert.match(appSource, /<SettingScreen onBack=/u);
   assert.match(appSource, /<BottomBar activeTab=/u);
+  assert.match(appSource, /isSettingsOpen \? null/u);
   assert.match(appSource, /useInitData/u);
   assert.match(appSource, /theme-\$\{appTheme\}/u);
+
+  const navigationSource = await readFile(
+    path.join(projectDirectory, 'src', 'app', 'navigation.ts'),
+    'utf8',
+  );
+  assert.match(navigationSource, /id: 'home', label: 'Home'/u);
+  assert.match(navigationSource, /id: 'about', label: 'About'/u);
+  assert.match(navigationSource, /id: 'me', label: 'Me'/u);
 
   const bottomBarSource = await readFile(
     path.join(
@@ -276,11 +293,9 @@ async function testGeneratedProject(root) {
     ),
     'utf8',
   );
-  assert.match(bottomBarSource, /from '\.\.\/\.\.\/assets\/icons\/home\.svg'/u);
-  assert.match(bottomBarSource, /from '\.\.\/\.\.\/assets\/icons\/about\.svg'/u);
-  assert.match(bottomBarSource, /from '\.\.\/\.\.\/assets\/icons\/settings\.svg'/u);
-  assert.match(bottomBarSource, /SvgIconComponent/u);
-  assert.match(bottomBarSource, /<Icon/u);
+  assert.match(bottomBarSource, /APP_TABS\.map/u);
+  assert.match(bottomBarSource, /bottom-bar__dot/u);
+  assert.doesNotMatch(bottomBarSource, /SvgIconComponent/u);
 
   const homeScreenSource = await readFile(
     path.join(projectDirectory, 'src', 'screens', 'HomeScreen.tsx'),
@@ -295,6 +310,42 @@ async function testGeneratedProject(root) {
   assert.match(homeScreenSource, /lynx\.querySelector\('#logo-emoji'\)/u);
   assert.match(homeScreenSource, /lynx\.querySelector\('#logo-image'\)/u);
   assert.match(homeScreenSource, /setStyleProperty\(/u);
+  assert.match(homeScreenSource, /<SettingsButton onTap=\{onSettingsTap\}/u);
+
+  const meScreenSource = await readFile(
+    path.join(projectDirectory, 'src', 'screens', 'MeScreen.tsx'),
+    'utf8',
+  );
+  assert.match(meScreenSource, /<text className="centered-message">Me<\/text>/u);
+  assert.match(meScreenSource, /<SettingsButton onTap=\{onSettingsTap\}/u);
+
+  const settingsButtonSource = await readFile(
+    path.join(
+      projectDirectory,
+      'src',
+      'components',
+      'ui',
+      'buttons',
+      'SettingsButton.tsx',
+    ),
+    'utf8',
+  );
+  assert.match(settingsButtonSource, /from '\.\.\/\.\.\/\.\.\/assets\/icons\/settings\.svg'/u);
+  assert.match(settingsButtonSource, /bindtap=\{onTap\}/u);
+
+  const settingScreenSource = await readFile(
+    path.join(
+      projectDirectory,
+      'src',
+      'screens',
+      'settings',
+      'SettingScreen.tsx',
+    ),
+    'utf8',
+  );
+  assert.match(settingScreenSource, /from '\.\.\/\.\.\/assets\/icons\/arrow-left\.svg'/u);
+  assert.match(settingScreenSource, /bindtap=\{onBack\}/u);
+  assert.match(settingScreenSource, />Setting<\/text>/u);
 
   const logoSource = await readFile(
     path.join(projectDirectory, 'src', 'components', 'ui', 'Logo.tsx'),

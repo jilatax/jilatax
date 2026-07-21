@@ -10,6 +10,10 @@
 .app-shell {
   background-color: #ffffff;
   color: #000000;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
 }
 
 .app-shell.theme-dark {
@@ -17,29 +21,17 @@
   color: #ffffff;
 }
 
-/**
- * ------------------------------------------------
- *  ⚡ APP SHELL
- * ------------------------------------------------
- */
-
-.app-shell {
-  height: 100vh;
-  overflow: hidden;
-  position: relative;
-  width: 100%;
-}
-
 .screen {
   height: 100%;
+  position: relative;
   width: 100%;
 }
 
 .screen__content {
   display: flex;
   flex-direction: column;
-  padding: 48px 22px 124px;
   height: 100%;
+  padding: 48px 22px 124px;
 }
 
 .centered-message {

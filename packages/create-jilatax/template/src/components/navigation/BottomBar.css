@@ -32,8 +32,20 @@
   background-color: #e8f7ef;
 }
 
-.bottom-bar__icon {
+.bottom-bar__dot {
+  background-color: transparent;
+  border-color: #879990;
+  border-radius: 999px;
+  border-style: solid;
+  border-width: 2px;
+  height: 10px;
   margin-right: 8px;
+  width: 10px;
+}
+
+.bottom-bar__dot--active {
+  background-color: #00aa6b;
+  border-color: #00aa6b;
 }
 
 .bottom-bar__label {
@@ -48,18 +60,27 @@
 }
 
 .theme-dark .bottom-bar {
-  background-color: #0d2119;
-  border-color: #1b382d;
+  background-color: #0c1714;
+  border-color: #1a2b26;
 }
 
 .theme-dark .bottom-bar__button--active {
-  background-color: #15392b;
+  background-color: #182b26;
+}
+
+.theme-dark .bottom-bar__dot {
+  border-color: #91a39d;
+}
+
+.theme-dark .bottom-bar__dot--active {
+  background-color: #1b9c68;
+  border-color: #1b9c68;
 }
 
 .theme-dark .bottom-bar__label {
-  color: #82978e;
+  color: #91a39d;
 }
 
 .theme-dark .bottom-bar__label--active {
-  color: #79efb5;
+  color: #5ce7b0;
 }
