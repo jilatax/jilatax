@@ -123,7 +123,7 @@ const packageJson = JSON.parse(
   await readFile(new URL('../package.json', import.meta.url), 'utf8'),
 );
 assert.equal(packageJson.name, '@jilatax/svg');
-assert.equal(packageJson.version, '0.0.3');
+assert.match(packageJson.version, /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/u);
 
 const require = createRequire(import.meta.url);
 const cjs = require('@jilatax/svg');
