@@ -1,0 +1,40 @@
+name: Publish @jilatax/svg
+
+on:
+  push:
+    tags:
+      - "svg-v*"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        working-directory: packages/@svg
+        run: bun install --frozen-lockfile
+
+      - name: Build @jilatax/svg
+        working-directory: packages/@svg
+        run: bun run build
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Update npm
+        run: npm install -g npm@latest
+
+      - name: Publish @jilatax/svg with provenance
+        working-directory: packages/@svg
+        run: npm publish --provenance --access public
