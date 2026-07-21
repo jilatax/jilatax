@@ -1,6 +1,6 @@
 {
   "name": "@jilatax/cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "packageManager": "bun@1.3.4",
   "description": "Android build and device orchestration for Jilatax applications.",
   "type": "module",

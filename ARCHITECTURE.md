@@ -10,7 +10,7 @@ jilatax/
 │
 ├── packages/                            # Publishable npm packages
 │   ├── jilatax/                         # Public framework API
-│   ├── cli/                             # CLI implementation
+│   ├── @cli/                            # CLI implementation
 │   └── create-jilatax/                  # Project scaffolder
 │
 ├── plan/                                # Internal planning (gitignored)
@@ -38,7 +38,7 @@ Application code
 | Package | npm | Role |
 |---------|-----|------|
 | `jilatax` | `jilatax` | Public API, `defineConfig`, SDK entry |
-| `cli` | `@jilatax/cli` | Command parsing, user output |
+| `@cli` | `@jilatax/cli` | Command parsing, user output |
 | `create-jilatax` | `create-jilatax` | Scaffolding, templates |
 
 ### Planned

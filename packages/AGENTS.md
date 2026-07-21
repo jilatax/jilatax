@@ -34,7 +34,7 @@ bun run check        # typecheck + test
 ### Build order when verifying everything
 
 ```
-cd packages/jilatax && bun run build && cd ../cli && bun run build && cd ../create-jilatax && bun run build
+cd packages/jilatax && bun run build && cd ../@cli && bun run build && cd ../create-jilatax && bun run build
 ```
 
 Or one-liner:

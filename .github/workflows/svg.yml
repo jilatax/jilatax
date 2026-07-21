@@ -1,9 +1,9 @@
-name: Publish @jilatax/cli
+name: Publish @jilatax/svg
 
 on:
   push:
     tags:
-      - "cli-v*"
+      - "svg-v*"
 
 jobs:
   publish:
@@ -20,14 +20,11 @@ jobs:
           bun-version: latest
 
       - name: Install dependencies
-        run: bun install
+        working-directory: packages/@svg
+        run: bun install --frozen-lockfile
 
-      - name: Build jilatax
-        working-directory: packages/jilatax
-        run: bun run build
-
-      - name: Build @jilatax/cli
-        working-directory: packages/@cli
+      - name: Build @jilatax/svg
+        working-directory: packages/@svg
         run: bun run build
 
       - uses: actions/setup-node@v4
@@ -38,6 +35,6 @@ jobs:
       - name: Update npm
         run: npm install -g npm@latest
 
-      - name: Publish @jilatax/cli with provenance
-        working-directory: packages/@cli
+      - name: Publish @jilatax/svg with provenance
+        working-directory: packages/@svg
         run: npm publish --provenance --access public
