@@ -25,13 +25,13 @@
   "keywords": ["typescript", "esm", "commonjs"],
   "author": "Gohit X (bastndev)",
   "license": "MIT",
-  "homepage": "https://gohit.xyz/package/@jilatax/svg",
+  "homepage": "https://jilatax.dev",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bastndev/packages.git"
+    "url": "git+https://github.com/jilatax/jilatax.git"
   },
   "bugs": {
-    "url": "https://github.com/bastndev/packages/issues"
+    "url": "https://github.com/jilatax/jilatax/issues"
   },
   "publishConfig": {
     "access": "public"
