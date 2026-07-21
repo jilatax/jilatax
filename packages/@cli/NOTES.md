@@ -31,9 +31,9 @@ https://www.npmjs.com/package/@jilatax/cli/access
 
 | Field | Value |
 | --- | --- |
-| Organization or user | `bastndev` |
-| Repository | `cli` |
-| Workflow filename | `publish.yml` |
+| Organization or user | `jilatax` |
+| Repository | `jilatax` |
+| Workflow filename | `cli.yml` |
 | Environment name | None |
 | Allowed actions | `Allow npm publish` |
 
@@ -41,15 +41,15 @@ Select **Set up connection**.
 
 ## 2 — Create the workflow manually
 
-Create `.github/workflows/publish.yml` yourself when you are ready:
+The workflow is located at `.github/workflows/cli.yml`:
 
 ```yaml
-name: Publish
+name: Publish @jilatax/cli
 
 on:
   push:
     tags:
-      - "v*"
+      - "cli-v*"
 
 jobs:
   publish:
@@ -68,7 +68,12 @@ jobs:
       - name: Install dependencies
         run: bun install
 
-      - name: Build
+      - name: Build jilatax
+        working-directory: packages/jilatax
+        run: bun run build
+
+      - name: Build @jilatax/cli
+        working-directory: packages/@cli
         run: bun run build
 
       - uses: actions/setup-node@v4
@@ -79,7 +84,8 @@ jobs:
       - name: Update npm
         run: npm install -g npm@latest
 
-      - name: Publish with provenance
+      - name: Publish @jilatax/cli with provenance
+        working-directory: packages/@cli
         run: npm publish --provenance --access public
 ```
 
@@ -91,11 +97,11 @@ Commit and push the workflow to `main` manually.
 git checkout main
 git pull
 ```
-**Update in package.json** `v0.0.1` to `v0.0.2`
+**Package version:** `0.1.1`
 
 ```bash
-git tag -a cli-v0.0.3 -m "cli 0.0.3"
-git push origin cli-v0.0.3
+git tag -a cli-v0.1.1 -m "cli 0.1.1"
+git push origin cli-v0.1.1
 ```
 
 > Use the tag created by `npm version`; update the example tag when the version changes.

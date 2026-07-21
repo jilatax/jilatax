@@ -22,9 +22,9 @@
         "astro": "^7.1.0",
       },
     },
-    "packages/cli": {
+    "packages/@cli": {
       "name": "@jilatax/cli",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "bin": {
         "jilatax": "./dist/bin.js",
       },
@@ -41,7 +41,7 @@
     },
     "packages/create-jilatax": {
       "name": "create-jilatax",
-      "version": "0.2.3",
+      "version": "0.2.4",
       "bin": {
         "create-jilatax": "./dist/bin.js",
       },
@@ -270,7 +270,7 @@
 
     "@img/sharp-win32-x64": ["@img/sharp-win32-x64@0.34.5", "", { "os": "win32", "cpu": "x64" }, "sha512-+29YMsqY2/9eFEiW93eqWnuLcWcufowXewwSNIT6UwZdUUCrM3oFjMWH/Z6/TMmb4hlFenmfAVbpWeup2jryCw=="],
 
-    "@jilatax/cli": ["@jilatax/cli@workspace:packages/cli"],
+    "@jilatax/cli": ["@jilatax/cli@workspace:packages/@cli"],
 
     "@jridgewell/sourcemap-codec": ["@jridgewell/sourcemap-codec@1.5.5", "", {}, "sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og=="],
 

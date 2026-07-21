@@ -5,7 +5,7 @@
   "workspaces": [
     "apps/*",
     "packages/jilatax",
-    "packages/cli",
+    "packages/@cli",
     "packages/create-jilatax"
   ]
 }

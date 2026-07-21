@@ -50,4 +50,4 @@ Options for `run:android`: `--device <serial>`, `--port <number>`, `--packaged`,
 ## CI
 
 - Tag `cli-v*` triggers publish via `.github/workflows/cli.yml`.
-- CI builds `jilatax` first, then `cli`.
+- CI builds `jilatax` first, then the CLI from `packages/@cli`.
