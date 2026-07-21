@@ -1,10 +1,10 @@
 # AGENTS.md — `create-jilatax`
 
-Project scaffolder. Depends on `jilatax`.
+Project scaffolder. Depends on `jilatax` and `@jilatax/svg`.
 
 ## Build prerequisite
 
-`jilatax` must be built first (`bun run build` in `packages/jilatax`).
+Build `jilatax` and `@jilatax/svg` before this package when validating the full workspace.
 
 ## Commands
 
@@ -44,4 +44,4 @@ bun run check       # typecheck + test
 ## CI
 
 - Tag `create-jilatax-v*` triggers publish via `.github/workflows/create-jilatax.yml`.
-- CI builds `jilatax` first, then `create-jilatax`.
+- CI builds `jilatax` and `@jilatax/svg` first, then `create-jilatax`.

@@ -13,10 +13,11 @@
 
 ## Architecture
 
-- Three publishable packages under `packages/`:
+- Four publishable packages under `packages/`:
   - `jilatax` — public API, config, Android host. Build first: `bun run build` in `packages/jilatax`.
+  - `@jilatax/svg` — SVG compiler, Rspeedy plugin, and ReactLynx icon runtime.
   - `@jilatax/cli` — CLI commands; depends on `jilatax`. Build after `jilatax`.
-  - `create-jilatax` — project scaffolder; depends on `jilatax`. Build after `jilatax`.
+  - `create-jilatax` — project scaffolder; depends on `jilatax` and `@jilatax/svg`. Build after both.
 - `apps/website` — Astro marketing site; separate lockfile, not part of packages workspace.
 - Build tool: `tsdown` (ESM + CJS + DTS output via `tsdown.config.ts` per package).
 
@@ -34,13 +35,13 @@ bun run check        # typecheck + test
 ### Build order when verifying everything
 
 ```
-cd packages/jilatax && bun run build && cd ../@cli && bun run build && cd ../create-jilatax && bun run build
+cd packages/jilatax && bun run build && cd ../@svg && bun run build && cd ../@cli && bun run build && cd ../create-jilatax && bun run build
 ```
 
 Or one-liner:
 
 ```
-bun run --filter jilatax build && bun run --filter @jilatax/cli build && bun run --filter create-jilatax build
+bun run build
 ```
 
 ## Runtime assets and packaging
@@ -53,9 +54,10 @@ bun run --filter jilatax build && bun run --filter @jilatax/cli build && bun run
 
 - Tag-based publishes in `.github/workflows/`:
   - `v*` → publishes `jilatax`
+  - `svg-v*` → publishes `@jilatax/svg`
   - `cli-v*` → builds `jilatax` first, then publishes `@jilatax/cli`
   - `create-jilatax-v*` → builds `jilatax` first, then publishes `create-jilatax`
-- All workflows run `bun install` then `bun run build` in `packages/jilatax` before building downstream packages.
+- Release `jilatax` and `@jilatax/svg` before packages that consume them.
 
 ## Comment style
 

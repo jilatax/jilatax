@@ -47,7 +47,8 @@
         "types": "./types/svg.d.cts",
         "default": "./dist/types.cjs"
       }
-    }
+    },
+    "./package.json": "./package.json"
   },
   "typesVersions": {
     "*": {

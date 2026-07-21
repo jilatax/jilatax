@@ -11,6 +11,7 @@ jilatax/
 ├── packages/                            # Publishable npm packages
 │   ├── jilatax/                         # Public framework API
 │   ├── @cli/                            # CLI implementation
+│   ├── @svg/                            # SVG compiler and ReactLynx icons
 │   └── create-jilatax/                  # Project scaffolder
 │
 ├── plan/                                # Internal planning (gitignored)
@@ -30,15 +31,16 @@ Application code
    Lynx / Rspeedy         ── engine, compilation, dev server
        │
        ▼
-   Android / iOS
+   Android                  ── only supported native platform in this phase
 ```
 
 ## 📦 Packages
 
 | Package | npm | Role |
 |---------|-----|------|
-| `jilatax` | `jilatax` | Public API, `defineConfig`, SDK entry |
+| `jilatax` | `jilatax` | Public API, app configuration, Android host |
 | `@cli` | `@jilatax/cli` | Command parsing, user output |
+| `@svg` | `@jilatax/svg` | SVG validation, Rspeedy compilation, ReactLynx icon components |
 | `create-jilatax` | `create-jilatax` | Scaffolding, templates |
 
 ### Planned
@@ -75,6 +77,7 @@ Validation: `publint` + `@arethetypeswrong/core`
 | Workflow | Trigger | Publishes |
 |----------|---------|-----------|
 | `publish.yml` | `v*` | `jilatax` |
+| `svg.yml` | `svg-v*` | `@jilatax/svg` |
 | `cli.yml` | `cli-v*` | `@jilatax/cli` |
 | `create-jilatax.yml` | `create-jilatax-v*` | `create-jilatax` |
 

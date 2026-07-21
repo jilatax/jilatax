@@ -32,19 +32,8 @@
   background-color: #e8f7ef;
 }
 
-.bottom-bar__mark {
-  border-color: #879990;
-  border-radius: 999px;
-  border-style: solid;
-  border-width: 2px;
-  height: 10px;
+.bottom-bar__icon {
   margin-right: 8px;
-  width: 10px;
-}
-
-.bottom-bar__mark--active {
-  background-color: #00aa6b;
-  border-color: #00aa6b;
 }
 
 .bottom-bar__label {

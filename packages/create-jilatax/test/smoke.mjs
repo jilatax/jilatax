@@ -12,6 +12,7 @@ import {
 
 const require = createRequire(import.meta.url);
 const cjs = require('create-jilatax');
+const svgPackageJson = require('@jilatax/svg/package.json');
 
 assert.equal(typeof createProject, 'function');
 assert.equal(typeof runCreateCli, 'function');
@@ -73,6 +74,10 @@ async function testGeneratedProject(root) {
     'create:aab': 'jilatax create:aab',
   });
   assert.equal(packageJson.dependencies?.jilatax, '^0.0.7');
+  assert.equal(
+    packageJson.dependencies?.['@jilatax/svg'],
+    `^${svgPackageJson.version}`,
+  );
   assert.equal(typeof packageJson.dependencies?.['@lynx-js/react'], 'string');
   assert.equal(packageJson.devDependencies?.['@jilatax/cli'], '^0.1.0');
   assert.equal(
@@ -150,6 +155,8 @@ async function testGeneratedProject(root) {
     'utf8',
   );
   assert.match(lynxConfig, /@lynx-js\/qrcode-rsbuild-plugin/u);
+  assert.match(lynxConfig, /@jilatax\/svg\/plugin/u);
+  assert.match(lynxConfig, /pluginJilataxSvg\(\)/u);
   assert.match(lynxConfig, /pluginQRCode/u);
   assert.match(lynxConfig, /\?fullscreen=true/u);
 
@@ -183,6 +190,9 @@ async function testGeneratedProject(root) {
   assert(projectFiles.includes('public/assets/splash-icon.png'));
   assert(projectFiles.includes('public/fonts/jilatax.ttf'));
   assert(projectFiles.includes('src/assets/images/logo.png'));
+  assert(projectFiles.includes('src/assets/icons/about.svg'));
+  assert(projectFiles.includes('src/assets/icons/home.svg'));
+  assert(projectFiles.includes('src/assets/icons/settings.svg'));
   assert(projectFiles.includes('src/app/App.tsx'));
   assert(projectFiles.includes('src/app/navigation.ts'));
   assert(projectFiles.includes('src/components/navigation/BottomBar.css'));
@@ -240,6 +250,25 @@ async function testGeneratedProject(root) {
   assert.match(appSource, /<BottomBar activeTab=/u);
   assert.match(appSource, /useInitData/u);
   assert.match(appSource, /theme-\$\{appTheme\}/u);
+
+  const bottomBarSource = await readFile(
+    path.join(
+      projectDirectory,
+      'src',
+      'components',
+      'navigation',
+      'BottomBar.tsx',
+    ),
+    'utf8',
+  );
+  assert.match(bottomBarSource, /from '\.\.\/\.\.\/assets\/icons\/home\.svg'/u);
+  assert.match(bottomBarSource, /<Icon/u);
+
+  const rspeedyTypes = await readFile(
+    path.join(projectDirectory, 'src', 'rspeedy-env.d.ts'),
+    'utf8',
+  );
+  assert.match(rspeedyTypes, /@jilatax\/svg\/types/u);
 
   const mainActivitySource = await readFile(
     path.join(

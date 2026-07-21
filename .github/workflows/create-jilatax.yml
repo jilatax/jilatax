@@ -26,6 +26,10 @@ jobs:
         working-directory: packages/jilatax
         run: bun run build
 
+      - name: Build @jilatax/svg
+        working-directory: packages/@svg
+        run: bun run build
+
       - name: Build create-jilatax
         working-directory: packages/create-jilatax
         run: bun run build

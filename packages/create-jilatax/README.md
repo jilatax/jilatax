@@ -39,7 +39,9 @@ Generated projects include:
 - `bun run create:aab` for a Play Store Android App Bundle.
 
 The creator only writes the project and can run `bun install`. Device, Gradle,
-bundle, APK, and AAB orchestration belongs to `@jilatax/cli`.
+bundle, APK, and AAB orchestration belongs to `@jilatax/cli`. Imported SVG icons
+are compiled by `@jilatax/svg`; the default bottom bar includes working examples
+with incremental Rspeedy rebuilds.
 
 ## Programmatic API
 
