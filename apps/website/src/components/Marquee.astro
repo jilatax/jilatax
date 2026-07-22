@@ -242,8 +242,13 @@ const laps = Array.from({ length: loopCount });
 
   .step-label {
     line-height: 1;
-    color: var(--color-text);
+    color: var(--color-gray);
     font-weight: 900;
+    transition: color 0.25s ease;
+  }
+
+  .step:hover .step-label {
+    color: #ffffff;
   }
 
   /* Glowing icons appear only on hover */
