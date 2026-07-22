@@ -230,11 +230,9 @@ const laps = Array.from({ length: loopCount });
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    transition: transform 0.25s ease, filter 0.25s ease;
-  }
-
-  .step:hover .step-icon-wrapper {
-    transform: scale(1.15);
+    color: var(--color-text-muted);
+    filter: none;
+    transition: color 0.25s ease, transform 0.25s ease, filter 0.25s ease;
   }
 
   .step-icon {
@@ -248,13 +246,15 @@ const laps = Array.from({ length: loopCount });
     font-weight: 900;
   }
 
-  /* Glowing icons matching image-1 reference */
-  .step-create .step-icon-wrapper   { color: var(--color-coral); filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.65)); }
-  .step-build .step-icon-wrapper    { color: var(--color-orange); filter: drop-shadow(0 0 6px rgba(20, 184, 166, 0.65)); }
-  .step-deploy .step-icon-wrapper   { color: var(--color-amber); filter: drop-shadow(0 0 6px rgba(6, 182, 212, 0.65)); }
-  .step-optimize .step-icon-wrapper { color: var(--color-green); filter: drop-shadow(0 0 6px rgba(52, 211, 153, 0.65)); }
-  .step-scale .step-icon-wrapper    { color: var(--color-blue); filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.65)); }
-  .step-default .step-icon-wrapper  { color: var(--color-text-muted); }
+  /* Glowing icons appear only on hover */
+  .step:hover .step-icon-wrapper {
+    transform: scale(1.15);
+  }
+  .step-create:hover .step-icon-wrapper   { color: var(--color-coral); filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.65)); }
+  .step-build:hover .step-icon-wrapper    { color: var(--color-orange); filter: drop-shadow(0 0 6px rgba(20, 184, 166, 0.65)); }
+  .step-deploy:hover .step-icon-wrapper   { color: var(--color-amber); filter: drop-shadow(0 0 6px rgba(6, 182, 212, 0.65)); }
+  .step-optimize:hover .step-icon-wrapper { color: var(--color-green); filter: drop-shadow(0 0 6px rgba(52, 211, 153, 0.65)); }
+  .step-scale:hover .step-icon-wrapper    { color: var(--color-blue); filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.65)); }
 
   /* ── Badges ── */
   .step-badge {
@@ -267,7 +267,7 @@ const laps = Array.from({ length: loopCount });
     color: var(--color-text-muted);
     line-height: 1;
     border: 1px solid rgba(0, 0, 0, 0.08);
-    transition: opacity 0.2s ease, background-color 0.2s ease;
+    transition: opacity 0.2s ease, color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
   .size-sm .step-badge { font-size: 0.58rem; padding: 0.15rem 0.38rem; }
@@ -279,8 +279,31 @@ const laps = Array.from({ length: loopCount });
     border-color: rgba(255, 255, 255, 0.12);
   }
 
-  .step:hover .step-badge {
-    color: var(--color-text);
+  /* Badge colors on hover */
+  .step-create:hover .step-badge {
+    color: var(--color-coral);
+    border-color: color-mix(in srgb, var(--color-coral) 40%, transparent);
+    background: color-mix(in srgb, var(--color-coral) 12%, transparent);
+  }
+  .step-build:hover .step-badge {
+    color: var(--color-orange);
+    border-color: color-mix(in srgb, var(--color-orange) 40%, transparent);
+    background: color-mix(in srgb, var(--color-orange) 12%, transparent);
+  }
+  .step-deploy:hover .step-badge {
+    color: var(--color-amber);
+    border-color: color-mix(in srgb, var(--color-amber) 40%, transparent);
+    background: color-mix(in srgb, var(--color-amber) 12%, transparent);
+  }
+  .step-optimize:hover .step-badge {
+    color: var(--color-green);
+    border-color: color-mix(in srgb, var(--color-green) 40%, transparent);
+    background: color-mix(in srgb, var(--color-green) 12%, transparent);
+  }
+  .step-scale:hover .step-badge {
+    color: var(--color-blue);
+    border-color: color-mix(in srgb, var(--color-blue) 40%, transparent);
+    background: color-mix(in srgb, var(--color-blue) 12%, transparent);
   }
 
   /* ── Separators ── */
