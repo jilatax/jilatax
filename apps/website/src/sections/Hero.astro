@@ -247,9 +247,19 @@ function formatNum(num: number): string {
     transition: filter 0.3s ease;
   }
 
-  .title:hover .android-typography {
-    animation: android-light-sweep 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
-    filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.55));
+  @media (hover: hover) {
+    .title:hover .android-typography {
+      animation: android-light-sweep 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+      filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.55));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .title:hover .android-typography,
+    .android-typography {
+      animation: none !important;
+      filter: none !important;
+    }
   }
 
   @keyframes android-light-sweep {
