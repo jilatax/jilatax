@@ -5,6 +5,7 @@ import MoonOutlineIcon from '../../assets/icons/outline/moon-outline.svg';
 import SunOutlineIcon from '../../assets/icons/outline/sun-outline.svg';
 import SystemIcon from '../../assets/icons/system.svg';
 import type { AppTheme, ThemePreference } from '../../app/theme.js';
+import appConfig from '../../../app.json';
 import './SettingScreen.css';
 
 interface SettingScreenProps {
@@ -102,6 +103,21 @@ export function SettingScreen({
             >
               System
             </text>
+          </view>
+        </view>
+
+        <view className="setting-screen__section">
+          <text className="setting-screen__section-title">About</text>
+          <view className="setting-card">
+            <view className="setting-item">
+              <text className="setting-item__label">Application</text>
+              <text className="setting-item__value">{appConfig.jilatax.name}</text>
+            </view>
+            <view className="setting-item__divider" />
+            <view className="setting-item">
+              <text className="setting-item__label">Version</text>
+              <text className="setting-item__value">v{appConfig.jilatax.version}</text>
+            </view>
           </view>
         </view>
       </view>
