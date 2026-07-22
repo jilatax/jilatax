@@ -7,24 +7,31 @@ import { LINKS } from '@/consts';
 const packages = [
   {
     name: 'jilatax',
-    version: '0.0.5',
+    version: '0.0.9',
     description: 'Android-first application framework for Lynx and Rspeedy.',
-    color: 'var(--color-coral)',
+    color: 'var(--color-green)',
     href: 'https://www.npmjs.com/package/jilatax',
   },
   {
     name: 'create-jilatax',
-    version: '0.0.5',
+    version: '0.3.4',
     description: 'Create an Android-first Jilatax application for Lynx and Rspeedy.',
-    color: 'var(--color-amber)',
+    color: 'var(--color-blue)',
     href: 'https://www.npmjs.com/package/create-jilatax',
   },
   {
     name: '@jilatax/cli',
-    version: '0.0.8',
+    version: '0.1.2',
     description: 'Android build and device orchestration for Jilatax applications.',
-    color: 'var(--color-blue)',
+    color: 'var(--color-coral)',
     href: 'https://www.npmjs.com/package/@jilatax/cli',
+  },
+  {
+    name: '@jilatax/svg',
+    version: '0.0.7',
+    description: 'Compile SVG icons into typed ReactLynx components for Jilatax applications.',
+    color: 'var(--color-amber)',
+    href: 'https://www.npmjs.com/package/@jilatax/svg',
   },
 ];
 ---
@@ -34,7 +41,7 @@ const packages = [
     <p class="kicker">How to use</p>
     <h2 class="title">Everything you need, <span class="gradient-text">packed tight.</span></h2>
     <p class="sub">
-      Framework, scaffolder and CLI — three packages that take you from an empty
+      Framework, scaffolder and CLI — four packages that take you from an empty
       folder to a running Android app.
     </p>
   </header>
@@ -99,7 +106,7 @@ const packages = [
 
     <!-- Packages -->
     <article class="card card-packages span-3" id="packages" style="--depth: 4px" data-spotlight>
-      <h3 class="packages-title">Three packages, one toolbox</h3>
+      <h3 class="packages-title">Four packages, one toolbox</h3>
       <ul class="packages-list">
         {packages.map((pkg) => (
           <li>
