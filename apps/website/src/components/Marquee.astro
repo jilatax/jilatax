@@ -21,6 +21,7 @@ export interface Props {
   variant?: 'default' | 'glass' | 'glowing' | 'pill' | 'card' | 'subtle';
   separator?: 'arrow' | 'dot' | 'spark' | 'slash' | 'none';
   gap?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
   repeat?: number;
   class?: string;
   ariaLabel?: string;
@@ -43,6 +44,7 @@ const {
   variant = 'default',
   separator = 'arrow',
   gap = 'md',
+  size = 'lg',
   repeat = 8,
   class: className = '',
   ariaLabel = 'Workflow marquee',
@@ -68,6 +70,7 @@ const laps = Array.from({ length: loopCount });
     'marquee',
     `variant-${variant}`,
     `gap-${gap}`,
+    `size-${size}`,
     { 'pause-on-hover': pauseOnHover, 'is-interactive': isInteractive },
     className,
   ]}
@@ -90,7 +93,7 @@ const laps = Array.from({ length: loopCount });
               <Tag class:list={['step', item.colorClass || 'step-default']} {...tagProps}>
                 {item.Icon && (
                   <span class="step-icon-wrapper">
-                    <item.Icon width={13} height={13} size={13} class="step-icon" aria-hidden="true" />
+                    <item.Icon width={15} height={15} size={15} class="step-icon" aria-hidden="true" />
                   </span>
                 )}
                 <span class="step-label">{item.label}</span>
@@ -120,13 +123,28 @@ const laps = Array.from({ length: loopCount });
     margin-top: auto;
     overflow: hidden;
     width: 100%;
-    padding: 0.85rem 0;
+    padding: 1.35rem 0;
     background: var(--color-bg-elevated);
     border-top: 1px solid var(--color-border);
     border-bottom: 1px solid var(--color-border);
     -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 6%, #000 94%, transparent 100%);
     mask-image: linear-gradient(to right, transparent 0%, #000 6%, #000 94%, transparent 100%);
     user-select: none;
+    transition: padding 0.25s ease;
+  }
+
+  /* ── Height & Size Options ── */
+  .size-sm {
+    padding: 0.75rem 0;
+  }
+  .size-md {
+    padding: 1.05rem 0;
+  }
+  .size-lg {
+    padding: 1.4rem 0;
+  }
+  .size-xl {
+    padding: 1.85rem 0;
   }
 
   /* ── Track & Animation ── */
@@ -158,24 +176,24 @@ const laps = Array.from({ length: loopCount });
   }
 
   .gap-sm .lap {
-    padding: 0 1rem;
-    gap: 0.75rem;
+    padding: 0 1.1rem;
+    gap: 0.85rem;
   }
   .gap-md .lap {
-    padding: 0 1.75rem;
-    gap: 1.25rem;
+    padding: 0 2rem;
+    gap: 1.4rem;
   }
   .gap-lg .lap {
-    padding: 0 2.5rem;
-    gap: 1.75rem;
+    padding: 0 2.8rem;
+    gap: 2rem;
   }
 
   /* ── Step Items ── */
   .step {
     display: inline-flex;
     align-items: center;
-    gap: 0.45rem;
-    font-size: 0.8rem;
+    gap: 0.5rem;
+    font-size: 0.85rem;
     font-weight: 900;
     letter-spacing: 0.13em;
     text-transform: uppercase;
@@ -186,6 +204,11 @@ const laps = Array.from({ length: loopCount });
     opacity: 0.95;
     transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease, filter 0.2s ease;
   }
+
+  .size-sm .step { font-size: 0.78rem; gap: 0.4rem; }
+  .size-md .step { font-size: 0.82rem; gap: 0.45rem; }
+  .size-lg .step { font-size: 0.88rem; gap: 0.52rem; }
+  .size-xl .step { font-size: 0.98rem; gap: 0.65rem; }
 
   .marquee:not(.is-interactive) .step:hover {
     opacity: 1;
@@ -223,19 +246,19 @@ const laps = Array.from({ length: loopCount });
   }
 
   /* Glowing icons matching image-1 reference */
-  .step-create .step-icon-wrapper   { color: var(--color-coral); filter: drop-shadow(0 0 5px rgba(16, 185, 129, 0.65)); }
-  .step-build .step-icon-wrapper    { color: var(--color-orange); filter: drop-shadow(0 0 5px rgba(20, 184, 166, 0.65)); }
-  .step-deploy .step-icon-wrapper   { color: var(--color-amber); filter: drop-shadow(0 0 5px rgba(6, 182, 212, 0.65)); }
-  .step-optimize .step-icon-wrapper { color: var(--color-green); filter: drop-shadow(0 0 5px rgba(52, 211, 153, 0.65)); }
-  .step-scale .step-icon-wrapper    { color: var(--color-blue); filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.65)); }
+  .step-create .step-icon-wrapper   { color: var(--color-coral); filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.65)); }
+  .step-build .step-icon-wrapper    { color: var(--color-orange); filter: drop-shadow(0 0 6px rgba(20, 184, 166, 0.65)); }
+  .step-deploy .step-icon-wrapper   { color: var(--color-amber); filter: drop-shadow(0 0 6px rgba(6, 182, 212, 0.65)); }
+  .step-optimize .step-icon-wrapper { color: var(--color-green); filter: drop-shadow(0 0 6px rgba(52, 211, 153, 0.65)); }
+  .step-scale .step-icon-wrapper    { color: var(--color-blue); filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.65)); }
   .step-default .step-icon-wrapper  { color: var(--color-text-muted); }
 
   /* ── Badges ── */
   .step-badge {
-    font-size: 0.62rem;
+    font-size: 0.65rem;
     font-weight: 800;
     letter-spacing: 0.06em;
-    padding: 0.18rem 0.42rem;
+    padding: 0.2rem 0.48rem;
     border-radius: 4px;
     background: rgba(0, 0, 0, 0.06);
     color: var(--color-text-muted);
@@ -243,6 +266,10 @@ const laps = Array.from({ length: loopCount });
     border: 1px solid rgba(0, 0, 0, 0.08);
     transition: opacity 0.2s ease, background-color 0.2s ease;
   }
+
+  .size-sm .step-badge { font-size: 0.58rem; padding: 0.15rem 0.38rem; }
+  .size-lg .step-badge { font-size: 0.66rem; padding: 0.22rem 0.5rem; }
+  .size-xl .step-badge { font-size: 0.72rem; padding: 0.25rem 0.55rem; }
 
   [data-theme='dark'] .step-badge {
     background: rgba(255, 255, 255, 0.08);
@@ -258,7 +285,7 @@ const laps = Array.from({ length: loopCount });
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     font-weight: 700;
     color: var(--color-text-muted);
     opacity: 0.45;
@@ -267,21 +294,24 @@ const laps = Array.from({ length: loopCount });
     user-select: none;
   }
 
+  .size-lg .separator { font-size: 0.85rem; }
+  .size-xl .separator { font-size: 0.95rem; }
+
   .sep-arrow {
     transform: scaleX(1.05);
   }
 
   .sep-spark {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     color: var(--color-amber);
   }
 
   .sep-dot {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
   }
 
   .sep-slash {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     font-weight: 400;
   }
 
@@ -304,7 +334,7 @@ const laps = Array.from({ length: loopCount });
   .variant-card .step {
     background: var(--color-bg);
     border: 1px solid var(--color-border);
-    padding: 0.45rem 0.85rem;
+    padding: 0.5rem 0.95rem;
     border-radius: 8px;
     box-shadow: 0 2px 8px -2px var(--color-shadow);
   }
@@ -312,7 +342,7 @@ const laps = Array.from({ length: loopCount });
   .variant-pill .step {
     background: rgba(0, 0, 0, 0.035);
     border: 1px solid rgba(0, 0, 0, 0.06);
-    padding: 0.38rem 0.8rem;
+    padding: 0.42rem 0.9rem;
     border-radius: 999px;
   }
   [data-theme='dark'] .variant-pill .step {
@@ -324,7 +354,7 @@ const laps = Array.from({ length: loopCount });
     background: transparent;
     border-top: none;
     border-bottom: none;
-    padding: 0.5rem 0;
+    padding: 0.8rem 0;
   }
 
   /* ── Accessibility ── */
