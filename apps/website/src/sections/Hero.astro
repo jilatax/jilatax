@@ -448,6 +448,7 @@ function formatNum(num: number): string {
     gap: 0.75rem;
     text-align: left;
     min-width: 0;
+    width: 100%;
   }
   .ts-card-icon {
     flex-shrink: 0;
@@ -501,7 +502,29 @@ function formatNum(num: number): string {
       padding-top: 3rem;
     }
   }
-  @media (max-width: 520px) {
+
+  @media (max-width: 768px) {
+    .tanstack-stats {
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 0.75rem;
+    }
+  }
+
+  @media (max-width: 540px) {
+    .tanstack-stats {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+    .ts-card {
+      padding: 0.8rem 1rem 0.8rem 1.1rem;
+    }
+    .ts-card-value {
+      font-size: 1.25rem;
+    }
+    .ts-card-label {
+      font-size: 0.8rem;
+      white-space: normal;
+    }
     .cmd-text {
       font-size: 0.85rem;
     }
