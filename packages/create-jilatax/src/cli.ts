@@ -352,7 +352,7 @@ function printResult(result: CreateProjectResult, log: (message: string) => void
     '',
     '🤖 Android:',
     '  bun run:android',
-    '  bun run create:aab',
+    '  bun create:aab',
   ];
   const message = lines.join('\n');
   const farewell = `Good luck out there 🎉, cd ${formatProjectDirectory(result.projectDirectory)}`;
