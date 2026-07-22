@@ -1,8 +1,8 @@
 ---
 import { SITE, LINKS } from '@/consts';
 import GithubIcon from '@/assets/icons/github.svg';
+import YoutubeIcon from '@/assets/icons/social/youtube.svg';
 import XIcon from '@/assets/icons/social/x.svg';
-import SkyBlueIcon from '@/assets/icons/social/sky-blue.svg';
 
 const year = new Date().getFullYear();
 
@@ -109,6 +109,16 @@ const columns = [
         <span class="social-sep" aria-hidden="true"></span>
         <a
           class="social-btn"
+          href="https://www.youtube.com/@jilatax"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="YouTube"
+        >
+          <YoutubeIcon class="icon-youtube" aria-hidden="true" />
+        </a>
+        <span class="social-sep" aria-hidden="true"></span>
+        <a
+          class="social-btn"
           href="https://x.com/jilatax"
           target="_blank"
           rel="noopener noreferrer"
@@ -116,10 +126,6 @@ const columns = [
         >
           <XIcon class="icon-x" aria-hidden="true" />
         </a>
-        <span class="social-sep" aria-hidden="true"></span>
-        <span class="social-btn social-static" aria-label="Bluesky">
-          <SkyBlueIcon class="icon-sky" aria-hidden="true" />
-        </span>
       </div>
     </div>
   </div>
@@ -297,16 +303,14 @@ const columns = [
     justify-content: center;
     color: var(--color-text);
     text-decoration: none;
-    opacity: 0.92;
-    transition: opacity 0.2s ease;
+    opacity: 0.85;
+    transition: opacity 0.2s ease, color 0.2s ease, transform 0.2s ease;
   }
 
   a.social-btn:hover {
     opacity: 1;
-  }
-
-  .social-static {
-    cursor: default;
+    color: var(--color-coral);
+    transform: translateY(-1px);
   }
 
   .social-btn :global(svg) {
@@ -314,20 +318,19 @@ const columns = [
   }
 
   .social-btn :global(.icon-github) {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     fill: currentColor;
+  }
+
+  .social-btn :global(.icon-youtube) {
+    width: 20px;
+    height: 20px;
   }
 
   .social-btn :global(.icon-x) {
-    width: 16px;
-    height: 16px;
-  }
-
-  .social-btn :global(.icon-sky) {
     width: 18px;
     height: 18px;
-    fill: currentColor;
   }
 
   .social-sep {
