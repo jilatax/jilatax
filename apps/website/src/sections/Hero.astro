@@ -503,28 +503,31 @@ function formatNum(num: number): string {
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 640px) {
     .tanstack-stats {
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 0.75rem;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.65rem;
+    }
+    .ts-card {
+      padding: 0.75rem 0.6rem 0.75rem 0.95rem;
+    }
+    .ts-card:nth-child(3) {
+      grid-column: 1 / -1;
+    }
+    .ts-card-body {
+      gap: 0.5rem;
+    }
+    .ts-card-value {
+      font-size: 1.18rem;
+    }
+    .ts-card-label {
+      font-size: 0.73rem;
+      white-space: normal;
+      line-height: 1.25;
     }
   }
 
-  @media (max-width: 540px) {
-    .tanstack-stats {
-      grid-template-columns: 1fr;
-      gap: 0.75rem;
-    }
-    .ts-card {
-      padding: 0.8rem 1rem 0.8rem 1.1rem;
-    }
-    .ts-card-value {
-      font-size: 1.25rem;
-    }
-    .ts-card-label {
-      font-size: 0.8rem;
-      white-space: normal;
-    }
+  @media (max-width: 480px) {
     .cmd-text {
       font-size: 0.85rem;
     }
