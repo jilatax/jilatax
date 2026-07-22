@@ -1,7 +1,7 @@
 <div align="center">
 
   <a href="https://www.npmjs.com/package/create-jilatax">
-    <img alt="create-jilatax logo" src="" height="128">
+    <img alt="create-jilatax logo" src="https://raw.githubusercontent.com/jilatax/jilatax/refs/heads/main/public/github/logo.png" height="128">
   </a>
 
 <br>
