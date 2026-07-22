@@ -130,7 +130,7 @@ const packages = [
         <ArrowUpRight size={18} aria-hidden="true" class="oss-arrow" />
       </span>
       <span class="oss-mit">MIT</span>
-      <span class="oss-label">Open source, forever.</span>
+      <span class="oss-label">(JilataX) Open source, forever.</span>
     </a>
   </div>
 </section>
@@ -485,11 +485,13 @@ const packages = [
     text-decoration: none;
     color: inherit;
     justify-content: space-between;
+    align-items: center;
   }
   .oss-top {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    width: 100%;
     color: var(--color-text);
   }
   .oss-arrow {
@@ -504,6 +506,7 @@ const packages = [
     font-size: 2.4rem;
     font-weight: 1000;
     letter-spacing: -0.03em;
+    text-align: center;
     background: var(--gradient-hero);
     -webkit-background-clip: text;
     background-clip: text;
@@ -531,6 +534,9 @@ const packages = [
       flex-direction: row;
       align-items: center;
       gap: 1.25rem;
+    }
+    .oss-top {
+      width: auto;
     }
     .oss-mit {
       font-size: 1.8rem;
