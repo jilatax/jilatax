@@ -8,12 +8,17 @@ import { MeScreen } from '../screens/MeScreen.js';
 import { SettingScreen } from '../screens/settings/SettingScreen.js';
 import '../styles/global.css';
 import type { AppTab } from './navigation.js';
-
-type AppTheme = 'dark' | 'light';
+import {
+  readThemeState,
+  setNativeThemePreference,
+  type AppTheme,
+  type ThemePreference,
+} from './theme.js';
 
 declare module '@lynx-js/react' {
   interface InitData {
     appTheme?: AppTheme;
+    themePreference?: ThemePreference;
   }
 }
 
@@ -21,7 +26,7 @@ export function App() {
   const [activeTab, setActiveTab] = useState<AppTab>('home');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const initData = useInitData();
-  const appTheme: AppTheme = initData.appTheme === 'dark' ? 'dark' : 'light';
+  const { appTheme, themePreference } = readThemeState(initData);
 
   const handleNavigateToSettings = () => {
     setIsSettingsOpen(true);
@@ -32,9 +37,14 @@ export function App() {
   };
 
   return (
-    <view className={`app-shell theme-${appTheme}`}>
+    <view className={`app theme-${appTheme}`}>
       {isSettingsOpen ? (
-        <SettingScreen onBack={handleNavigateBack} />
+        <SettingScreen
+          appTheme={appTheme}
+          onBack={handleNavigateBack}
+          onThemeChange={setNativeThemePreference}
+          selectedTheme={themePreference}
+        />
       ) : activeTab === 'home' ? (
         <HomeScreen />
       ) : activeTab === 'about' ? (
@@ -43,7 +53,7 @@ export function App() {
         <MeScreen />
       )}
       {isSettingsOpen ? null : (
-        <SettingsButton onTap={handleNavigateToSettings} />
+        <SettingsButton appTheme={appTheme} onTap={handleNavigateToSettings} />
       )}
       {isSettingsOpen ? null : (
         <BottomBar activeTab={activeTab} onSelect={setActiveTab} />

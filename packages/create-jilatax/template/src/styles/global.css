@@ -7,11 +7,12 @@
   font-family: system-ui, sans-serif;
 }
 
-.app-shell {
+.app {
   background-color: #ffffff;
   color: #000000;
 }
-.app-shell.theme-dark {
+
+.app.theme-dark {
   background-color: #000000;
   color: #ffffff;
 }
@@ -20,7 +21,7 @@
  *  ⚡ APP 
  * ------------------------------------------------
  */
-.app-shell {
+.app {
   height: 100vh;
   overflow: hidden;
   position: relative;
@@ -28,6 +29,7 @@
 }
 
 .screen {
+  background-color: transparent;
   height: 100%;
   position: relative;
   width: 100%;

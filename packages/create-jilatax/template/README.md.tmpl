@@ -32,8 +32,14 @@ Configure `android/keystore.properties` from the included example before a
 Play Store release. Never commit signing credentials.
 
 Application metadata lives in `app.json`. Android is the only supported native
-platform in this phase. The app follows the device light or dark theme and
-refreshes automatically when that setting changes.
+platform in this phase. The Settings screen offers Light, Dark, and System
+themes. Light and Dark override the device theme; System follows it. The choice
+persists across launches, and the Android status and navigation bars stay in
+sync with the app.
+
+Shared background and foreground colors live on `.app` in
+`src/styles/global.css`. New transparent screens and text inherit that palette;
+an explicitly hard-coded component color still takes precedence.
 
 Default launcher and splash artwork lives in `public/assets/`. Additional local
 fonts can be stored in `public/fonts/`; the included JilataX font is applied to

@@ -214,6 +214,32 @@ const androidRuntime = await readFile(
   ),
   'utf8',
 );
+const androidApplication = await readFile(
+  resolveAndroidProjectPath(
+    'src/main/java/dev/jilatax/android/JilataxApplication.kt',
+  ),
+  'utf8',
+);
+const androidTheme = await readFile(
+  resolveAndroidProjectPath(
+    'src/main/java/dev/jilatax/android/JilataxTheme.kt',
+  ),
+  'utf8',
+);
+const androidThemeModule = await readFile(
+  resolveAndroidProjectPath(
+    'src/main/java/dev/jilatax/android/JilataxThemeModule.kt',
+  ),
+  'utf8',
+);
+const androidManifest = await readFile(
+  resolveAndroidProjectPath('src/main/AndroidManifest.xml'),
+  'utf8',
+);
+const androidRuntimeStyles = await readFile(
+  resolveAndroidProjectPath('src/main/res/values/styles.xml'),
+  'utf8',
+);
 assert.equal(existsSync(androidProjectPath), true);
 assert.equal(androidBuildFile.includes('sparkling-debug-tool'), false);
 assert.equal(androidBuildFile.includes('debugImplementation'), false);
@@ -246,6 +272,45 @@ assert.match(
 assert.match(
   androidRuntime,
   /addBehaviors\(XElementBehaviors\(\)\.create\(\)\)/u,
+);
+assert.match(androidRuntime, /JilataxTheme\.initialize\(application\)/u);
+assert.match(androidRuntime, /JilataxThemeModule\.NAME/u);
+assert.match(androidRuntime, /SparklingLynxModuleWrapper/u);
+assert.match(androidRuntime, /JilataxTheme\.enrichInitialData/u);
+assert.match(androidApplication, /override fun onConfigurationChanged/u);
+assert.match(androidApplication, /JilataxTheme\.onSystemThemeChanged/u);
+assert.match(androidTheme, /getSharedPreferences/u);
+assert.match(androidTheme, /\.commit\(\)/u);
+assert.match(androidTheme, /themePreference/u);
+assert.match(androidTheme, /appTheme/u);
+assert.match(androidTheme, /registerActivityLifecycleCallbacks/u);
+assert.match(androidTheme, /addKitViewCreatedListener/u);
+assert.match(androidTheme, /APPEARANCE_LIGHT_NAVIGATION_BARS/u);
+assert.match(androidTheme, /isNavigationBarContrastEnforced = false/u);
+assert.match(androidTheme, /isForceDarkAllowed = false/u);
+assert.match(androidTheme, /KitViewManager\.getKitViews\(\)/u);
+assert.match(androidTheme, /kitView\.updateData\(data\)/u);
+assert.equal(androidTheme.includes('Log.i'), false);
+assert.match(androidThemeModule, /class JilataxThemeModule/u);
+assert.match(androidThemeModule, /@LynxMethod/u);
+assert.match(androidThemeModule, /fun setPreference/u);
+assert.match(
+  androidManifest,
+  /android:name="com\.tiktok\.sparkling\.SparklingActivity"/u,
+);
+assert.match(androidManifest, /android:configChanges="uiMode"/u);
+assert.match(
+  androidManifest,
+  /android:theme="@style\/Theme\.Jilatax\.Runtime"/u,
+);
+assert.match(androidManifest, /tools:replace="android:theme"/u);
+assert.match(
+  androidRuntimeStyles,
+  /parent="Theme\.AppCompat\.Light\.NoActionBar"/u,
+);
+assert.match(
+  androidRuntimeStyles,
+  /<item name="android:forceDarkAllowed">false<\/item>/u,
 );
 
 const schemaPath = resolveAppSchemaPath();

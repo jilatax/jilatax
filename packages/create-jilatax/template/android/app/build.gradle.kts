@@ -24,6 +24,11 @@ val appPackage = requiredConfig("jilatax.android.package")
 val appVersion = requiredConfig("jilatax.version")
 val appVersionCode = requiredConfig("jilatax.android.versionCode").toInt()
 val appScheme = requiredConfig("jilatax.scheme")
+val userInterfaceStyle =
+    when (val style = requiredConfig("jilatax.userInterfaceStyle")) {
+        "automatic", "light", "dark" -> style
+        else -> error("Unsupported Jilatax user interface style: $style")
+    }
 val predictiveBack = requiredConfig(
     "jilatax.android.predictiveBackGestureEnabled",
 ).toBooleanStrict()
@@ -59,6 +64,7 @@ android {
         manifestPlaceholders["jilataxOrientation"] = screenOrientation
         manifestPlaceholders["jilataxPredictiveBack"] = predictiveBack.toString()
         manifestPlaceholders["jilataxScheme"] = appScheme
+        manifestPlaceholders["jilataxUserInterfaceStyle"] = userInterfaceStyle
         resValue("string", "jilatax_app_name", appName)
         resValue("color", "jilatax_splash_background", splashBackground)
     }

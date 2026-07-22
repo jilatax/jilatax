@@ -12,12 +12,14 @@ import com.tiktok.sparkling.hybridkit.HybridKit
 import com.tiktok.sparkling.hybridkit.config.BaseInfoConfig
 import com.tiktok.sparkling.hybridkit.config.SparklingHybridConfig
 import com.tiktok.sparkling.hybridkit.config.SparklingLynxConfig
+import com.tiktok.sparkling.hybridkit.lynx.SparklingLynxModuleWrapper
 
 object JilataxRuntime {
     @Volatile
     private var initialized = false
 
     fun initialize(application: Application) {
+        JilataxTheme.initialize(application)
         if (initialized) return
 
         synchronized(this) {
@@ -32,6 +34,15 @@ object JilataxRuntime {
                 SparklingLynxConfig.build(application) {
                     setTemplateProvider(JilataxTemplateProvider(application))
                     addBehaviors(XElementBehaviors().create())
+                    addLynxModules(
+                        mapOf(
+                            JilataxThemeModule.NAME to
+                                SparklingLynxModuleWrapper(
+                                    JilataxThemeModule::class.java,
+                                    null,
+                                ),
+                        ),
+                    )
                 }
             val hybridConfig =
                 SparklingHybridConfig.build(
@@ -58,7 +69,7 @@ object JilataxRuntime {
         val context =
             SparklingContext().apply {
                 scheme = bundleSource.toNavigationScheme()
-                withInitData(initialDataJson)
+                withInitData(JilataxTheme.enrichInitialData(activity, initialDataJson))
             }
         val launched = Sparkling.build(activity, context).navigate()
         if (launched) activity.finish()

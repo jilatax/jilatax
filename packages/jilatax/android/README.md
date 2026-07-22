@@ -12,5 +12,9 @@ The first host revision deliberately keeps bundle selection stateless:
 - fonts emitted by Rspeedy are loaded from the development server or packaged Android assets;
 - no persistent development URL or Sparkling debug-tool dependency is used.
 
+The host owns persistent Light, Dark, and System theme preferences. It publishes the preference and
+resolved theme to Lynx, follows Android configuration changes only for System, synchronizes system
+bar colors and icon contrast, and disables Android Force Dark on the Sparkling content activity.
+
 Application-specific manifest entries, splash resources, icons, package identifiers, and Gradle
 root configuration belong to the generated project and will be supplied by `create-jilatax`.

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:name="dev.jilatax.app.MainApplication"
+        android:name="dev.jilatax.android.JilataxApplication"
         android:allowBackup="false"
         android:enableOnBackInvokedCallback="${jilataxPredictiveBack}"
         android:icon="@mipmap/jilatax_launcher"
@@ -10,15 +10,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Jilatax"
         android:usesCleartextTraffic="false">
+        <meta-data
+            android:name="dev.jilatax.userInterfaceStyle"
+            android:value="${jilataxUserInterfaceStyle}" />
         <activity
-            android:name="dev.jilatax.app.MainActivity"
-            android:exported="false"
-            android:screenOrientation="${jilataxOrientation}"
-            android:theme="@style/Theme.Jilatax.Starting" />
-        <activity-alias
             android:name="dev.jilatax.android.JilataxActivity"
             android:exported="true"
-            android:targetActivity="dev.jilatax.app.MainActivity">
+            android:screenOrientation="${jilataxOrientation}"
+            android:theme="@style/Theme.Jilatax.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -29,6 +28,6 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="${jilataxScheme}" />
             </intent-filter>
-        </activity-alias>
+        </activity>
     </application>
 </manifest>

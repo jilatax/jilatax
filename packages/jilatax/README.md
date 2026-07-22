@@ -79,6 +79,13 @@ Its bundle-source rules are deliberately strict:
 The Android host is consumed by the CLI and generated application template; application projects
 do not need to locate it manually.
 
+The host also provides the native side of Jilatax themes. It persists the user's Light, Dark, or
+System preference, exposes both the preference and resolved theme to Lynx init data, reacts to
+device-theme changes while System is selected, and keeps the Android status and navigation bars in
+sync. The configured `userInterfaceStyle` is used only as the initial default before a user
+preference exists. The visible Lynx host opts out of Android Force Dark so explicit app themes are
+not recolored by the operating system.
+
 ## Development
 
 ```bash

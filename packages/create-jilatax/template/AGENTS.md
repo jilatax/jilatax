@@ -47,7 +47,7 @@
 - `lynx.config.ts` configures Rspeedy, React Lynx, SVG compilation, QR development, bundle naming, and the required `asset:///` prefix.
 - `app.json` is the source of truth for Jilatax application and Android metadata.
 - `android/` contains the committed native project and Gradle wrapper. Jilatax synchronizes configuration and resources before Android builds.
-- `android/app/src/main/java/dev/jilatax/app/` bridges the Android device theme into Lynx init data and restarts the task when the device theme changes.
+- The `jilatax` Android runtime persists the theme choice, updates Lynx init data, and synchronizes native system bars.
 
 ## Implementation conventions
 
@@ -56,6 +56,7 @@
 - Follow the existing `.js` suffix convention for relative TypeScript imports.
 - Use Lynx elements and events such as `<view>`, `<text>`, `<image>`, and `bindtap`; do not assume browser DOM APIs or React DOM event names.
 - Keep component-specific styles colocated when they are not shared. Put only cross-app styles and theme variables in `src/styles/global.css`.
+- Keep new screen roots transparent when they should use the global `.app` background. Plain text inherits the global foreground color; explicit component colors override it.
 - Import source assets from `src/assets/`. Keep launcher and splash paths stable unless `app.json` is updated at the same time.
 - Import an SVG directly and render its default export as a component. Keep `pluginJilataxSvg()` before `pluginReactLynx()` in `lynx.config.ts`.
 - Preserve `output.assetPrefix: 'asset:///'` in `lynx.config.ts`; Android bundle loading depends on it.

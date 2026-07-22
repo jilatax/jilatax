@@ -132,6 +132,7 @@ async function testGeneratedProject(root) {
   );
   assert.match(androidProperties, /^jilatax\.name=Sample Android App$/mu);
   assert.match(androidProperties, /^jilatax\.android\.package=dev\.jilatax\.sample$/mu);
+  assert.match(androidProperties, /^jilatax\.userInterfaceStyle=automatic$/mu);
 
   const settings = await readFile(
     path.join(projectDirectory, 'android', 'settings.gradle.kts'),
@@ -148,6 +149,8 @@ async function testGeneratedProject(root) {
   assert.match(appGradle, /\.jilatax\/android-assets/u);
   assert.match(appGradle, /\.jilatax\/android-res/u);
   assert.match(appGradle, /implementation\(project\(":jilatax"\)\)/u);
+  assert.match(appGradle, /jilatax\.userInterfaceStyle/u);
+  assert.match(appGradle, /jilataxUserInterfaceStyle/u);
   assert.doesNotMatch(appGradle, /sparkling/iu);
 
   const lynxConfig = await readFile(
@@ -160,19 +163,23 @@ async function testGeneratedProject(root) {
   assert.match(lynxConfig, /pluginQRCode/u);
   assert.match(lynxConfig, /\?fullscreen=true/u);
   assert.match(lynxConfig, /assetPrefix:\s*'asset:\/\/\/'/u);
+  assert.match(lynxConfig, /enableCSSInheritance:\s*true/u);
+  assert.match(lynxConfig, /customCSSInheritanceList:\s*\['color'\]/u);
   assert(
     lynxConfig.indexOf('pluginJilataxSvg()') <
-      lynxConfig.indexOf('pluginReactLynx()'),
+      lynxConfig.indexOf('pluginReactLynx('),
   );
 
   const mainManifest = await readFile(
     path.join(projectDirectory, 'android', 'app', 'src', 'main', 'AndroidManifest.xml'),
     'utf8',
   );
-  assert.match(mainManifest, /dev\.jilatax\.app\.MainApplication/u);
-  assert.match(mainManifest, /dev\.jilatax\.app\.MainActivity/u);
+  assert.match(mainManifest, /dev\.jilatax\.android\.JilataxApplication/u);
   assert.match(mainManifest, /dev\.jilatax\.android\.JilataxActivity/u);
-  assert.match(mainManifest, /android:targetActivity="dev\.jilatax\.app\.MainActivity"/u);
+  assert.match(mainManifest, /dev\.jilatax\.userInterfaceStyle/u);
+  assert.match(mainManifest, /\$\{jilataxUserInterfaceStyle\}/u);
+  assert.doesNotMatch(mainManifest, /dev\.jilatax\.app\./u);
+  assert.doesNotMatch(mainManifest, /activity-alias/u);
   assert.match(mainManifest, /android:usesCleartextTraffic="false"/u);
 
   const androidStyles = await readFile(
@@ -196,9 +203,15 @@ async function testGeneratedProject(root) {
   assert(projectFiles.includes('public/fonts/jilatax.ttf'));
   assert(projectFiles.includes('src/assets/images/logo.png'));
   assert(projectFiles.includes('src/assets/icons/arrow-left.svg'));
+  assert(projectFiles.includes('src/assets/icons/filled/moon-filled.svg'));
+  assert(projectFiles.includes('src/assets/icons/filled/sun-filled.svg'));
+  assert(projectFiles.includes('src/assets/icons/outline/moon-outline.svg'));
+  assert(projectFiles.includes('src/assets/icons/outline/sun-outline.svg'));
   assert(projectFiles.includes('src/assets/icons/settings.svg'));
+  assert(projectFiles.includes('src/assets/icons/system.svg'));
   assert(projectFiles.includes('src/app/App.tsx'));
   assert(projectFiles.includes('src/app/navigation.ts'));
+  assert(projectFiles.includes('src/app/theme.ts'));
   assert(projectFiles.includes('src/components/navigation/BottomBar.css'));
   assert(projectFiles.includes('src/components/navigation/BottomBar.tsx'));
   assert(projectFiles.includes('src/components/ui/Logo.tsx'));
@@ -210,8 +223,8 @@ async function testGeneratedProject(root) {
   assert(projectFiles.includes('src/screens/settings/SettingScreen.css'));
   assert(projectFiles.includes('src/screens/settings/SettingScreen.tsx'));
   assert(projectFiles.includes('src/styles/global.css'));
-  assert(projectFiles.includes('android/app/src/main/java/dev/jilatax/app/MainActivity.kt'));
-  assert(projectFiles.includes('android/app/src/main/java/dev/jilatax/app/MainApplication.kt'));
+  assert(!projectFiles.includes('android/app/src/main/java/dev/jilatax/app/MainActivity.kt'));
+  assert(!projectFiles.includes('android/app/src/main/java/dev/jilatax/app/MainApplication.kt'));
   assert(!projectFiles.includes('src/App.tsx'));
   assert(!projectFiles.includes('src/App.tsx.tmpl'));
   assert(!projectFiles.includes('src/App.css'));
@@ -257,6 +270,9 @@ async function testGeneratedProject(root) {
     'utf8',
   );
   const generatedGuidance = `${readmeSource}\n${agentsSource}\n${claudeSource}`;
+  assert.match(generatedGuidance, /Light, Dark, and System/u);
+  assert.match(generatedGuidance, /persists across launches/u);
+  assert.match(generatedGuidance, /navigation bars/u);
   assert.doesNotMatch(generatedGuidance, /\bon1\b/iu);
   assert.doesNotMatch(generatedGuidance, /analizar(?:-base)?/iu);
   assert.doesNotMatch(generatedGuidance, /test-[12]/iu);
@@ -288,7 +304,15 @@ async function testGeneratedProject(root) {
     /\{isSettingsOpen\s*\?\s*null\s*:\s*\(\s*<BottomBar\b/su,
   );
   assert.match(appSource, /useInitData/u);
+  assert.match(appSource, /readThemeState/u);
+  assert.match(appSource, /setNativeThemePreference/u);
+  assert.match(appSource, /themePreference/u);
   assert.match(appSource, /theme-\$\{appTheme\}/u);
+  assert.match(appSource, /className=\{`app theme-/u);
+  assert.doesNotMatch(appSource, /app-shell/u);
+  assert.match(appSource, /onThemeChange=\{setNativeThemePreference\}/u);
+  assert.match(appSource, /selectedTheme=\{themePreference\}/u);
+  assert.match(appSource, /<SettingsButton appTheme=\{appTheme\}/u);
 
   const navigationSource = await readFile(
     path.join(projectDirectory, 'src', 'app', 'navigation.ts'),
@@ -359,6 +383,8 @@ async function testGeneratedProject(root) {
   );
   assert.match(settingsButtonSource, /from '\.\.\/\.\.\/\.\.\/assets\/icons\/settings\.svg'/u);
   assert.match(settingsButtonSource, /bindtap=\{onTap\}/u);
+  assert.match(settingsButtonSource, /appTheme:\s*AppTheme/u);
+  assert.match(settingsButtonSource, /color=\{iconColor\}/u);
 
   const settingScreenSource = await readFile(
     path.join(
@@ -372,7 +398,25 @@ async function testGeneratedProject(root) {
   );
   assert.match(settingScreenSource, /from '\.\.\/\.\.\/assets\/icons\/arrow-left\.svg'/u);
   assert.match(settingScreenSource, /bindtap=\{onBack\}/u);
-  assert.match(settingScreenSource, />Setting<\/text>/u);
+  assert.match(settingScreenSource, />Settings<\/text>/u);
+  assert.match(settingScreenSource, /selectedTheme:\s*ThemePreference/u);
+  assert.match(settingScreenSource, /onThemeChange\('light'\)/u);
+  assert.match(settingScreenSource, /onThemeChange\('dark'\)/u);
+  assert.match(settingScreenSource, /onThemeChange\('system'\)/u);
+  assert.match(settingScreenSource, />\s*Light\s*<\/text>/u);
+  assert.match(settingScreenSource, />\s*Dark\s*<\/text>/u);
+  assert.match(settingScreenSource, />\s*System\s*<\/text>/u);
+  assert.doesNotMatch(settingScreenSource, /useState/u);
+
+  const themeSource = await readFile(
+    path.join(projectDirectory, 'src', 'app', 'theme.ts'),
+    'utf8',
+  );
+  assert.match(themeSource, /export type ThemePreference/u);
+  assert.match(themeSource, /readThemeState/u);
+  assert.match(themeSource, /NativeModules\.JilataxTheme/u);
+  assert.match(themeSource, /setPreference\(preference/u);
+  assert.match(themeSource, /'background only'/u);
 
   const logoSource = await readFile(
     path.join(projectDirectory, 'src', 'components', 'ui', 'Logo.tsx'),
@@ -399,47 +443,13 @@ async function testGeneratedProject(root) {
   );
   assert.match(rspeedyTypes, /@jilatax\/svg\/types/u);
 
-  const mainActivitySource = await readFile(
-    path.join(
-      projectDirectory,
-      'android',
-      'app',
-      'src',
-      'main',
-      'java',
-      'dev',
-      'jilatax',
-      'app',
-      'MainActivity.kt',
-    ),
-    'utf8',
-  );
-  assert.match(mainActivitySource, /override fun initialDataJson\(\): String/u);
-  assert.match(mainActivitySource, /"appTheme"/u);
-
-  const mainApplicationSource = await readFile(
-    path.join(
-      projectDirectory,
-      'android',
-      'app',
-      'src',
-      'main',
-      'java',
-      'dev',
-      'jilatax',
-      'app',
-      'MainApplication.kt',
-    ),
-    'utf8',
-  );
-  assert.match(mainApplicationSource, /override fun onConfigurationChanged/u);
-  assert.match(mainApplicationSource, /Intent\.makeRestartActivityTask/u);
-
   const globalStyles = await readFile(
     path.join(projectDirectory, 'src', 'styles', 'global.css'),
     'utf8',
   );
-  assert.match(globalStyles, /\.app-shell\.theme-dark/u);
+  assert.match(globalStyles, /\.app\.theme-dark/u);
+  assert.match(globalStyles, /\.screen\s*\{[^}]*background-color:\s*transparent/isu);
+  assert.doesNotMatch(globalStyles, /\.app-shell/u);
   assert.doesNotMatch(globalStyles, /prefers-color-scheme/u);
   assert.match(globalStyles, /@font-face\s*\{[^}]*font-family:\s*jilatax/isu);
   assert.match(globalStyles, /src:\s*url\('\.\.\/\.\.\/public\/fonts\/jilatax\.ttf'\)/u);
