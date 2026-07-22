@@ -309,14 +309,17 @@ const packages = [
 
   /* ── 3. Gauge Icon Animation (Rspeedy builds) ── */
   .card-icon-animated[data-anim="gauge"]:hover .icon-svg {
-    animation: gaugeSpin 1.6s cubic-bezier(0.25, 1, 0.5, 1) infinite;
     filter: drop-shadow(0 0 10px rgba(40, 200, 64, 0.9));
   }
-  @keyframes gaugeSpin {
-    0% { transform: rotate(0deg) scale(1); }
-    35% { transform: rotate(180deg) scale(1.22); }
-    55% { transform: rotate(155deg) scale(1.15); }
-    100% { transform: rotate(360deg) scale(1); }
+  .card-icon-animated[data-anim="gauge"]:hover .icon-svg path:first-child {
+    transform-origin: 12px 14px;
+    animation: gaugeNeedle 1.6s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  }
+  @keyframes gaugeNeedle {
+    0% { transform: rotate(0deg); }
+    35% { transform: rotate(180deg); }
+    55% { transform: rotate(155deg); }
+    100% { transform: rotate(360deg); }
   }
 
   /* ── 4. Braces Icon Animation (TypeScript strict) ── */
