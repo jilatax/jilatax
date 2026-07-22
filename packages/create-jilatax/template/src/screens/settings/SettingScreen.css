@@ -86,3 +86,73 @@
 .theme-dark .theme-selector__label--active {
   color: #000000;
 }
+
+.setting-screen__section {
+  display: flex;
+  flex-direction: column;
+  margin-top: 24px;
+  width: 100%;
+}
+
+.setting-screen__section-title {
+  color: #71717a;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  margin-left: 4px;
+  text-transform: uppercase;
+}
+
+.setting-card {
+  background-color: #f4f4f5;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  padding: 4px 16px;
+  width: 100%;
+}
+
+.setting-item {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  height: 48px;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.setting-item__label {
+  color: #18181a;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.setting-item__value {
+  color: #71717a;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.setting-item__divider {
+  background-color: #e4e4e7;
+  height: 1px;
+  width: 100%;
+}
+
+.theme-dark .setting-item__label {
+  color: #ffffff;
+}
+
+.theme-dark .setting-card {
+  background-color: #27272a;
+}
+
+.theme-dark .setting-screen__section-title,
+.theme-dark .setting-item__value {
+  color: #a1a1aa;
+}
+
+.theme-dark .setting-item__divider {
+  background-color: #3f3f46;
+}
+

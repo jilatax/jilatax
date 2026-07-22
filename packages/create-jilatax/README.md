@@ -8,15 +8,10 @@
 
 <h1>create-jilatax</h1>
 
-**Create Android-first Lynx applications powered by JilataX**
-
-<br>
-
 <a href="https://www.npmjs.com/package/create-jilatax"><img alt="NPM version" src="https://img.shields.io/npm/v/create-jilatax.svg?style=for-the-badge&logo=npm&color=16a34a&labelColor=18181b"></a>
 <a href="https://www.npmjs.com/package/create-jilatax"><img alt="NPM Downloads" src="https://img.shields.io/npm/dm/create-jilatax.svg?style=for-the-badge&logo=npm&color=16a34a&labelColor=18181b"></a>
-<a href="https://github.com/jilatax/jilatax/blob/main/packages/create-jilatax/LICENSE"><img alt="License" src="https://img.shields.io/npm/l/create-jilatax.svg?style=for-the-badge&color=16a34a&labelColor=18181b"></a>
+<a href="https://github.com/jilatax/jilatax/blob/main/packages/create-jilatax/LICENSE"><img alt="Android" src="https://img.shields.io/badge/ANDROID-16a34a?style=for-the-badge&logo=android&logoColor=white&labelColor=18181b"></a>
 <a href="https://github.com/jilatax/jilatax/stargazers"><img alt="GitHub Stars" src="https://img.shields.io/github/stars/jilatax/jilatax.svg?style=for-the-badge&logo=github&color=16a34a&labelColor=18181b"></a>
-
 </div>
 
 ---
