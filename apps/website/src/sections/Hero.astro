@@ -244,12 +244,13 @@ function formatNum(num: number): string {
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    animation: android-light-sweep 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 1;
     transition: filter 0.3s ease;
   }
 
   @media (hover: hover) {
     .title:hover .android-typography {
-      animation: android-light-sweep 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 1;
+      animation: android-light-sweep-hover 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 1;
       filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.55));
     }
   }
@@ -263,6 +264,15 @@ function formatNum(num: number): string {
   }
 
   @keyframes android-light-sweep {
+    0% {
+      background-position: 220% 0%;
+    }
+    100% {
+      background-position: -220% 0%;
+    }
+  }
+
+  @keyframes android-light-sweep-hover {
     0% {
       background-position: 220% 0%;
     }
