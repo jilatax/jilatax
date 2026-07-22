@@ -1,94 +1,98 @@
 ---
-// Bottom ticker, modelled on the reference's category strip: words separated by
-// colored diamonds, scrolling seamlessly. The track is rendered 10 times so the
-// -10% translate loops without a gap on ultra-wide screens.
-const words = [
-  'ANDROID',
-  'LYNX',
-  'RSPEEDY',
-  'TYPESCRIPT',
-  'HOT RELOAD',
-  'GRADLE',
-  'CLI',
-  'BUN',
-  'NODE 22+',
-  'MIT',
-];
-const colors = [
-  'var(--color-coral)',
-  'var(--color-amber)',
-  'var(--color-green)',
-  'var(--color-blue)',
-  'var(--color-pink)',
-  'var(--color-orange)',
+import SparklesIcon from '@/assets/icons/sparkles.svg';
+import CpuIcon from '@/assets/icons/cpu.svg';
+import RocketIcon from '@/assets/icons/rocket.svg';
+
+const steps = [
+  { label: 'CREATE', Icon: SparklesIcon, colorClass: 'step-create' },
+  { label: 'BUILD',  Icon: CpuIcon,      colorClass: 'step-build'  },
+  { label: 'DEPLOY', Icon: RocketIcon,   colorClass: 'step-deploy' },
 ];
 ---
 
 <div class="marquee" aria-hidden="true">
   <div class="track">
-    {
-      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(() => (
-        <div class="lap">
-          {words.map((word, i) => (
-            <>
-              <span class="word">{word}</span>
-              <span class="diamond" style={`--c: ${colors[i % colors.length]}`}></span>
-            </>
-          ))}
-        </div>
-      ))
-    }
+    {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(() => (
+      <div class="lap">
+        {steps.map((step, i) => (
+          <>
+            <span class={`step ${step.colorClass}`}>
+              <step.Icon width={13} height={13} class="step-icon" aria-hidden="true" />
+              <span class="step-label">{step.label}</span>
+            </span>
+            <span class={`arrow ${step.colorClass}`}>→</span>
+          </>
+        ))}
+      </div>
+    ))}
   </div>
 </div>
 
 <style>
   .marquee {
-    /* In <main>'s flex column this absorbs spare space, pinning the ticker to
-       the bottom (above the footer) like the reference's strip. */
     margin-top: auto;
     overflow: hidden;
     border-top: 1px solid var(--color-border);
     border-bottom: 1px solid var(--color-border);
     background: var(--color-bg-elevated);
-    padding: 1.05rem 0;
-    /* Soft-fade the edges so words don't pop in/out. */
+    padding: 0.9rem 0;
     -webkit-mask: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
     mask: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
   }
+
   .track {
     display: flex;
     width: max-content;
-    animation: marquee 32s linear infinite;
+    animation: marquee 28s linear infinite;
   }
+
   .marquee:hover .track {
     animation-play-state: paused;
   }
+
   @keyframes marquee {
-    to {
-      transform: translateX(-10%);
-    }
+    to { transform: translateX(-10%); }
   }
+
   .lap {
     display: flex;
     align-items: center;
     flex-shrink: 0;
+    padding: 0 2rem;
+    gap: 1rem;
   }
-  .word {
-    padding: 0 1.6rem;
-    color: var(--color-text-muted);
-    font-size: 0.92rem;
+
+  .step {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.42rem;
+    font-size: 0.8rem;
     font-weight: 900;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
     white-space: nowrap;
+    line-height: 1;
   }
-  .diamond {
+
+  .step-icon {
+    display: block;
     flex-shrink: 0;
-    width: 11px;
-    height: 11px;
-    border-radius: 3px;
-    background: var(--c);
-    box-shadow: 0 0 12px -1px var(--c);
-    transform: rotate(45deg);
+  }
+
+  .step-label {
+    line-height: 1;
+  }
+
+  .step-create { color: var(--color-coral); }
+  .step-build  { color: var(--color-orange); }
+  .step-deploy { color: var(--color-amber); }
+
+  .arrow {
+    font-size: 0.75rem;
+    font-weight: 700;
+    opacity: 0.45;
+    line-height: 1;
+    flex-shrink: 0;
   }
 
   @media (prefers-reduced-motion: reduce) {
