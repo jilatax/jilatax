@@ -65,6 +65,7 @@ async function testGeneratedProject(root) {
 
   const packageJson = await readJson(path.join(projectDirectory, 'package.json'));
   assert.equal(packageJson.name, 'sample-app');
+  assert.equal(packageJson.version, '0.0.1');
   assert.equal(packageJson.private, true);
   assert.equal(packageJson.type, 'module');
   assert.deepEqual(packageJson.scripts, {
@@ -117,7 +118,7 @@ async function testGeneratedProject(root) {
   assert.deepEqual(Object.keys(appJson).sort(), ['$schema', 'jilatax']);
   assert.equal(appJson.jilatax.name, 'Sample Android App');
   assert.equal(appJson.jilatax.slug, 'sample-app');
-  assert.equal(appJson.jilatax.version, '1.0.0');
+  assert.equal(appJson.jilatax.version, '0.0.1');
   assert.equal(appJson.jilatax.icon, './public/assets/icon.png');
   assert.equal(appJson.jilatax.splash.image, './public/assets/splash-icon.png');
   assert.equal(appJson.jilatax.splash.imageWidth, 96);
