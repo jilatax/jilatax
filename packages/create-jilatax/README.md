@@ -29,13 +29,7 @@ bun create jilatax@latest
 
 ```bash
 cd my-app
-bun run dev
-```
-or
-
-```bash
 bun run:android
-bun create:aab
 ```
 
 The scaffolder derives the project name from the directory, then prompts for the Android package ID and dependency installation. In non-interactive environments:
