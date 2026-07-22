@@ -110,7 +110,7 @@ export function SettingScreen({
           <text className="setting-screen__section-title">About</text>
           <view className="setting-card">
             <view className="setting-item">
-              <text className="setting-item__label">Application</text>
+              <text className="setting-item__label">App</text>
               <text className="setting-item__value">{appConfig.jilatax.name}</text>
             </view>
             <view className="setting-item__divider" />
