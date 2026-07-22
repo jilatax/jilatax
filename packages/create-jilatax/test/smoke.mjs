@@ -12,6 +12,7 @@ import {
 
 const require = createRequire(import.meta.url);
 const cjs = require('create-jilatax');
+const jilataxPackageJson = require('jilatax/package.json');
 const svgPackageJson = require('@jilatax/svg/package.json');
 
 assert.equal(typeof createProject, 'function');
@@ -73,7 +74,10 @@ async function testGeneratedProject(root) {
     'run:android': 'jilatax run:android',
     'create:aab': 'jilatax create:aab',
   });
-  assert.equal(packageJson.dependencies?.jilatax, '^0.0.8');
+  assert.equal(
+    packageJson.dependencies?.jilatax,
+    `^${jilataxPackageJson.version}`,
+  );
   assert.equal(
     packageJson.dependencies?.['@jilatax/svg'],
     `^${svgPackageJson.version}`,

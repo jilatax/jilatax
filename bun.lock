@@ -41,7 +41,7 @@
     },
     "packages/@svg": {
       "name": "@jilatax/svg",
-      "version": "0.0.6",
+      "version": "0.0.7",
       "dependencies": {
         "saxes": "^6.0.0",
       },
@@ -63,14 +63,14 @@
     },
     "packages/create-jilatax": {
       "name": "create-jilatax",
-      "version": "0.2.5",
+      "version": "0.3.0",
       "bin": {
         "create-jilatax": "./dist/bin.js",
       },
       "dependencies": {
         "@clack/prompts": "^1.7.0",
-        "@jilatax/svg": ">=0.0.6 <0.1.0",
-        "jilatax": "^0.0.8",
+        "@jilatax/svg": ">=0.0.7 <0.1.0",
+        "jilatax": "^0.0.9",
       },
       "devDependencies": {
         "@arethetypeswrong/core": "^0.18.5",
@@ -82,7 +82,7 @@
     },
     "packages/jilatax": {
       "name": "jilatax",
-      "version": "0.0.8",
+      "version": "0.0.9",
       "devDependencies": {
         "@arethetypeswrong/core": "^0.18.5",
         "@types/node": "^22.20.1",
@@ -1182,6 +1182,8 @@
     "@bruits/satteri-wasm32-wasi/@emnapi/core": ["@emnapi/core@1.11.1", "", { "dependencies": { "@emnapi/wasi-threads": "1.2.2", "tslib": "^2.4.0" } }, "sha512-RSvbQmHzdKzNsLYa/wHrbc3KN4sYLKAdPZxqiM2HATqv/SBk2/ENSHpvXGaLOMcsAyz0poEGqkmmKYG3OWiJEQ=="],
 
     "@bruits/satteri-wasm32-wasi/@emnapi/runtime": ["@emnapi/runtime@1.11.1", "", { "dependencies": { "tslib": "^2.4.0" } }, "sha512-vgj7R3y3Wgx24IQaGPA/R6YFXLHVMOZ0uVEyIQPaWs+rd1AzfEMXlAC22FYwO1XkKR6NPsq7mUandH8oIRdZFw=="],
+
+    "@jilatax/cli/jilatax": ["jilatax@0.0.8", "", {}, "sha512-wWe5eJBmysPkF1vWy8zk35Xe06xaKvbJGSqCYpG87MatUWxtjbpKNAS1E7fhvlMxC26XppKNh5fRdnqsfrmGSQ=="],
 
     "@mdx-js/mdx/estree-walker": ["estree-walker@3.0.3", "", { "dependencies": { "@types/estree": "^1.0.0" } }, "sha512-7RUKfXgSMMkzt6ZuXmqapOurLGPPfgj6l9uRZ7lRGolvk0y2yocc35LdcxKC5PQZdn2DMqioAQ2NoWcrTKmm6g=="],
 

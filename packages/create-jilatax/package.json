@@ -46,7 +46,7 @@
   "dependencies": {
     "@clack/prompts": "^1.7.0",
     "@jilatax/svg": ">=0.0.7 <0.1.0",
-    "jilatax": "^0.0.8"
+    "jilatax": "^0.0.9"
   },
 
   "devDependencies": {
