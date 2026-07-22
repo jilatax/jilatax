@@ -1,7 +1,7 @@
 <div align="center">
 
   <a href="https://www.npmjs.com/package/create-jilatax">
-    <img alt="create-jilatax logo" src="" height="128">
+    <img alt="create-jilatax logo" src="https://raw.githubusercontent.com/jilatax/jilatax/refs/heads/main/public/github/logo.png" height="128">
   </a>
 
 <br>
@@ -29,7 +29,7 @@ bun create jilatax@latest
 
 ```bash
 cd my-app
-bun run run:android
+bun run:android
 ```
 
 The scaffolder derives the project name from the directory, then prompts for the Android package ID and dependency installation. In non-interactive environments:
