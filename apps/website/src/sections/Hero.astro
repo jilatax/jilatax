@@ -108,7 +108,7 @@ function formatNum(num: number): string {
           <div class="ts-card-body">
             <Download class="ts-card-icon emerald" size={22} />
             <div class="ts-card-info">
-              <span class="ts-card-value">{formatNum(totalDownloads)}</span>
+              <span class="ts-card-value" data-target={totalDownloads}>{formatNum(totalDownloads)}</span>
               <span class="ts-card-label">Total NPM Downloads</span>
             </div>
           </div>
@@ -119,7 +119,7 @@ function formatNum(num: number): string {
           <div class="ts-card-body">
             <TrendingUp class="ts-card-icon cyan" size={22} />
             <div class="ts-card-info">
-              <span class="ts-card-value">{formatNum(weeklyDownloads)}</span>
+              <span class="ts-card-value" data-target={weeklyDownloads}>{formatNum(weeklyDownloads)}</span>
               <span class="ts-card-label">Weekly Downloads</span>
             </div>
           </div>
@@ -130,7 +130,7 @@ function formatNum(num: number): string {
           <div class="ts-card-body">
             <Package class="ts-card-icon amber" size={22} />
             <div class="ts-card-info">
-              <span class="ts-card-value">{packages.length}</span>
+              <span class="ts-card-value" data-target={packages.length}>{packages.length}</span>
               <span class="ts-card-label">NPM Packages</span>
             </div>
           </div>
@@ -544,5 +544,53 @@ function formatNum(num: number): string {
         console.error('Failed to copy', err);
       }
     });
+  }
+
+  // ── Count-Up Animation for Stats ──
+  const statsContainer = document.querySelector('.tanstack-stats');
+  if (statsContainer) {
+    const valueElements = statsContainer.querySelectorAll('.ts-card-value') as NodeListOf<HTMLElement>;
+
+    function formatNumberDisplay(num: number): string {
+      if (num >= 1_000_000_000) return (num / 1_000_000_000).toFixed(2) + ' Billion';
+      if (num >= 1_000_000) return (num / 1_000_000).toFixed(1) + 'M';
+      return new Intl.NumberFormat('en-US').format(Math.floor(num));
+    }
+
+    function animateCountUp(el: HTMLElement) {
+      const target = parseFloat(el.dataset.target || '0');
+      if (!target || isNaN(target)) return;
+
+      const duration = 1600;
+      const startTime = performance.now();
+
+      function update(now: number) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        const current = target * easeOut;
+
+        el.textContent = formatNumberDisplay(current);
+
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        } else {
+          el.textContent = formatNumberDisplay(target);
+        }
+      }
+
+      requestAnimationFrame(update);
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          valueElements.forEach(el => animateCountUp(el));
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.1 });
+
+    observer.observe(statsContainer);
   }
 </script>
