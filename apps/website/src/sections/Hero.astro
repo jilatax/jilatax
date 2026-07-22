@@ -1,16 +1,30 @@
 ---
 import Marquee from '@/components/Marquee.astro';
-import { Check, Copy } from '@lucide/astro';
+import { Check, Copy, Download, TrendingUp, Package } from '@lucide/astro';
 import NpmIcon from '@/assets/icons/package-managers/npm.svg';
 import YarnIcon from '@/assets/icons/package-managers/yarn.svg';
 import PnpmIcon from '@/assets/icons/package-managers/pnpm.svg';
 import BunIcon from '@/assets/icons/package-managers/bun.svg';
+import { getNpmStats } from '@/lib/npm-stats';
+
+const npmStats = await getNpmStats();
+const { weeklyDownloads, totalDownloads, packageCount, weeklyUpdatedAt } = npmStats;
+
+function formatNum(num: number): string {
+  if (num >= 1_000_000_000) return (num / 1_000_000_000).toFixed(2) + ' Billion';
+  if (num >= 1_000_000) return (num / 1_000_000).toFixed(1) + 'M';
+  return new Intl.NumberFormat('en-US').format(num);
+}
 ---
 
 <section class="hero">
   <div class="announcement-banner">
-    <span class="banner-text">🎉 Jilatax v0.0.1 <span class="beta-badge">Beta</span> is officially out! Scaffold production-ready Android apps in seconds.</span>
-    <a href="https://docs.jilatax.dev" target="_blank" rel="noopener noreferrer" class="banner-btn">Read the docs</a>
+    <div class="banner-content">
+      <span class="banner-version">🎉 Jilatax v0.0.1</span>
+      <span class="beta-badge">Beta</span>
+      <span class="banner-tagline">is officially out! Scaffold production-ready Android apps in seconds.</span>
+      <a href="https://docs.jilatax.dev" target="_blank" rel="noopener noreferrer" class="banner-btn">Read the docs &rarr;</a>
+    </div>
   </div>
 
   <div class="hero-inner">
@@ -59,22 +73,44 @@ import BunIcon from '@/assets/icons/package-managers/bun.svg';
 
       <hr class="divider" />
 
-      <div class="stats">
-        <div class="stat" style="--depth: 5px">
-          <span class="num coral">3</span>
-          <span class="label">npm packages</span>
+      <div class="tanstack-stats">
+        <div class="ts-card">
+          <div class="ts-card-bar emerald"></div>
+          <div class="ts-card-body">
+            <Download class="ts-card-icon emerald" size={22} />
+            <div class="ts-card-info">
+              <span class="ts-card-value">{formatNum(totalDownloads)}</span>
+              <span class="ts-card-label">Total NPM Downloads</span>
+            </div>
+          </div>
         </div>
-        <div class="stat" style="--depth: 9px">
-          <span class="num amber">1</span>
-          <span class="label">command to start</span>
+
+        <div class="ts-card">
+          <div class="ts-card-bar cyan"></div>
+          <div class="ts-card-body">
+            <TrendingUp class="ts-card-icon cyan" size={22} />
+            <div class="ts-card-info">
+              <span
+                class="ts-card-value"
+                data-weekly-downloads
+                data-target={weeklyDownloads}
+                data-updated-at={weeklyUpdatedAt}
+                title="Live estimate based on the latest npm weekly snapshot"
+              >{formatNum(weeklyDownloads)}</span>
+              <span class="ts-card-label"><span class="live-dot" aria-hidden="true"></span>Weekly Downloads</span>
+            </div>
+          </div>
         </div>
-        <div class="stat" style="--depth: 7px">
-          <span class="num green">0</span>
-          <span class="label">runtime deps</span>
-        </div>
-        <div class="stat" style="--depth: 11px">
-          <span class="num blue">MIT</span>
-          <span class="label">open source</span>
+
+        <div class="ts-card">
+          <div class="ts-card-bar amber"></div>
+          <div class="ts-card-body">
+            <Package class="ts-card-icon amber" size={22} />
+            <div class="ts-card-info">
+              <span class="ts-card-value">{packageCount}</span>
+              <span class="ts-card-label">NPM Packages</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -92,7 +128,7 @@ import BunIcon from '@/assets/icons/package-managers/bun.svg';
   }
   .marquee-wrapper {
     position: absolute;
-    bottom: -3rem;
+    bottom: -1rem;
     left: -2%;
     width: 104%;
     transform: rotate(-2deg);
@@ -101,7 +137,7 @@ import BunIcon from '@/assets/icons/package-managers/bun.svg';
   .hero-inner {
     max-width: 1000px;
     margin: 0 auto;
-    padding: 4.5rem 1.5rem 8rem;
+    padding: 4.5rem 1.5rem 7.8rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -122,41 +158,57 @@ import BunIcon from '@/assets/icons/package-managers/bun.svg';
     display: flex;
     justify-content: center;
     align-items: center;
-    text-align: center;
-    flex-wrap: wrap;
-    gap: 0.5rem;
     width: 100%;
-    padding: 0.9rem 1.5rem;
+    padding: 0.75rem 1rem;
     background: var(--color-notice-bg);
     border-bottom: 1px solid var(--color-border);
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 600;
     color: var(--color-notice-text);
   }
-  .banner-text {
-    display: inline;
-    opacity: 0.95;
+  .banner-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.6rem;
+    text-align: center;
+    max-width: 100%;
+  }
+  .banner-version {
+    white-space: nowrap;
   }
   .beta-badge {
     background: #c0c0c0; /* Silver bg */
     color: #110f0b; /* Dark text for contrast */
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     font-weight: 800;
     text-transform: uppercase;
     padding: 0.15rem 0.45rem;
     border-radius: 6px;
     letter-spacing: 0.05em;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .banner-tagline {
+    opacity: 0.95;
   }
   .announcement-banner .banner-btn {
     color: var(--color-coral);
     text-decoration: underline;
     text-underline-offset: 3px;
-    margin-left: 0.3rem;
     font-weight: 600;
+    white-space: nowrap;
     transition: color 0.2s ease;
   }
   .announcement-banner .banner-btn:hover {
     color: var(--color-orange);
+  }
+
+  @media (max-width: 640px) {
+    .banner-tagline {
+      display: none;
+    }
   }
 
   .title {
@@ -304,43 +356,128 @@ import BunIcon from '@/assets/icons/package-managers/bun.svg';
 
 
 
-  /* ── Stats ── */
+  /* ── TanStack Style Stats ── */
   .divider {
-    margin: 2.5rem 0 1.75rem;
+    margin: 2.5rem 0 2rem;
     border: 0;
     border-top: 1.5px dashed var(--color-border);
     width: 100%;
   }
-  .stats {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 2.4rem;
+  .tanstack-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    width: 100%;
+    max-width: 860px;
   }
-  .stat {
+  .ts-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: #17140e;
+    border: 1px solid #332d1f;
+    border-radius: 12px;
+    padding: 0.85rem 1rem 0.85rem 1.2rem;
+    box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.45);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    overflow: hidden;
+    min-width: 0;
+  }
+  .ts-card:hover {
+    transform: translateY(-2px);
+    border-color: #524734;
+    box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.65);
+  }
+  .ts-card-bar {
+    position: absolute;
+    left: 0;
+    top: 12px;
+    bottom: 12px;
+    width: 3.5px;
+    border-radius: 4px;
+  }
+  .ts-card-bar.emerald {
+    background: #10b981;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+  }
+  .ts-card-bar.cyan {
+    background: #06b6d4;
+    box-shadow: 0 0 10px rgba(6, 182, 212, 0.6);
+  }
+  .ts-card-bar.amber {
+    background: #f59e0b;
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
+  }
+  .ts-card-body {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: left;
+    min-width: 0;
+  }
+  .ts-card-icon {
+    flex-shrink: 0;
+  }
+  .ts-card-icon.emerald { color: #10b981; }
+  .ts-card-icon.cyan { color: #06b6d4; }
+  .ts-card-icon.amber { color: #f59e0b; }
+  
+  .ts-card-info {
     display: flex;
     flex-direction: column;
-    gap: 0.15rem;
-    transform: translate3d(
-      calc(var(--px, 0) * var(--depth)),
-      calc(var(--py, 0) * var(--depth)),
-      0
-    );
+    min-width: 0;
   }
-  .num {
-    font-size: 1.9rem;
-    font-weight: 1000;
+  .ts-card-value {
+    font-size: 1.35rem;
+    font-weight: 850;
+    color: #f5f1e4;
+    line-height: 1.1;
     letter-spacing: -0.02em;
-    line-height: 1;
+    font-family: inherit;
+    white-space: nowrap;
   }
-  .coral { color: var(--color-coral); }
-  .amber { color: var(--color-amber); }
-  .green { color: var(--color-green); }
-  .blue { color: var(--color-blue); }
-  .label {
-    color: var(--color-text-muted);
-    font-size: 0.85rem;
-    font-weight: 700;
+  .ts-card-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.78rem;
+    font-style: italic;
+    font-weight: 500;
+    color: #a29a85;
+    margin-top: 0.2rem;
+    white-space: nowrap;
+  }
+  .live-dot {
+    width: 0.38rem;
+    height: 0.38rem;
+    border-radius: 50%;
+    background: #06b6d4;
+    box-shadow: 0 0 0 rgba(6, 182, 212, 0.55);
+    animation: live-pulse 2.4s ease-out infinite;
+  }
+
+  @keyframes live-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.55); }
+    65%, 100% { box-shadow: 0 0 0 0.35rem rgba(6, 182, 212, 0); }
+  }
+
+  @media (max-width: 640px) {
+    .tanstack-stats {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      justify-content: flex-start;
+      padding-bottom: 0.5rem;
+    }
+    .tanstack-stats::-webkit-scrollbar {
+      display: none;
+    }
+    .ts-card {
+      flex: 0 0 auto;
+      min-width: 190px;
+    }
   }
 
   /* ── Responsive ── */
@@ -363,7 +500,8 @@ import BunIcon from '@/assets/icons/package-managers/bun.svg';
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .badge-dot {
+    .badge-dot,
+    .live-dot {
       animation: none;
     }
   }
@@ -400,5 +538,74 @@ import BunIcon from '@/assets/icons/package-managers/bun.svg';
         console.error('Failed to copy', err);
       }
     });
+  }
+
+  // ── Weekly Download Estimate ──
+  const weeklyValue = document.querySelector('[data-weekly-downloads]') as HTMLElement | null;
+  if (weeklyValue) {
+    const weeklyElement = weeklyValue;
+    const storageKey = 'jilatax:weekly-downloads:v1';
+    const weekMs = 7 * 24 * 60 * 60 * 1000;
+    const maxProjectionMs = 12 * 60 * 60 * 1000;
+    let baseline = Number(weeklyElement.dataset.target || 0);
+    let baselineAt = Date.parse(weeklyElement.dataset.updatedAt || '');
+
+    function formatNumberDisplay(num: number): string {
+      if (num >= 1_000_000_000) return (num / 1_000_000_000).toFixed(2) + ' Billion';
+      if (num >= 1_000_000) return (num / 1_000_000).toFixed(1) + 'M';
+      return new Intl.NumberFormat('en-US').format(Math.floor(num));
+    }
+
+    function projectedValue(now = Date.now()): number {
+      if (!baseline || !Number.isFinite(baselineAt)) return baseline;
+      const elapsed = Math.min(Math.max(now - baselineAt, 0), maxProjectionMs);
+      return baseline + (baseline / weekMs) * elapsed;
+    }
+
+    function render(value: number, persist = true) {
+      const rounded = Math.floor(value);
+      weeklyElement.textContent = formatNumberDisplay(rounded);
+      if (!persist) return;
+
+      try {
+        sessionStorage.setItem(storageKey, JSON.stringify({
+          value: rounded,
+          snapshotAt: new Date(baselineAt).toISOString(),
+        }));
+      } catch {
+        // Storage can be unavailable in privacy-restricted browser contexts.
+      }
+    }
+
+    function restoreSessionValue(projectIfMissing = true, persistIfMissing = true) {
+      try {
+        const stored = JSON.parse(sessionStorage.getItem(storageKey) || 'null');
+        const snapshotAt = new Date(baselineAt).toISOString();
+        if (stored?.snapshotAt === snapshotAt && Number.isFinite(stored.value)) {
+          render(Math.max(stored.value, projectedValue()));
+          return;
+        }
+      } catch {
+      }
+
+      render(projectIfMissing ? projectedValue() : baseline, persistIfMissing);
+    }
+
+    function applySnapshot(stats: { weeklyDownloads: number; weeklyUpdatedAt: string }) {
+      if (!Number.isFinite(stats.weeklyDownloads) || !Date.parse(stats.weeklyUpdatedAt)) return;
+      baseline = stats.weeklyDownloads;
+      baselineAt = Date.parse(stats.weeklyUpdatedAt);
+      weeklyElement.dataset.target = String(baseline);
+      weeklyElement.dataset.updatedAt = stats.weeklyUpdatedAt;
+      restoreSessionValue();
+    }
+
+    restoreSessionValue(false, false);
+
+    fetch('/api/npm-stats', { headers: { Accept: 'application/json' } })
+      .then((response) => response.ok ? response.json() : Promise.reject())
+      .then(applySnapshot)
+      .catch(() => restoreSessionValue())
+      .finally(() => setInterval(() => render(projectedValue()), 1000));
   }
 </script>
