@@ -1,99 +1,397 @@
 ---
-// Bottom ticker, modelled on the reference's category strip: words separated by
-// colored diamonds, scrolling seamlessly. The track is rendered 10 times so the
-// -10% translate loops without a gap on ultra-wide screens.
-const words = [
-  'ANDROID',
-  'LYNX',
-  'RSPEEDY',
-  'TYPESCRIPT',
-  'HOT RELOAD',
-  'GRADLE',
-  'CLI',
-  'BUN',
-  'NODE 22+',
-  'MIT',
+import SparklesIcon from '@/assets/icons/sparkles.svg';
+import CpuIcon from '@/assets/icons/cpu.svg';
+import RocketIcon from '@/assets/icons/rocket.svg';
+import { Zap, Gauge } from '@lucide/astro';
+
+// ── Types ──
+export interface MarqueeItem {
+  label: string;
+  Icon?: any;
+  colorClass?: string;
+  badge?: string;
+  href?: string;
+}
+
+export interface Props {
+  items?: MarqueeItem[];
+  speed?: 'very-slow' | 'slow' | 'normal' | 'fast' | 'very-fast' | string;
+  direction?: 'left' | 'right';
+  pauseOnHover?: boolean;
+  variant?: 'default' | 'glass' | 'glowing' | 'pill' | 'card' | 'subtle';
+  separator?: 'arrow' | 'dot' | 'spark' | 'slash' | 'none';
+  gap?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  repeat?: number;
+  class?: string;
+  ariaLabel?: string;
+}
+
+// ── Defaults ──
+const defaultItems: MarqueeItem[] = [
+  { label: 'CREATE', Icon: SparklesIcon, colorClass: 'step-create', badge: 'LYNX' },
+  { label: 'BUILD', Icon: CpuIcon, colorClass: 'step-build', badge: 'RSPEEDY' },
+  { label: 'DEPLOY', Icon: RocketIcon, colorClass: 'step-deploy', badge: 'ANDROID' },
+  { label: 'OPTIMIZE', Icon: Zap, colorClass: 'step-optimize', badge: 'LIGHTNING' },
+  { label: 'SCALE', Icon: Gauge, colorClass: 'step-scale', badge: 'PRODUCTION' },
 ];
-const colors = [
-  'var(--color-coral)',
-  'var(--color-amber)',
-  'var(--color-green)',
-  'var(--color-blue)',
-  'var(--color-pink)',
-  'var(--color-orange)',
-];
+
+const {
+  items = defaultItems,
+  speed = 'normal',
+  direction = 'left',
+  pauseOnHover = true,
+  variant = 'default',
+  separator = 'arrow',
+  gap = 'md',
+  size = 'md',
+  repeat = 8,
+  class: className = '',
+  ariaLabel = 'Workflow marquee',
+} = Astro.props;
+
+// ── Helpers ──
+const speedMap: Record<string, string> = {
+  'very-slow': '55s',
+  'slow': '38s',
+  'normal': '24s',
+  'fast': '16s',
+  'very-fast': '10s',
+};
+
+const duration = speedMap[speed] || (speed.endsWith('s') || speed.endsWith('ms') ? speed : `${speed}s`);
+const isInteractive = items.some((item) => Boolean(item.href));
+const loopCount = Math.max(4, repeat);
+const laps = Array.from({ length: loopCount });
 ---
 
-<div class="marquee" aria-hidden="true">
+<div
+  class:list={[
+    'marquee',
+    `variant-${variant}`,
+    `gap-${gap}`,
+    `size-${size}`,
+    { 'pause-on-hover': pauseOnHover, 'is-interactive': isInteractive },
+    className,
+  ]}
+  style={{
+    '--marquee-duration': duration,
+    '--marquee-direction': direction === 'right' ? 'reverse' : 'normal',
+  }}
+  aria-hidden={isInteractive ? undefined : 'true'}
+  aria-label={isInteractive ? ariaLabel : undefined}
+>
   <div class="track">
-    {
-      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(() => (
-        <div class="lap">
-          {words.map((word, i) => (
+    {laps.map(() => (
+      <div class="lap">
+        {items.map((item) => {
+          const Tag = item.href ? 'a' : 'span';
+          const tagProps = item.href ? { href: item.href, target: '_blank', rel: 'noopener noreferrer' } : {};
+
+          return (
             <>
-              <span class="word">{word}</span>
-              <span class="diamond" style={`--c: ${colors[i % colors.length]}`}></span>
+              <Tag class:list={['step', item.colorClass || 'step-default']} {...tagProps}>
+                {item.Icon && (
+                  <span class="step-icon-wrapper">
+                    <item.Icon width={15} height={15} size={15} class="step-icon" aria-hidden="true" />
+                  </span>
+                )}
+                <span class="step-label">{item.label}</span>
+                {item.badge && <span class="step-badge">{item.badge}</span>}
+              </Tag>
+
+              {separator !== 'none' && (
+                <span class="separator" aria-hidden="true">
+                  {separator === 'arrow' && <span class="sep-arrow">→</span>}
+                  {separator === 'dot' && <span class="sep-dot">•</span>}
+                  {separator === 'spark' && <span class="sep-spark">✦</span>}
+                  {separator === 'slash' && <span class="sep-slash">/</span>}
+                </span>
+              )}
             </>
-          ))}
-        </div>
-      ))
-    }
+          );
+        })}
+      </div>
+    ))}
   </div>
 </div>
 
 <style>
+  /* ── Base Container ── */
   .marquee {
-    /* In <main>'s flex column this absorbs spare space, pinning the ticker to
-       the bottom (above the footer) like the reference's strip. */
+    position: relative;
     margin-top: auto;
     overflow: hidden;
+    width: 100%;
+    padding: 1.2rem 0;
+    background: var(--color-bg-elevated);
     border-top: 1px solid var(--color-border);
     border-bottom: 1px solid var(--color-border);
-    background: var(--color-bg-elevated);
-    padding: 1.05rem 0;
-    /* Soft-fade the edges so words don't pop in/out. */
-    -webkit-mask: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
-    mask: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 6%, #000 94%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, #000 6%, #000 94%, transparent 100%);
+    user-select: none;
+    transition: padding 0.25s ease;
   }
+
+  /* ── Height & Size Options ── */
+  .size-sm {
+    padding: 0.65rem 0;
+  }
+  .size-md {
+    padding: 1.0rem 0;
+  }
+  .size-lg {
+    padding: 1.2rem 0;
+  }
+  .size-xl {
+    padding: 1.6rem 0;
+  }
+
+  /* ── Track & Animation ── */
   .track {
     display: flex;
     width: max-content;
-    animation: marquee 32s linear infinite;
+    will-change: transform;
+    animation: marquee-scroll var(--marquee-duration) linear infinite var(--marquee-direction);
+    pointer-events: auto;
   }
-  .marquee:hover .track {
-    animation-play-state: paused;
+
+  .marquee.pause-on-hover:hover .track,
+  .marquee.pause-on-hover *:hover ~ .track,
+  .track:hover {
+    animation-play-state: paused !important;
   }
-  @keyframes marquee {
-    to {
-      transform: translateX(-10%);
+
+  @keyframes marquee-scroll {
+    0% {
+      transform: translate3d(0, 0, 0);
+    }
+    100% {
+      transform: translate3d(-12.5%, 0, 0);
     }
   }
+
+  /* ── Lap & Item Alignment ── */
   .lap {
     display: flex;
     align-items: center;
     flex-shrink: 0;
   }
-  .word {
-    padding: 0 1.6rem;
-    color: var(--color-text-muted);
-    font-size: 0.92rem;
-    font-weight: 900;
-    letter-spacing: 0.14em;
-    white-space: nowrap;
+
+  .gap-sm .lap {
+    padding: 0 1.1rem;
+    gap: 0.85rem;
   }
-  .diamond {
-    flex-shrink: 0;
-    width: 11px;
-    height: 11px;
-    border-radius: 3px;
-    background: var(--c);
-    box-shadow: 0 0 12px -1px var(--c);
-    transform: rotate(45deg);
+  .gap-md .lap {
+    padding: 0 2rem;
+    gap: 1.4rem;
+  }
+  .gap-lg .lap {
+    padding: 0 2.8rem;
+    gap: 2rem;
   }
 
+  /* ── Step Items ── */
+  .step {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 900;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    line-height: 1;
+    text-decoration: none;
+    color: var(--color-text);
+    opacity: 0.95;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease, filter 0.2s ease;
+  }
+
+  .size-sm .step { font-size: 0.78rem; gap: 0.4rem; }
+  .size-md .step { font-size: 0.82rem; gap: 0.45rem; }
+  .size-lg .step { font-size: 0.88rem; gap: 0.52rem; }
+  .size-xl .step { font-size: 0.98rem; gap: 0.65rem; }
+
+  .marquee:not(.is-interactive) .step:hover {
+    opacity: 1;
+    transform: translateY(-1px);
+  }
+
+  a.step:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+    filter: brightness(1.15);
+  }
+
+  /* ── Icon Highlights ── */
+  .step-icon-wrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--color-text-muted);
+    filter: none;
+    transition: color 0.25s ease, transform 0.25s ease, filter 0.25s ease;
+  }
+
+  .step-icon {
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .step-label {
+    line-height: 1;
+    color: var(--color-gray);
+    font-weight: 900;
+    transition: color 0.25s ease;
+  }
+
+  .step:hover .step-label {
+    color: #ffffff;
+  }
+
+  /* Glowing icons appear only on hover */
+  .step:hover .step-icon-wrapper {
+    transform: scale(1.15);
+  }
+  .step-create:hover .step-icon-wrapper   { color: var(--color-coral); filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.65)); }
+  .step-build:hover .step-icon-wrapper    { color: var(--color-orange); filter: drop-shadow(0 0 6px rgba(20, 184, 166, 0.65)); }
+  .step-deploy:hover .step-icon-wrapper   { color: var(--color-amber); filter: drop-shadow(0 0 6px rgba(6, 182, 212, 0.65)); }
+  .step-optimize:hover .step-icon-wrapper { color: var(--color-green); filter: drop-shadow(0 0 6px rgba(52, 211, 153, 0.65)); }
+  .step-scale:hover .step-icon-wrapper    { color: var(--color-blue); filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.65)); }
+
+  /* ── Badges ── */
+  .step-badge {
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    padding: 0.2rem 0.48rem;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.06);
+    color: var(--color-text-muted);
+    line-height: 1;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    transition: opacity 0.2s ease, color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .size-sm .step-badge { font-size: 0.58rem; padding: 0.15rem 0.38rem; }
+  .size-lg .step-badge { font-size: 0.66rem; padding: 0.22rem 0.5rem; }
+  .size-xl .step-badge { font-size: 0.72rem; padding: 0.25rem 0.55rem; }
+
+  [data-theme='dark'] .step-badge {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  /* Badge colors on hover */
+  .step-create:hover .step-badge {
+    color: var(--color-coral);
+    border-color: color-mix(in srgb, var(--color-coral) 40%, transparent);
+    background: color-mix(in srgb, var(--color-coral) 12%, transparent);
+  }
+  .step-build:hover .step-badge {
+    color: var(--color-orange);
+    border-color: color-mix(in srgb, var(--color-orange) 40%, transparent);
+    background: color-mix(in srgb, var(--color-orange) 12%, transparent);
+  }
+  .step-deploy:hover .step-badge {
+    color: var(--color-amber);
+    border-color: color-mix(in srgb, var(--color-amber) 40%, transparent);
+    background: color-mix(in srgb, var(--color-amber) 12%, transparent);
+  }
+  .step-optimize:hover .step-badge {
+    color: var(--color-green);
+    border-color: color-mix(in srgb, var(--color-green) 40%, transparent);
+    background: color-mix(in srgb, var(--color-green) 12%, transparent);
+  }
+  .step-scale:hover .step-badge {
+    color: var(--color-blue);
+    border-color: color-mix(in srgb, var(--color-blue) 40%, transparent);
+    background: color-mix(in srgb, var(--color-blue) 12%, transparent);
+  }
+
+  /* ── Separators ── */
+  .separator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    opacity: 0.45;
+    line-height: 1;
+    flex-shrink: 0;
+    user-select: none;
+  }
+
+  .size-lg .separator { font-size: 0.85rem; }
+  .size-xl .separator { font-size: 0.95rem; }
+
+  .sep-arrow {
+    transform: scaleX(1.05);
+  }
+
+  .sep-spark {
+    font-size: 0.75rem;
+    color: var(--color-amber);
+  }
+
+  .sep-dot {
+    font-size: 0.95rem;
+  }
+
+  .sep-slash {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
+  /* ── Style Variants ── */
+  .variant-glass {
+    background: rgba(253, 250, 241, 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 4px 20px -2px var(--color-shadow);
+  }
+  [data-theme='dark'] .variant-glass {
+    background: rgba(33, 29, 21, 0.65);
+  }
+
+  .variant-glowing {
+    background: var(--color-bg-elevated);
+    box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.12);
+  }
+
+  .variant-card .step {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    padding: 0.5rem 0.95rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px -2px var(--color-shadow);
+  }
+
+  .variant-pill .step {
+    background: rgba(0, 0, 0, 0.035);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 0.42rem 0.9rem;
+    border-radius: 999px;
+  }
+  [data-theme='dark'] .variant-pill .step {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .variant-subtle {
+    background: transparent;
+    border-top: none;
+    border-bottom: none;
+    padding: 0.8rem 0;
+  }
+
+  /* ── Accessibility ── */
   @media (prefers-reduced-motion: reduce) {
     .track {
-      animation: none;
+      animation-duration: 120s;
     }
   }
 </style>

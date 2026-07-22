@@ -21,6 +21,7 @@
   /* text */
   --color-text: #2b2517;
   --color-text-muted: #71684f;
+  --color-gray: #d4d4d4;
 
   /* premium accent */
   --color-accent: #2b2517;
@@ -68,6 +69,7 @@
 
   --color-text: #f5f1e4;
   --color-text-muted: #a29a85;
+  --color-gray: #d4d4d4;
 
   --color-accent: #f5f1e4;
   --color-accent-hover: #ffffff;

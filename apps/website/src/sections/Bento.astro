@@ -7,24 +7,31 @@ import { LINKS } from '@/consts';
 const packages = [
   {
     name: 'jilatax',
-    version: '0.0.5',
+    version: '0.0.9',
     description: 'Android-first application framework for Lynx and Rspeedy.',
-    color: 'var(--color-coral)',
+    color: 'var(--color-green)',
     href: 'https://www.npmjs.com/package/jilatax',
   },
   {
     name: 'create-jilatax',
-    version: '0.0.5',
+    version: '0.3.4',
     description: 'Create an Android-first Jilatax application for Lynx and Rspeedy.',
-    color: 'var(--color-amber)',
+    color: 'var(--color-blue)',
     href: 'https://www.npmjs.com/package/create-jilatax',
   },
   {
     name: '@jilatax/cli',
-    version: '0.0.8',
+    version: '0.1.2',
     description: 'Android build and device orchestration for Jilatax applications.',
-    color: 'var(--color-blue)',
+    color: 'var(--color-coral)',
     href: 'https://www.npmjs.com/package/@jilatax/cli',
+  },
+  {
+    name: '@jilatax/svg',
+    version: '0.0.7',
+    description: 'Compile SVG icons into typed ReactLynx components for Jilatax applications.',
+    color: 'var(--color-amber)',
+    href: 'https://www.npmjs.com/package/@jilatax/svg',
   },
 ];
 ---
@@ -34,7 +41,7 @@ const packages = [
     <p class="kicker">How to use</p>
     <h2 class="title">Everything you need, <span class="gradient-text">packed tight.</span></h2>
     <p class="sub">
-      Framework, scaffolder and CLI — three packages that take you from an empty
+      Framework, scaffolder and CLI — four packages that take you from an empty
       folder to a running Android app.
     </p>
   </header>
@@ -62,36 +69,44 @@ const packages = [
     </article>
 
     <!-- Android-first -->
-    <article class="card" style="--depth: 12px" data-spotlight>
-      <span class="tile tile-coral"><Smartphone size={22} aria-hidden="true" /></span>
+    <article class="card card-icon-animated" style="--depth: 12px; --accent-color: var(--color-green); --accent-rgb: 40, 200, 64" data-spotlight data-anim="smartphone">
+      <span class="tile tile-green">
+        <span class="icon-svg"><Smartphone size={22} aria-hidden="true" /></span>
+      </span>
       <h3>Android-first</h3>
       <p>A native Gradle project lands in <code>./android</code> — manifests, flavors and device orchestration wired up for you.</p>
     </article>
 
     <!-- Lynx -->
-    <article class="card" style="--depth: 16px" data-spotlight>
-      <span class="tile tile-amber"><Zap size={22} aria-hidden="true" /></span>
+    <article class="card card-icon-animated" style="--depth: 16px; --accent-color: var(--color-blue); --accent-rgb: 64, 169, 255" data-spotlight data-anim="zap">
+      <span class="tile tile-blue">
+        <span class="icon-svg"><Zap size={22} aria-hidden="true" /></span>
+      </span>
       <h3>Lynx engine</h3>
       <p>Dual-threaded UI with instant first paint. Write once in TypeScript, render truly native views.</p>
     </article>
 
     <!-- Rspeedy -->
-    <article class="card" style="--depth: 14px" data-spotlight>
-      <span class="tile tile-green"><Gauge size={22} aria-hidden="true" /></span>
+    <article class="card card-icon-animated" style="--depth: 14px; --accent-color: var(--color-green); --accent-rgb: 40, 200, 64" data-spotlight data-anim="gauge">
+      <span class="tile tile-green">
+        <span class="icon-svg"><Gauge size={22} aria-hidden="true" /></span>
+      </span>
       <h3>Rspeedy builds</h3>
       <p>Rspack-powered bundling with sub-second HMR while you iterate on a real device.</p>
     </article>
 
     <!-- TypeScript -->
-    <article class="card" style="--depth: 18px" data-spotlight>
-      <span class="tile tile-blue"><Braces size={22} aria-hidden="true" /></span>
+    <article class="card card-icon-animated" style="--depth: 18px; --accent-color: var(--color-blue); --accent-rgb: 64, 169, 255" data-spotlight data-anim="braces">
+      <span class="tile tile-blue">
+        <span class="icon-svg"><Braces size={22} aria-hidden="true" /></span>
+      </span>
       <h3>TypeScript strict</h3>
       <p>Typed APIs end to end, plus a JSON-schema-validated app config out of the box.</p>
     </article>
 
     <!-- Packages -->
     <article class="card card-packages span-3" id="packages" style="--depth: 4px" data-spotlight>
-      <h3 class="packages-title">Three packages, one toolbox</h3>
+      <h3 class="packages-title">Four packages, one toolbox</h3>
       <ul class="packages-list">
         {packages.map((pkg) => (
           <li>
@@ -115,7 +130,7 @@ const packages = [
         <ArrowUpRight size={18} aria-hidden="true" class="oss-arrow" />
       </span>
       <span class="oss-mit">MIT</span>
-      <span class="oss-label">Open source, forever.</span>
+      <span class="oss-label">(JilataX) Open source, forever.</span>
     </a>
   </div>
 </section>
@@ -250,12 +265,81 @@ const packages = [
 
   /* Icon tiles */
   .tile {
+    position: relative;
     display: grid;
     place-items: center;
-    width: 46px;
-    height: 46px;
+    width: 48px;
+    height: 48px;
     border-radius: 14px;
     margin-bottom: 0.35rem;
+    overflow: hidden;
+    transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.35s ease;
+  }
+
+  .icon-svg {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.35s ease;
+  }
+
+  .card-icon-animated:hover .tile {
+    transform: translateY(-2px) scale(1.1);
+    box-shadow: 0 0 36px -2px rgba(var(--accent-rgb), 0.55);
+  }
+
+  /* ── 1. Smartphone Icon Animation (Android-first) ── */
+  .card-icon-animated[data-anim="smartphone"]:hover .icon-svg {
+    animation: smartphoneFloat 2.2s ease-in-out infinite alternate;
+    filter: drop-shadow(0 0 10px rgba(255, 107, 74, 0.85));
+  }
+  @keyframes smartphoneFloat {
+    0% { transform: translateY(0) rotate(0deg) scale(1); }
+    50% { transform: translateY(-3px) rotate(-8deg) scale(1.14); }
+    100% { transform: translateY(2px) rotate(8deg) scale(1.08); }
+  }
+
+  /* ── 2. Zap Icon Animation (Lynx engine) ── */
+  .card-icon-animated[data-anim="zap"]:hover .icon-svg {
+    animation: zapPulse 0.85s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+    filter: drop-shadow(0 0 12px rgba(254, 188, 46, 0.95));
+  }
+  @keyframes zapPulse {
+    0% { transform: scale(1) rotate(0deg); }
+    20% { transform: scale(1.3) rotate(-14deg) skewX(-6deg); }
+    40% { transform: scale(0.92) rotate(10deg); }
+    60% { transform: scale(1.22) rotate(-6deg); }
+    80% { transform: scale(1.04) rotate(4deg); }
+    100% { transform: scale(1) rotate(0deg); }
+  }
+
+  /* ── 3. Gauge Icon Animation (Rspeedy builds) ── */
+  .card-icon-animated[data-anim="gauge"]:hover .icon-svg {
+    filter: drop-shadow(0 0 10px rgba(40, 200, 64, 0.9));
+  }
+  .card-icon-animated[data-anim="gauge"]:hover .icon-svg path:first-child {
+    transform-origin: 12px 14px;
+    animation: gaugeNeedle 1.6s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+  }
+  @keyframes gaugeNeedle {
+    0% { transform: rotate(0deg); }
+    35% { transform: rotate(180deg); }
+    55% { transform: rotate(155deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* ── 4. Braces Icon Animation (TypeScript strict) ── */
+  .card-icon-animated[data-anim="braces"]:hover .icon-svg {
+    animation: bracesMorph 1.8s ease-in-out infinite;
+    filter: drop-shadow(0 0 12px rgba(64, 169, 255, 0.9));
+  }
+  @keyframes bracesMorph {
+    0% { transform: scaleX(1) scaleY(1); }
+    25% { transform: scaleX(1.38) scaleY(0.88); }
+    50% { transform: scaleX(0.84) scaleY(1.28); }
+    75% { transform: scaleX(1.22) scaleY(0.94); }
+    100% { transform: scaleX(1) scaleY(1); }
   }
   .tile-coral {
     color: var(--color-coral);
@@ -401,11 +485,13 @@ const packages = [
     text-decoration: none;
     color: inherit;
     justify-content: space-between;
+    align-items: center;
   }
   .oss-top {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    width: 100%;
     color: var(--color-text);
   }
   .oss-arrow {
@@ -420,6 +506,7 @@ const packages = [
     font-size: 2.4rem;
     font-weight: 1000;
     letter-spacing: -0.03em;
+    text-align: center;
     background: var(--gradient-hero);
     -webkit-background-clip: text;
     background-clip: text;
@@ -447,6 +534,9 @@ const packages = [
       flex-direction: row;
       align-items: center;
       gap: 1.25rem;
+    }
+    .oss-top {
+      width: auto;
     }
     .oss-mit {
       font-size: 1.8rem;
