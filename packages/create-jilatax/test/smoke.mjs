@@ -583,8 +583,8 @@ async function testCli(root) {
   ]);
   assert.equal(cliWarnings.length, 0);
   assert.match(cliLog.join('\n'), /bun install/u);
-  assert.match(cliLog.join('\n'), /bun run run:android/u);
-  assert.match(cliLog.join('\n'), /bun run create:aab/u);
+  assert.match(cliLog.join('\n'), /bun run:android/u);
+  assert.match(cliLog.join('\n'), /bun create:aab/u);
 
   const missingWarnings = [];
   assert.equal(
