@@ -1,6 +1,6 @@
 {
   "name": "create-jilatax",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "packageManager": "bun@1.3.4",
   "description": "Create an Android-first Jilatax application for Lynx and Rspeedy.",
   "type": "module",
