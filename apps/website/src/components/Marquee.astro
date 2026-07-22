@@ -153,10 +153,13 @@ const laps = Array.from({ length: loopCount });
     width: max-content;
     will-change: transform;
     animation: marquee-scroll var(--marquee-duration) linear infinite var(--marquee-direction);
+    pointer-events: auto;
   }
 
-  .marquee.pause-on-hover:hover .track {
-    animation-play-state: paused;
+  .marquee.pause-on-hover:hover .track,
+  .marquee.pause-on-hover *:hover ~ .track,
+  .track:hover {
+    animation-play-state: paused !important;
   }
 
   @keyframes marquee-scroll {
