@@ -5,39 +5,10 @@ import NpmIcon from '@/assets/icons/package-managers/npm.svg';
 import YarnIcon from '@/assets/icons/package-managers/yarn.svg';
 import PnpmIcon from '@/assets/icons/package-managers/pnpm.svg';
 import BunIcon from '@/assets/icons/package-managers/bun.svg';
+import { getNpmStats } from '@/lib/npm-stats';
 
-const packages = ['jilatax', 'create-jilatax', '@jilatax/cli', '@jilatax/svg'];
-
-let weeklyDownloads = 0;
-let totalDownloads = 0;
-
-try {
-  const results = await Promise.all(
-    packages.map(async (p) => {
-      try {
-        const [wRes, tRes] = await Promise.all([
-          fetch(`https://api.npmjs.org/downloads/point/last-week/${p}`).then((r) => r.json()),
-          fetch(`https://api.npmjs.org/downloads/point/2024-01-01:2030-01-01/${p}`).then((r) => r.json())
-        ]);
-        return {
-          weekly: wRes.downloads || 0,
-          total: tRes.downloads || 0
-        };
-      } catch {
-        return { weekly: 0, total: 0 };
-      }
-    })
-  );
-
-  weeklyDownloads = results.reduce((acc, r) => acc + r.weekly, 0);
-  totalDownloads = results.reduce((acc, r) => acc + r.total, 0);
-} catch {
-  weeklyDownloads = 7617;
-  totalDownloads = 7617;
-}
-
-if (weeklyDownloads === 0) weeklyDownloads = 7617;
-if (totalDownloads === 0) totalDownloads = 7617;
+const npmStats = await getNpmStats();
+const { weeklyDownloads, totalDownloads, packageCount, weeklyUpdatedAt } = npmStats;
 
 function formatNum(num: number): string {
   if (num >= 1_000_000_000) return (num / 1_000_000_000).toFixed(2) + ' Billion';
@@ -108,7 +79,7 @@ function formatNum(num: number): string {
           <div class="ts-card-body">
             <Download class="ts-card-icon emerald" size={22} />
             <div class="ts-card-info">
-              <span class="ts-card-value" data-target={totalDownloads}>{formatNum(totalDownloads)}</span>
+              <span class="ts-card-value">{formatNum(totalDownloads)}</span>
               <span class="ts-card-label">Total NPM Downloads</span>
             </div>
           </div>
@@ -119,8 +90,14 @@ function formatNum(num: number): string {
           <div class="ts-card-body">
             <TrendingUp class="ts-card-icon cyan" size={22} />
             <div class="ts-card-info">
-              <span class="ts-card-value" data-target={weeklyDownloads}>{formatNum(weeklyDownloads)}</span>
-              <span class="ts-card-label">Weekly Downloads</span>
+              <span
+                class="ts-card-value"
+                data-weekly-downloads
+                data-target={weeklyDownloads}
+                data-updated-at={weeklyUpdatedAt}
+                title="Live estimate based on the latest npm weekly snapshot"
+              >{formatNum(weeklyDownloads)}</span>
+              <span class="ts-card-label"><span class="live-dot" aria-hidden="true"></span>Weekly Downloads</span>
             </div>
           </div>
         </div>
@@ -130,7 +107,7 @@ function formatNum(num: number): string {
           <div class="ts-card-body">
             <Package class="ts-card-icon amber" size={22} />
             <div class="ts-card-info">
-              <span class="ts-card-value" data-target={packages.length}>{packages.length}</span>
+              <span class="ts-card-value">{packageCount}</span>
               <span class="ts-card-label">NPM Packages</span>
             </div>
           </div>
@@ -460,12 +437,28 @@ function formatNum(num: number): string {
     white-space: nowrap;
   }
   .ts-card-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
     font-size: 0.78rem;
     font-style: italic;
     font-weight: 500;
     color: #a29a85;
     margin-top: 0.2rem;
     white-space: nowrap;
+  }
+  .live-dot {
+    width: 0.38rem;
+    height: 0.38rem;
+    border-radius: 50%;
+    background: #06b6d4;
+    box-shadow: 0 0 0 rgba(6, 182, 212, 0.55);
+    animation: live-pulse 2.4s ease-out infinite;
+  }
+
+  @keyframes live-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.55); }
+    65%, 100% { box-shadow: 0 0 0 0.35rem rgba(6, 182, 212, 0); }
   }
 
   @media (max-width: 640px) {
@@ -507,7 +500,8 @@ function formatNum(num: number): string {
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .badge-dot {
+    .badge-dot,
+    .live-dot {
       animation: none;
     }
   }
@@ -546,10 +540,15 @@ function formatNum(num: number): string {
     });
   }
 
-  // ── Count-Up Animation for Stats ──
-  const statsContainer = document.querySelector('.tanstack-stats');
-  if (statsContainer) {
-    const valueElements = statsContainer.querySelectorAll('.ts-card-value') as NodeListOf<HTMLElement>;
+  // ── Weekly Download Estimate ──
+  const weeklyValue = document.querySelector('[data-weekly-downloads]') as HTMLElement | null;
+  if (weeklyValue) {
+    const weeklyElement = weeklyValue;
+    const storageKey = 'jilatax:weekly-downloads:v1';
+    const weekMs = 7 * 24 * 60 * 60 * 1000;
+    const maxProjectionMs = 12 * 60 * 60 * 1000;
+    let baseline = Number(weeklyElement.dataset.target || 0);
+    let baselineAt = Date.parse(weeklyElement.dataset.updatedAt || '');
 
     function formatNumberDisplay(num: number): string {
       if (num >= 1_000_000_000) return (num / 1_000_000_000).toFixed(2) + ' Billion';
@@ -557,40 +556,56 @@ function formatNum(num: number): string {
       return new Intl.NumberFormat('en-US').format(Math.floor(num));
     }
 
-    function animateCountUp(el: HTMLElement) {
-      const target = parseFloat(el.dataset.target || '0');
-      if (!target || isNaN(target)) return;
-
-      const duration = 1600;
-      const startTime = performance.now();
-
-      function update(now: number) {
-        const elapsed = now - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const easeOut = 1 - Math.pow(1 - progress, 3);
-        const current = target * easeOut;
-
-        el.textContent = formatNumberDisplay(current);
-
-        if (progress < 1) {
-          requestAnimationFrame(update);
-        } else {
-          el.textContent = formatNumberDisplay(target);
-        }
-      }
-
-      requestAnimationFrame(update);
+    function projectedValue(now = Date.now()): number {
+      if (!baseline || !Number.isFinite(baselineAt)) return baseline;
+      const elapsed = Math.min(Math.max(now - baselineAt, 0), maxProjectionMs);
+      return baseline + (baseline / weekMs) * elapsed;
     }
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          valueElements.forEach(el => animateCountUp(el));
-          observer.disconnect();
-        }
-      });
-    }, { threshold: 0.1 });
+    function render(value: number, persist = true) {
+      const rounded = Math.floor(value);
+      weeklyElement.textContent = formatNumberDisplay(rounded);
+      if (!persist) return;
 
-    observer.observe(statsContainer);
+      try {
+        sessionStorage.setItem(storageKey, JSON.stringify({
+          value: rounded,
+          snapshotAt: new Date(baselineAt).toISOString(),
+        }));
+      } catch {
+        // Storage can be unavailable in privacy-restricted browser contexts.
+      }
+    }
+
+    function restoreSessionValue(projectIfMissing = true, persistIfMissing = true) {
+      try {
+        const stored = JSON.parse(sessionStorage.getItem(storageKey) || 'null');
+        const snapshotAt = new Date(baselineAt).toISOString();
+        if (stored?.snapshotAt === snapshotAt && Number.isFinite(stored.value)) {
+          render(Math.max(stored.value, projectedValue()));
+          return;
+        }
+      } catch {
+      }
+
+      render(projectIfMissing ? projectedValue() : baseline, persistIfMissing);
+    }
+
+    function applySnapshot(stats: { weeklyDownloads: number; weeklyUpdatedAt: string }) {
+      if (!Number.isFinite(stats.weeklyDownloads) || !Date.parse(stats.weeklyUpdatedAt)) return;
+      baseline = stats.weeklyDownloads;
+      baselineAt = Date.parse(stats.weeklyUpdatedAt);
+      weeklyElement.dataset.target = String(baseline);
+      weeklyElement.dataset.updatedAt = stats.weeklyUpdatedAt;
+      restoreSessionValue();
+    }
+
+    restoreSessionValue(false, false);
+
+    fetch('/api/npm-stats', { headers: { Accept: 'application/json' } })
+      .then((response) => response.ok ? response.json() : Promise.reject())
+      .then(applySnapshot)
+      .catch(() => restoreSessionValue())
+      .finally(() => setInterval(() => render(projectedValue()), 1000));
   }
 </script>

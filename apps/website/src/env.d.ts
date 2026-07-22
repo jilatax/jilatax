@@ -4,7 +4,8 @@
 // `import.meta.env`. Astro exposes `PUBLIC_`-prefixed vars to the client;
 // everything else stays server-only.
 interface ImportMetaEnv {
-  // readonly PUBLIC_SITE_URL: string;
+  readonly UPSTASH_REDIS_REST_URL?: string;
+  readonly UPSTASH_REDIS_REST_TOKEN?: string;
 }
 
 interface ImportMeta {
