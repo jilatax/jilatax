@@ -33,7 +33,7 @@ function formatNum(num: number): string {
       <h1 class="title">
         One command.<br />
         Zero config.<br />
-        <span class="gradient-text">Ship Android apps.</span>
+        <span class="gradient-text">Ship <span class="android-typography">Android</span> apps.</span>
       </h1>
 
       <p class="sub">
@@ -68,8 +68,6 @@ function formatNum(num: number): string {
           </button>
         </div>
       </div>
-
-
 
       <hr class="divider" />
 
@@ -211,18 +209,56 @@ function formatNum(num: number): string {
     }
   }
 
+  /* ── Hero Title ── */
   .title {
     margin: 0;
     font-size: clamp(2.7rem, 6vw, 4.4rem);
     font-weight: 1000;
     line-height: 1.04;
     letter-spacing: -0.02em;
+    cursor: default;
   }
+
   .gradient-text {
     background: var(--gradient-hero);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+  }
+
+  /* Pure inline typography — zero vertical offset, zero background box */
+  .android-typography {
+    display: inline;
+    background: linear-gradient(
+      110deg,
+      #10b981 0%,
+      #14b8a6 20%,
+      #06b6d4 40%,
+      #ffffff 50%,
+      #06b6d4 60%,
+      #14b8a6 80%,
+      #10b981 100%
+    );
+    background-size: 220% 100%;
+    background-position: 0% 0%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    transition: filter 0.3s ease;
+  }
+
+  .title:hover .android-typography {
+    animation: android-light-sweep 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+    filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.55));
+  }
+
+  @keyframes android-light-sweep {
+    0% {
+      background-position: 220% 0%;
+    }
+    100% {
+      background-position: -220% 0%;
+    }
   }
 
   .sub {
@@ -354,8 +390,6 @@ function formatNum(num: number): string {
     display: block;
   }
 
-
-
   /* ── TanStack Style Stats ── */
   .divider {
     margin: 2.5rem 0 2rem;
@@ -461,25 +495,6 @@ function formatNum(num: number): string {
     65%, 100% { box-shadow: 0 0 0 0.35rem rgba(6, 182, 212, 0); }
   }
 
-  @media (max-width: 640px) {
-    .tanstack-stats {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      scrollbar-width: none;
-      justify-content: flex-start;
-      padding-bottom: 0.5rem;
-    }
-    .tanstack-stats::-webkit-scrollbar {
-      display: none;
-    }
-    .ts-card {
-      flex: 0 0 auto;
-      min-width: 190px;
-    }
-  }
-
   /* ── Responsive ── */
   @media (max-width: 900px) {
     .hero-inner {
@@ -487,9 +502,6 @@ function formatNum(num: number): string {
     }
   }
   @media (max-width: 520px) {
-    .stats {
-      gap: 1.5rem;
-    }
     .cmd-text {
       font-size: 0.85rem;
     }
@@ -500,14 +512,17 @@ function formatNum(num: number): string {
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .badge-dot,
     .live-dot {
+      animation: none;
+    }
+    .title:hover .android-typography {
       animation: none;
     }
   }
 </style>
 
 <script>
+  // ── Package Manager Tabs & Copy ──
   const box = document.querySelector('.cmd-box');
   if (box) {
     const tabs = box.querySelectorAll('.cmd-tab') as NodeListOf<HTMLElement>;
