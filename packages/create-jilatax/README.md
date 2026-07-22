@@ -1,25 +1,38 @@
-# create-jilatax
+<div align="center">
 
-Create an Android-first Lynx application backed by the Jilatax runtime and CLI.
+  <a href="https://www.npmjs.com/package/create-jilatax">
+    <img alt="create-jilatax logo" src="" height="128">
+  </a>
 
-Requires Node.js 22.18 or newer and Bun.
+<br>
 
-## Create an application
+<h1>create-jilatax</h1>
 
-```sh
+**Create Android-first Lynx applications powered by JilataX**
+
+<br>
+
+<a href="https://www.npmjs.com/package/create-jilatax"><img alt="NPM version" src="https://img.shields.io/npm/v/create-jilatax.svg?style=for-the-badge&logo=npm&color=16a34a&labelColor=18181b"></a>
+<a href="https://www.npmjs.com/package/create-jilatax"><img alt="NPM Downloads" src="https://img.shields.io/npm/dm/create-jilatax.svg?style=for-the-badge&logo=npm&color=16a34a&labelColor=18181b"></a>
+<a href="https://github.com/jilatax/jilatax/blob/main/packages/create-jilatax/LICENSE"><img alt="License" src="https://img.shields.io/npm/l/create-jilatax.svg?style=for-the-badge&color=16a34a&labelColor=18181b"></a>
+<a href="https://github.com/jilatax/jilatax/stargazers"><img alt="GitHub Stars" src="https://img.shields.io/github/stars/jilatax/jilatax.svg?style=for-the-badge&logo=github&color=16a34a&labelColor=18181b"></a>
+
+</div>
+
+---
+
+## Quick Start
+
+```bash
 bun create jilatax@latest
 ```
----
 
 ```bash
 cd my-app
 bun run run:android
 ```
 
-The creator derives the application name from the project directory, then asks
-for the Android package ID and whether to install dependencies. Installation is
-disabled by default. In non-interactive environments, pass the directory and
-options explicitly:
+The scaffolder derives the project name from the directory, then prompts for the Android package ID and dependency installation. In non-interactive environments:
 
 ```bash
 bunx create-jilatax@latest my-app \
@@ -28,21 +41,15 @@ bunx create-jilatax@latest my-app \
   --skip-install
 ```
 
-Generated projects include:
+## What's Included
 
-- a Lynx and Rspeedy application;
-- `app.json` as the Jilatax application configuration;
-- an Android Gradle project linked to `jilatax/android`;
-- a persistent Light, Dark, and System theme selector synchronized with Android
-  status and navigation bars;
-- `bun run run:android` for development on a connected device; the generated
-  APK is located at `android/app/build/outputs/apk/debug/app-debug.apk`;
-- `bun run create:aab` for a Play Store Android App Bundle.
-
-The creator only writes the project and can run `bun install`. Device, Gradle,
-bundle, APK, and AAB orchestration belongs to `@jilatax/cli`. Imported SVG icons
-are compiled by `@jilatax/svg`; the default bottom bar includes working examples
-with incremental Rspeedy rebuilds.
+- Lynx and Rspeedy application setup
+- `app.json` Jilatax configuration
+- Android Gradle project linked to `jilatax/android`
+- Light, Dark, and System theme selector synced with Android status/nav bars
+- `bun run run:android` — development on a connected device
+- `bun run create:aab` — Play Store Android App Bundle
+- Compiled SVG icons via `@jilatax/svg` with incremental Rspeedy rebuilds
 
 ## Programmatic API
 
@@ -57,6 +64,11 @@ await createProject({
 });
 ```
 
+## Requirements
+
+- Node.js >= 22.18.0
+- [Bun](https://bun.sh)
+
 ## Development
 
 ```bash
@@ -66,4 +78,4 @@ bun run check
 
 ## License
 
-MIT © [JilataX](https://jilatax.dev) — see [`LICENSE`](./LICENSE).
+MIT © [JilataX](https://jilatax.dev)
