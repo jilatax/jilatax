@@ -12,7 +12,6 @@ bun create jilatax@latest
 ---
 
 ```bash
-bunx create-jilatax@latest my-app
 cd my-app
 bun run run:android
 ```
