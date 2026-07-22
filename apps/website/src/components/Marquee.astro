@@ -90,7 +90,7 @@ const laps = Array.from({ length: loopCount });
               <Tag class:list={['step', item.colorClass || 'step-default']} {...tagProps}>
                 {item.Icon && (
                   <span class="step-icon-wrapper">
-                    <item.Icon width={14} height={14} size={14} class="step-icon" aria-hidden="true" />
+                    <item.Icon width={13} height={13} size={13} class="step-icon" aria-hidden="true" />
                   </span>
                 )}
                 <span class="step-label">{item.label}</span>
@@ -174,38 +174,41 @@ const laps = Array.from({ length: loopCount });
   .step {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.82rem;
+    gap: 0.45rem;
+    font-size: 0.8rem;
     font-weight: 900;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.13em;
     text-transform: uppercase;
     white-space: nowrap;
     line-height: 1;
     text-decoration: none;
-    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s ease, color 0.2s ease;
-    border-radius: 999px;
-    padding: 0.3rem 0.6rem;
+    color: var(--color-text);
+    opacity: 0.95;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease, filter 0.2s ease;
   }
 
   .marquee:not(.is-interactive) .step:hover {
-    transform: translateY(-1px) scale(1.03);
+    opacity: 1;
+    transform: translateY(-1px);
   }
 
   a.step:hover {
-    transform: translateY(-2px) scale(1.05);
-    filter: brightness(1.2);
+    opacity: 1;
+    transform: translateY(-2px);
+    filter: brightness(1.15);
   }
 
+  /* ── Icon Highlights ── */
   .step-icon-wrapper {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    transition: transform 0.25s ease;
+    transition: transform 0.25s ease, filter 0.25s ease;
   }
 
   .step:hover .step-icon-wrapper {
-    transform: rotate(6deg) scale(1.1);
+    transform: scale(1.15);
   }
 
   .step-icon {
@@ -215,7 +218,17 @@ const laps = Array.from({ length: loopCount });
 
   .step-label {
     line-height: 1;
+    color: var(--color-text);
+    font-weight: 900;
   }
+
+  /* Glowing icons matching image-1 reference */
+  .step-create .step-icon-wrapper   { color: var(--color-coral); filter: drop-shadow(0 0 5px rgba(16, 185, 129, 0.65)); }
+  .step-build .step-icon-wrapper    { color: var(--color-orange); filter: drop-shadow(0 0 5px rgba(20, 184, 166, 0.65)); }
+  .step-deploy .step-icon-wrapper   { color: var(--color-amber); filter: drop-shadow(0 0 5px rgba(6, 182, 212, 0.65)); }
+  .step-optimize .step-icon-wrapper { color: var(--color-green); filter: drop-shadow(0 0 5px rgba(52, 211, 153, 0.65)); }
+  .step-scale .step-icon-wrapper    { color: var(--color-blue); filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.65)); }
+  .step-default .step-icon-wrapper  { color: var(--color-text-muted); }
 
   /* ── Badges ── */
   .step-badge {
@@ -225,8 +238,7 @@ const laps = Array.from({ length: loopCount });
     padding: 0.18rem 0.42rem;
     border-radius: 4px;
     background: rgba(0, 0, 0, 0.06);
-    color: currentColor;
-    opacity: 0.85;
+    color: var(--color-text-muted);
     line-height: 1;
     border: 1px solid rgba(0, 0, 0, 0.08);
     transition: opacity 0.2s ease, background-color 0.2s ease;
@@ -238,42 +250,25 @@ const laps = Array.from({ length: loopCount });
   }
 
   .step:hover .step-badge {
-    opacity: 1;
-    background: rgba(0, 0, 0, 0.12);
+    color: var(--color-text);
   }
-  [data-theme='dark'] .step:hover .step-badge {
-    background: rgba(255, 255, 255, 0.18);
-  }
-
-  /* ── Color Themes ── */
-  .step-create   { color: var(--color-coral); }
-  .step-build    { color: var(--color-orange); }
-  .step-deploy   { color: var(--color-amber); }
-  .step-optimize { color: var(--color-green); }
-  .step-scale    { color: var(--color-blue); }
-  .step-default  { color: var(--color-text); }
 
   /* ── Separators ── */
   .separator {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     font-weight: 700;
     color: var(--color-text-muted);
-    opacity: 0.4;
+    opacity: 0.45;
     line-height: 1;
     flex-shrink: 0;
     user-select: none;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-  }
-
-  .marquee:hover .separator {
-    opacity: 0.65;
   }
 
   .sep-arrow {
-    transform: scaleX(1.1);
+    transform: scaleX(1.05);
   }
 
   .sep-spark {
@@ -291,8 +286,6 @@ const laps = Array.from({ length: loopCount });
   }
 
   /* ── Style Variants ── */
-
-  /* Glass Variant */
   .variant-glass {
     background: rgba(253, 250, 241, 0.65);
     backdrop-filter: blur(12px);
@@ -303,16 +296,11 @@ const laps = Array.from({ length: loopCount });
     background: rgba(33, 29, 21, 0.65);
   }
 
-  /* Glowing Variant */
   .variant-glowing {
     background: var(--color-bg-elevated);
-    box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  }
-  .variant-glowing .step {
-    text-shadow: 0 0 12px currentColor;
+    box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.12);
   }
 
-  /* Card / Bento Variant */
   .variant-card .step {
     background: var(--color-bg);
     border: 1px solid var(--color-border);
@@ -320,12 +308,7 @@ const laps = Array.from({ length: loopCount });
     border-radius: 8px;
     box-shadow: 0 2px 8px -2px var(--color-shadow);
   }
-  .variant-card .step:hover {
-    border-color: currentColor;
-    box-shadow: 0 4px 14px -3px var(--color-shadow);
-  }
 
-  /* Pill Variant */
   .variant-pill .step {
     background: rgba(0, 0, 0, 0.035);
     border: 1px solid rgba(0, 0, 0, 0.06);
@@ -334,10 +317,9 @@ const laps = Array.from({ length: loopCount });
   }
   [data-theme='dark'] .variant-pill .step {
     background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
   }
 
-  /* Subtle Variant */
   .variant-subtle {
     background: transparent;
     border-top: none;
