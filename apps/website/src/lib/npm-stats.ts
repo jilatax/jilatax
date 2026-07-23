@@ -7,7 +7,6 @@ const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 const WEEKLY_REFRESH_MS = 6 * 60 * 60 * 1000;
 const TOTAL_REFRESH_MS = WEEK_MS;
 const MAX_RANGE_DAYS = 500;
-const FALLBACK_DOWNLOADS = 7_617;
 
 interface NpmPointResponse {
   downloads?: number;
@@ -171,8 +170,8 @@ function createSnapshot(cache: CachedStats, nowIso: string): NpmStatsSnapshot {
     .at(0) ?? nowIso;
 
   return {
-    weeklyDownloads: weeklyDownloads || FALLBACK_DOWNLOADS,
-    totalDownloads: totalDownloads || FALLBACK_DOWNLOADS,
+    weeklyDownloads,
+    totalDownloads,
     packageCount: NPM_PACKAGES.length,
     weeklyUpdatedAt,
     totalUpdatedAt,
