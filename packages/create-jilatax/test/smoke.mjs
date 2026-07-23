@@ -237,7 +237,7 @@ async function testGeneratedProject(root) {
   assert(!projectFiles.includes('src/assets/icons/home.svg'));
   assert(!projectFiles.includes('src/screens/SettingScreen.tsx'));
   assert(!projectFiles.includes('public/assets/jilatax-icon.png'));
-  assert(!projectFiles.includes('public/fonts/JilataX.otf'));
+  assert(!projectFiles.includes('public/fonts/JilaTax.otf'));
   assert(!projectFiles.includes('src/components/ui/Brand.tsx'));
   assert(
     projectFiles.includes(

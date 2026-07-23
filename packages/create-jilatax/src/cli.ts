@@ -257,7 +257,7 @@ async function printWelcome(version: string): Promise<void> {
   const mascotTop = `${cyan} /\\_/\\ ${reset}`;
   const renderMascot = (eyes: string): string => `${cyan} (${green}${eyes}${cyan}ᴗ${green}${eyes}${cyan}) ${reset}`;
   const welcome = [
-    `${bold}${brightCyan}JilataX:${reset} ${dim}v${version}${reset}`,
+    `${bold}${brightCyan}JilaTax:${reset} ${dim}v${version}${reset}`,
     `${dim}Welcome.${reset} Build your next ${greenBackground}${black}Android${reset}-first app.`,
   ];
   const renderHeader = (eyes: string): string => `${mascotTop}  ${welcome[0]}\n${renderMascot(eyes)}  ${welcome[1]}`;
@@ -310,7 +310,7 @@ function startInstallProgress(): InstallProgress {
     frameIndex += 1;
     return [
       `${brightCyan}${frame}${reset}  ${bold}Installing dependencies${reset}  ${renderComet(cometPosition)}`,
-      `   ${dim}Bun is assembling your ${reset}${brightCyan}JilataX${reset}${dim} project…${reset}`,
+      `   ${dim}Bun is assembling your ${reset}${brightCyan}JilaTax${reset}${dim} project…${reset}`,
     ];
   };
   const redraw = (lines: readonly [string, string]): void => {
@@ -338,7 +338,7 @@ function startInstallProgress(): InstallProgress {
     succeed() {
       finish([
         `${green}✓${reset}  ${bold}Dependencies installed${reset}`,
-        `   ${dim}Your ${reset}${brightCyan}JilataX${reset}${dim} project is ready.${reset}`,
+        `   ${dim}Your ${reset}${brightCyan}JilaTax${reset}${dim} project is ready.${reset}`,
       ]);
     },
   };
