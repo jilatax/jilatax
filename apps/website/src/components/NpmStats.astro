@@ -1,0 +1,516 @@
+---
+import { Download, Package, TrendingUp } from '@lucide/astro';
+import { getNpmStats } from '@/lib/npm-stats';
+
+const { weeklyDownloads, totalDownloads, packageCount, weeklyUpdatedAt } = await getNpmStats();
+
+function formatNum(num: number): string {
+  if (num >= 1_000_000_000) return (num / 1_000_000_000).toFixed(2) + ' Billion';
+  if (num >= 1_000_000) return (num / 1_000_000).toFixed(1) + 'M';
+  return new Intl.NumberFormat('en-US').format(num);
+}
+---
+
+<div class="tanstack-stats">
+  <div class="ts-card">
+    <div class="ts-card-bar emerald"></div>
+    <div class="ts-card-body">
+      <Download class="ts-card-icon emerald" size={22} />
+      <div class="ts-card-info">
+        <span class="ts-card-value">{formatNum(totalDownloads)}</span>
+        <span class="ts-card-label">Total NPM Downloads</span>
+      </div>
+    </div>
+  </div>
+
+  <npm-download-counter class="ts-card">
+    <div class="ts-card-bar cyan"></div>
+    <div class="ts-card-body">
+      <TrendingUp class="ts-card-icon cyan" size={22} />
+      <div class="ts-card-info">
+        <span
+          class="ts-card-value"
+          data-weekly-downloads
+          data-target={weeklyDownloads}
+          data-updated-at={weeklyUpdatedAt}
+          aria-label={`Latest verified npm weekly snapshot: ${formatNum(weeklyDownloads)} downloads`}
+          title={`Count-up animation capped at the latest verified npm snapshot: ${formatNum(weeklyDownloads)}`}
+        >{formatNum(weeklyDownloads)}</span>
+        <span class="ts-card-label"><span class="live-dot" aria-hidden="true"></span>Weekly Downloads</span>
+      </div>
+    </div>
+  </npm-download-counter>
+
+  <div class="ts-card">
+    <div class="ts-card-bar amber"></div>
+    <div class="ts-card-body">
+      <Package class="ts-card-icon amber" size={22} />
+      <div class="ts-card-info">
+        <span class="ts-card-value">{packageCount}</span>
+        <span class="ts-card-label">NPM Packages</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .tanstack-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    width: 100%;
+    max-width: 860px;
+  }
+  .ts-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 0.85rem 1rem 0.85rem 1.2rem;
+    box-shadow: 0 12px 30px -10px var(--color-shadow);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    overflow: hidden;
+    min-width: 0;
+  }
+  :global([data-theme='dark']) .ts-card {
+    background: #17140e;
+  }
+  .ts-card:hover {
+    transform: translateY(-2px);
+    border-color: transparent;
+    box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.65);
+  }
+  .ts-card-bar {
+    position: absolute;
+    left: 0;
+    top: 12px;
+    bottom: 12px;
+    width: 3.5px;
+    border-radius: 4px;
+  }
+  .ts-card-bar.emerald {
+    background: #10b981;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+  }
+  .ts-card-bar.cyan {
+    background: #06b6d4;
+    box-shadow: 0 0 10px rgba(6, 182, 212, 0.6);
+  }
+  .ts-card-bar.amber {
+    background: #f59e0b;
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
+  }
+  .ts-card-body {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: left;
+    min-width: 0;
+    width: 100%;
+  }
+  .ts-card-icon {
+    flex-shrink: 0;
+  }
+  .ts-card-icon.emerald { color: #10b981; }
+  .ts-card-icon.cyan { color: #06b6d4; }
+  .ts-card-icon.amber { color: #f59e0b; }
+  .ts-card-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .ts-card-value {
+    display: inline-flex;
+    align-items: center;
+    font-size: 1.35rem;
+    font-weight: 850;
+    color: var(--color-text);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-family: inherit;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  :global(.npm-counter-digit) {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    width: 1ch;
+    height: 1.1em;
+    overflow: hidden;
+  }
+  :global(.npm-counter-glyph) {
+    grid-area: 1 / 1;
+    display: block;
+    line-height: 1.1;
+    will-change: transform, opacity, filter;
+  }
+  :global(.npm-counter-separator) {
+    display: inline-block;
+    width: 0.34em;
+    text-align: center;
+  }
+  .ts-card-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.78rem;
+    font-style: italic;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    margin-top: 0.2rem;
+    white-space: nowrap;
+  }
+  .live-dot {
+    width: 0.38rem;
+    height: 0.38rem;
+    border-radius: 50%;
+    background: #06b6d4;
+    box-shadow: 0 0 0 rgba(6, 182, 212, 0.55);
+    animation: live-pulse 2.4s ease-out infinite;
+  }
+
+  @keyframes live-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.55); }
+    65%, 100% { box-shadow: 0 0 0 0.35rem rgba(6, 182, 212, 0); }
+  }
+
+  @media (max-width: 640px) {
+    .tanstack-stats {
+      grid-template-columns: 1fr 1fr;
+      gap: 0.65rem;
+    }
+    .ts-card {
+      padding: 0.75rem 0.6rem 0.75rem 0.95rem;
+    }
+    .ts-card:nth-child(3) {
+      grid-column: 1 / -1;
+    }
+    .ts-card-body {
+      gap: 0.5rem;
+    }
+    .ts-card-value {
+      font-size: 1.18rem;
+    }
+    .ts-card-label {
+      font-size: 0.73rem;
+      white-space: normal;
+      line-height: 1.25;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .live-dot {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  interface NpmSnapshot {
+    weeklyDownloads: number;
+    weeklyUpdatedAt: string;
+  }
+
+  interface StoredProgress {
+    value: number;
+    target: number;
+  }
+
+  const storageKey = 'jilatax:weekly-downloads:v2';
+  const catchUpWindow = 1_000;
+  const snapshotRefreshMs = 5 * 60 * 1000;
+  const numberFormatter = new Intl.NumberFormat('en-US');
+
+  function formatNumberDisplay(num: number): string {
+    if (num >= 1_000_000_000) return (num / 1_000_000_000).toFixed(2) + ' Billion';
+    if (num >= 1_000_000) return (num / 1_000_000).toFixed(1) + 'M';
+    return numberFormatter.format(Math.floor(num));
+  }
+
+  class NpmDownloadCounter extends HTMLElement {
+    private valueElement: HTMLElement | null = null;
+    private current = 0;
+    private target = 0;
+    private updatedAt = '';
+    private tickTimer: number | undefined;
+    private refreshTimer: number | undefined;
+    private reduceMotion = false;
+    private burstTicksRemaining = 0;
+
+    connectedCallback() {
+      this.valueElement = this.querySelector('[data-weekly-downloads]');
+      if (!this.valueElement) return;
+
+      this.target = this.readTarget(this.valueElement.dataset.target);
+      this.updatedAt = this.valueElement.dataset.updatedAt || '';
+      this.reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      this.current = this.restoreProgress();
+      this.render(false);
+      this.updateVerifiedMetadata();
+
+      document.addEventListener('visibilitychange', this.handleVisibilityChange);
+      this.scheduleNextTick();
+      void this.refreshSnapshot();
+      this.refreshTimer = window.setInterval(() => void this.refreshSnapshot(), snapshotRefreshMs);
+    }
+
+    disconnectedCallback() {
+      document.removeEventListener('visibilitychange', this.handleVisibilityChange);
+      this.clearTimers();
+    }
+
+    private readonly handleVisibilityChange = () => {
+      if (document.hidden) {
+        window.clearTimeout(this.tickTimer);
+        return;
+      }
+
+      this.scheduleNextTick();
+      void this.refreshSnapshot();
+    };
+
+    private readTarget(value: string | undefined): number {
+      const parsed = Math.floor(Number(value));
+      return Number.isFinite(parsed) && parsed > 0 ? parsed : 0;
+    }
+
+    private restoreProgress(): number {
+      const startingValue = Math.max(0, this.target - catchUpWindow);
+
+      try {
+        const stored = JSON.parse(sessionStorage.getItem(storageKey) || 'null') as StoredProgress | null;
+        if (stored && Number.isFinite(stored.value) && Number.isFinite(stored.target)) {
+          if (stored.target > this.target) return startingValue;
+          return Math.min(this.target, Math.max(startingValue, Math.floor(stored.value)));
+        }
+      } catch {
+        // Session storage can be unavailable in privacy-restricted contexts.
+      }
+
+      return startingValue;
+    }
+
+    private tickDelay(): number {
+      const remaining = this.target - this.current;
+      if (remaining > 500) {
+        if (this.burstTicksRemaining > 0) {
+          this.burstTicksRemaining -= 1;
+          return this.randomDelay(450, 800);
+        }
+
+        const rhythm = Math.random();
+        if (rhythm < 0.16) {
+          this.burstTicksRemaining = this.randomInteger(2, 5);
+          return this.randomDelay(450, 800);
+        }
+        if (rhythm < 0.21) return this.randomDelay(5_000, 10_000);
+        if (rhythm < 0.34) return this.randomDelay(1_600, 2_600);
+        return this.randomDelay(850, 1_400);
+      }
+
+      if (remaining > 100) return this.randomDelay(2_200, 4_200);
+      return this.randomDelay(4_200, 7_200);
+    }
+
+    private randomDelay(min: number, max: number): number {
+      return Math.round(min + Math.random() * (max - min));
+    }
+
+    private randomInteger(min: number, max: number): number {
+      return Math.floor(min + Math.random() * (max - min + 1));
+    }
+
+    private scheduleNextTick() {
+      window.clearTimeout(this.tickTimer);
+      if (document.hidden || this.current >= this.target) return;
+      this.tickTimer = window.setTimeout(() => this.tick(), this.tickDelay());
+    }
+
+    private tick() {
+      if (this.current >= this.target) return;
+      const remaining = this.target - this.current;
+      const doubleStepChance = this.burstTicksRemaining > 0
+        ? 0.42
+        : remaining > 500
+          ? 0.2
+          : remaining > 100
+            ? 0.1
+            : 0;
+      const step = Math.random() < doubleStepChance ? 2 : 1;
+      this.current = Math.min(this.target, this.current + step);
+      this.render();
+      this.scheduleNextTick();
+    }
+
+    private render(persist = true) {
+      if (!this.valueElement) return;
+      this.renderDigits(formatNumberDisplay(this.current), persist && !this.reduceMotion);
+
+      if (!persist) return;
+      try {
+        sessionStorage.setItem(storageKey, JSON.stringify({ value: this.current, target: this.target }));
+      } catch {
+        // The counter remains functional when storage is unavailable.
+      }
+    }
+
+    private renderDigits(formattedValue: string, animate: boolean) {
+      if (!this.valueElement) return;
+      const characters = Array.from(formattedValue);
+      const tokens = Array.from(
+        this.valueElement.querySelectorAll<HTMLElement>('[data-counter-token]'),
+      );
+
+      const structureMatches = tokens.length === characters.length
+        && tokens.every((token, index) => {
+          const wasDigit = /^\d$/.test(token.dataset.value || '');
+          const isDigit = /^\d$/.test(characters[index]);
+          return wasDigit === isDigit;
+        });
+
+      if (!structureMatches) {
+        this.replaceDigits(characters);
+        return;
+      }
+
+      const lastIndex = characters.length - 1;
+      tokens.forEach((token, index) => {
+        const nextCharacter = characters[index];
+        if (token.dataset.value === nextCharacter) return;
+
+        if (animate && /^\d$/.test(nextCharacter)) {
+          this.rollDigit(token, nextCharacter, (lastIndex - index) * 35);
+          return;
+        }
+
+        this.replaceToken(token, nextCharacter);
+      });
+    }
+
+    private replaceDigits(characters: string[]) {
+      if (!this.valueElement) return;
+      const fragment = document.createDocumentFragment();
+      characters.forEach((character) => fragment.append(this.createToken(character)));
+      this.valueElement.replaceChildren(fragment);
+    }
+
+    private createToken(character: string): HTMLElement {
+      const token = document.createElement('span');
+      token.dataset.counterToken = '';
+      token.dataset.value = character;
+      token.setAttribute('aria-hidden', 'true');
+
+      if (/^\d$/.test(character)) {
+        token.className = 'npm-counter-digit';
+        token.append(this.createGlyph(character));
+      } else {
+        token.className = 'npm-counter-separator';
+        token.textContent = character;
+      }
+
+      return token;
+    }
+
+    private createGlyph(character: string): HTMLElement {
+      const glyph = document.createElement('span');
+      glyph.className = 'npm-counter-glyph';
+      glyph.textContent = character;
+      return glyph;
+    }
+
+    private replaceToken(token: HTMLElement, character: string) {
+      token.dataset.value = character;
+      token.replaceChildren(this.createGlyph(character));
+    }
+
+    private rollDigit(token: HTMLElement, nextDigit: string, delay: number) {
+      const outgoing = token.lastElementChild as HTMLElement | null;
+      if (!outgoing) {
+        this.replaceToken(token, nextDigit);
+        return;
+      }
+
+      token.getAnimations({ subtree: true }).forEach((animation) => animation.cancel());
+      token.replaceChildren(outgoing);
+
+      const incoming = this.createGlyph(nextDigit);
+      token.dataset.value = nextDigit;
+      token.append(incoming);
+
+      const timing: KeyframeAnimationOptions = {
+        duration: 520,
+        delay,
+        easing: 'cubic-bezier(0.32, 0.72, 0, 1)',
+        fill: 'forwards',
+      };
+      const outgoingAnimation = outgoing.animate(
+        [
+          { transform: 'translate3d(0, 0, 0)', opacity: 1, filter: 'blur(0)' },
+          { transform: 'translate3d(0, -115%, 0)', opacity: 0, filter: 'blur(1px)' },
+        ],
+        timing,
+      );
+      const incomingAnimation = incoming.animate(
+        [
+          { transform: 'translate3d(0, 115%, 0)', opacity: 0, filter: 'blur(1px)' },
+          { transform: 'translate3d(0, 0, 0)', opacity: 1, filter: 'blur(0)' },
+        ],
+        timing,
+      );
+
+      Promise.allSettled([outgoingAnimation.finished, incomingAnimation.finished]).then(() => {
+        if (token.dataset.value !== nextDigit) return;
+        incoming.getAnimations().forEach((animation) => animation.cancel());
+        token.replaceChildren(incoming);
+      });
+    }
+
+    private updateVerifiedMetadata() {
+      if (!this.valueElement) return;
+      const formattedTarget = formatNumberDisplay(this.target);
+      this.valueElement.dataset.target = String(this.target);
+      this.valueElement.dataset.updatedAt = this.updatedAt;
+      this.valueElement.ariaLabel = `Latest verified npm weekly snapshot: ${formattedTarget} downloads`;
+      this.valueElement.title = `Count-up animation capped at the latest verified npm snapshot: ${formattedTarget}`;
+    }
+
+    private applySnapshot(snapshot: NpmSnapshot) {
+      const nextTarget = this.readTarget(String(snapshot.weeklyDownloads));
+      if (!nextTarget || !Number.isFinite(Date.parse(snapshot.weeklyUpdatedAt))) return;
+
+      const minimumVisibleValue = Math.max(0, nextTarget - catchUpWindow);
+      const targetDecreased = nextTarget < this.target;
+      this.target = nextTarget;
+      this.updatedAt = snapshot.weeklyUpdatedAt;
+      this.current = targetDecreased
+        ? minimumVisibleValue
+        : Math.min(this.target, Math.max(this.current, minimumVisibleValue));
+      this.updateVerifiedMetadata();
+      this.render();
+      this.scheduleNextTick();
+    }
+
+    private async refreshSnapshot() {
+      try {
+        const response = await fetch('/api/npm-stats', { headers: { Accept: 'application/json' } });
+        if (!response.ok) return;
+        const snapshot = await response.json() as NpmSnapshot;
+        if (this.isConnected) this.applySnapshot(snapshot);
+      } catch {
+        // The server-rendered verified snapshot remains the active ceiling.
+      }
+    }
+
+    private clearTimers() {
+      window.clearTimeout(this.tickTimer);
+      window.clearInterval(this.refreshTimer);
+    }
+  }
+
+  if (!customElements.get('npm-download-counter')) {
+    customElements.define('npm-download-counter', NpmDownloadCounter);
+  }
+</script>
