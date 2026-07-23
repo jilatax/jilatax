@@ -73,4 +73,4 @@ bun run check
 
 ## License
 
-MIT © [JilataX](https://jilatax.dev)
+MIT © [JilaTax](https://jilatax.dev)
