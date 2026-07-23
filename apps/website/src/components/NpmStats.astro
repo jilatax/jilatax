@@ -222,6 +222,7 @@ function formatNum(num: number): string {
 
   const storageKey = 'jilatax:weekly-downloads:v3';
   const catchUpWindow = 1_000;
+  const reentryCatchUpThreshold = 500;
   const snapshotRefreshMs = 5 * 60 * 1000;
   const numberFormatter = new Intl.NumberFormat('en-US');
 
@@ -314,7 +315,7 @@ function formatNum(num: number): string {
 
     private startReentryCatchUp() {
       const gap = this.target - this.current;
-      if (gap <= 1) {
+      if (gap <= reentryCatchUpThreshold) {
         this.scheduleNextTick();
         return;
       }
