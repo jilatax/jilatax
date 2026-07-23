@@ -1,0 +1,256 @@
+---
+import { Download, Package, TrendingUp } from '@lucide/astro';
+import { getNpmStats } from '@/lib/npm-stats';
+
+const { weeklyDownloads, totalDownloads, packageCount, weeklyUpdatedAt } = await getNpmStats();
+
+function formatNum(num: number): string {
+  if (num >= 1_000_000_000) return (num / 1_000_000_000).toFixed(2) + ' Billion';
+  if (num >= 1_000_000) return (num / 1_000_000).toFixed(1) + 'M';
+  return new Intl.NumberFormat('en-US').format(num);
+}
+---
+
+<div class="tanstack-stats">
+  <div class="ts-card">
+    <div class="ts-card-bar emerald"></div>
+    <div class="ts-card-body">
+      <Download class="ts-card-icon emerald" size={22} />
+      <div class="ts-card-info">
+        <span class="ts-card-value">{formatNum(totalDownloads)}</span>
+        <span class="ts-card-label">Total NPM Downloads</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="ts-card">
+    <div class="ts-card-bar cyan"></div>
+    <div class="ts-card-body">
+      <TrendingUp class="ts-card-icon cyan" size={22} />
+      <div class="ts-card-info">
+        <span
+          class="ts-card-value"
+          data-weekly-downloads
+          data-target={weeklyDownloads}
+          data-updated-at={weeklyUpdatedAt}
+          title="Live estimate based on the latest npm weekly snapshot"
+        >{formatNum(weeklyDownloads)}</span>
+        <span class="ts-card-label"><span class="live-dot" aria-hidden="true"></span>Weekly Downloads</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="ts-card">
+    <div class="ts-card-bar amber"></div>
+    <div class="ts-card-body">
+      <Package class="ts-card-icon amber" size={22} />
+      <div class="ts-card-info">
+        <span class="ts-card-value">{packageCount}</span>
+        <span class="ts-card-label">NPM Packages</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .tanstack-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    width: 100%;
+    max-width: 860px;
+  }
+  .ts-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 0.85rem 1rem 0.85rem 1.2rem;
+    box-shadow: 0 12px 30px -10px var(--color-shadow);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    overflow: hidden;
+    min-width: 0;
+  }
+  :global([data-theme='dark']) .ts-card {
+    background: #17140e;
+  }
+  .ts-card:hover {
+    transform: translateY(-2px);
+    border-color: transparent;
+    box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.65);
+  }
+  .ts-card-bar {
+    position: absolute;
+    left: 0;
+    top: 12px;
+    bottom: 12px;
+    width: 3.5px;
+    border-radius: 4px;
+  }
+  .ts-card-bar.emerald {
+    background: #10b981;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+  }
+  .ts-card-bar.cyan {
+    background: #06b6d4;
+    box-shadow: 0 0 10px rgba(6, 182, 212, 0.6);
+  }
+  .ts-card-bar.amber {
+    background: #f59e0b;
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
+  }
+  .ts-card-body {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: left;
+    min-width: 0;
+    width: 100%;
+  }
+  .ts-card-icon {
+    flex-shrink: 0;
+  }
+  .ts-card-icon.emerald { color: #10b981; }
+  .ts-card-icon.cyan { color: #06b6d4; }
+  .ts-card-icon.amber { color: #f59e0b; }
+  .ts-card-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .ts-card-value {
+    font-size: 1.35rem;
+    font-weight: 850;
+    color: var(--color-text);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-family: inherit;
+    white-space: nowrap;
+  }
+  .ts-card-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.78rem;
+    font-style: italic;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    margin-top: 0.2rem;
+    white-space: nowrap;
+  }
+  .live-dot {
+    width: 0.38rem;
+    height: 0.38rem;
+    border-radius: 50%;
+    background: #06b6d4;
+    box-shadow: 0 0 0 rgba(6, 182, 212, 0.55);
+    animation: live-pulse 2.4s ease-out infinite;
+  }
+
+  @keyframes live-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.55); }
+    65%, 100% { box-shadow: 0 0 0 0.35rem rgba(6, 182, 212, 0); }
+  }
+
+  @media (max-width: 640px) {
+    .tanstack-stats {
+      grid-template-columns: 1fr 1fr;
+      gap: 0.65rem;
+    }
+    .ts-card {
+      padding: 0.75rem 0.6rem 0.75rem 0.95rem;
+    }
+    .ts-card:nth-child(3) {
+      grid-column: 1 / -1;
+    }
+    .ts-card-body {
+      gap: 0.5rem;
+    }
+    .ts-card-value {
+      font-size: 1.18rem;
+    }
+    .ts-card-label {
+      font-size: 0.73rem;
+      white-space: normal;
+      line-height: 1.25;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .live-dot {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  const weeklyValue = document.querySelector('[data-weekly-downloads]') as HTMLElement | null;
+  if (weeklyValue) {
+    const weeklyElement = weeklyValue;
+    const storageKey = 'jilatax:weekly-downloads:v1';
+    const weekMs = 7 * 24 * 60 * 60 * 1000;
+    const maxProjectionMs = 12 * 60 * 60 * 1000;
+    let baseline = Number(weeklyElement.dataset.target || 0);
+    let baselineAt = Date.parse(weeklyElement.dataset.updatedAt || '');
+
+    function formatNumberDisplay(num: number): string {
+      if (num >= 1_000_000_000) return (num / 1_000_000_000).toFixed(2) + ' Billion';
+      if (num >= 1_000_000) return (num / 1_000_000).toFixed(1) + 'M';
+      return new Intl.NumberFormat('en-US').format(Math.floor(num));
+    }
+
+    function projectedValue(now = Date.now()): number {
+      if (!baseline || !Number.isFinite(baselineAt)) return baseline;
+      const elapsed = Math.min(Math.max(now - baselineAt, 0), maxProjectionMs);
+      return baseline + (baseline / weekMs) * elapsed;
+    }
+
+    function render(value: number, persist = true) {
+      const rounded = Math.floor(value);
+      weeklyElement.textContent = formatNumberDisplay(rounded);
+      if (!persist) return;
+
+      try {
+        sessionStorage.setItem(storageKey, JSON.stringify({
+          value: rounded,
+          snapshotAt: new Date(baselineAt).toISOString(),
+        }));
+      } catch {
+        // Storage can be unavailable in privacy-restricted browser contexts.
+      }
+    }
+
+    function restoreSessionValue(projectIfMissing = true, persistIfMissing = true) {
+      try {
+        const stored = JSON.parse(sessionStorage.getItem(storageKey) || 'null');
+        const snapshotAt = new Date(baselineAt).toISOString();
+        if (stored?.snapshotAt === snapshotAt && Number.isFinite(stored.value)) {
+          render(Math.max(stored.value, projectedValue()));
+          return;
+        }
+      } catch {
+      }
+
+      render(projectIfMissing ? projectedValue() : baseline, persistIfMissing);
+    }
+
+    function applySnapshot(stats: { weeklyDownloads: number; weeklyUpdatedAt: string }) {
+      if (!Number.isFinite(stats.weeklyDownloads) || !Date.parse(stats.weeklyUpdatedAt)) return;
+      baseline = stats.weeklyDownloads;
+      baselineAt = Date.parse(stats.weeklyUpdatedAt);
+      weeklyElement.dataset.target = String(baseline);
+      weeklyElement.dataset.updatedAt = stats.weeklyUpdatedAt;
+      restoreSessionValue();
+    }
+
+    restoreSessionValue(false, false);
+
+    fetch('/api/npm-stats', { headers: { Accept: 'application/json' } })
+      .then((response) => response.ok ? response.json() : Promise.reject())
+      .then(applySnapshot)
+      .catch(() => restoreSessionValue())
+      .finally(() => setInterval(() => render(projectedValue()), 1000));
+  }
+</script>
