@@ -218,6 +218,7 @@ function formatNum(num: number): string {
     value: number;
     target: number;
     savedAt: number;
+    catchUpSnapshotAt?: string;
   }
 
   const storageKey = 'jilatax:weekly-downloads:v3';
@@ -242,8 +243,10 @@ function formatNum(num: number): string {
     private reentryTimer: number | undefined;
     private reduceMotion = false;
     private burstTicksRemaining = 0;
+    private hasStoredProgress = false;
     private restoredFromCache = false;
     private reentrySteps: number[] = [];
+    private catchUpSnapshotAt = '';
 
     connectedCallback() {
       this.valueElement = this.querySelector('[data-weekly-downloads]');
@@ -302,7 +305,11 @@ function formatNum(num: number): string {
           && Number.isFinite(stored.target)
           && Number.isFinite(stored.savedAt)
         ) {
-          this.restoredFromCache = true;
+          this.hasStoredProgress = true;
+          this.catchUpSnapshotAt = stored.catchUpSnapshotAt || '';
+          this.restoredFromCache = Boolean(
+            this.updatedAt && this.catchUpSnapshotAt !== this.updatedAt,
+          );
           if (stored.target > this.target) return startingValue;
           return Math.min(this.target, Math.max(0, Math.floor(stored.value)));
         }
@@ -316,10 +323,14 @@ function formatNum(num: number): string {
     private startReentryCatchUp() {
       const gap = this.target - this.current;
       if (gap <= reentryCatchUpThreshold) {
+        this.catchUpSnapshotAt = this.updatedAt;
+        this.persistProgress();
         this.scheduleNextTick();
         return;
       }
 
+      this.catchUpSnapshotAt = this.updatedAt;
+      this.persistProgress();
       this.reentrySteps = [
         Math.round(gap * this.randomRatio(0.28, 0.36)),
         Math.round(gap * this.randomRatio(0.11, 0.17)),
@@ -414,6 +425,10 @@ function formatNum(num: number): string {
       this.renderDigits(formatNumberDisplay(this.current), persist && !this.reduceMotion);
 
       if (!persist) return;
+      this.persistProgress();
+    }
+
+    private persistProgress() {
       try {
         const previous = JSON.parse(localStorage.getItem(storageKey) || 'null') as StoredProgress | null;
         const previousValue = previous?.target === this.target && Number.isFinite(previous.value)
@@ -423,6 +438,7 @@ function formatNum(num: number): string {
           value: Math.max(this.current, previousValue),
           target: this.target,
           savedAt: Date.now(),
+          catchUpSnapshotAt: this.catchUpSnapshotAt,
         }));
       } catch {
         // The counter remains functional when storage is unavailable.
@@ -555,8 +571,11 @@ function formatNum(num: number): string {
 
       const minimumVisibleValue = Math.max(0, nextTarget - catchUpWindow);
       const targetChanged = nextTarget !== this.target;
+      const snapshotChanged = snapshot.weeklyUpdatedAt !== this.updatedAt;
       const targetDecreased = nextTarget < this.target;
       const reentryActive = this.reentrySteps.length > 0;
+      const catchUpAvailable = this.hasStoredProgress
+        && this.catchUpSnapshotAt !== snapshot.weeklyUpdatedAt;
       this.target = nextTarget;
       this.updatedAt = snapshot.weeklyUpdatedAt;
       this.current = targetDecreased
@@ -567,9 +586,11 @@ function formatNum(num: number): string {
       this.updateVerifiedMetadata();
       this.render();
 
-      if (reentryActive && targetChanged) {
+      if (reentryActive && (targetChanged || snapshotChanged)) {
         window.clearTimeout(this.reentryTimer);
         this.reentrySteps = [];
+        this.startReentryCatchUp();
+      } else if (!reentryActive && catchUpAvailable) {
         this.startReentryCatchUp();
       } else if (!reentryActive) {
         this.scheduleNextTick();
