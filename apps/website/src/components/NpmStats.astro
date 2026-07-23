@@ -238,6 +238,7 @@ function formatNum(num: number): string {
     private tickTimer: number | undefined;
     private refreshTimer: number | undefined;
     private reduceMotion = false;
+    private burstTicksRemaining = 0;
 
     connectedCallback() {
       this.valueElement = this.querySelector('[data-weekly-downloads]');
@@ -294,9 +295,27 @@ function formatNum(num: number): string {
 
     private tickDelay(): number {
       const remaining = this.target - this.current;
-      if (remaining > 500) return 1_000;
-      if (remaining > 100) return 3_000;
-      return 5_000;
+      if (remaining > 500) {
+        if (this.burstTicksRemaining > 0) {
+          this.burstTicksRemaining -= 1;
+          return this.randomDelay(620, 900);
+        }
+
+        const rhythm = Math.random();
+        if (rhythm < 0.18) {
+          this.burstTicksRemaining = Math.floor(this.randomDelay(2, 5));
+          return this.randomDelay(620, 900);
+        }
+        if (rhythm < 0.36) return this.randomDelay(1_800, 2_800);
+        return this.randomDelay(950, 1_550);
+      }
+
+      if (remaining > 100) return this.randomDelay(2_200, 4_200);
+      return this.randomDelay(4_200, 7_200);
+    }
+
+    private randomDelay(min: number, max: number): number {
+      return Math.round(min + Math.random() * (max - min));
     }
 
     private scheduleNextTick() {
