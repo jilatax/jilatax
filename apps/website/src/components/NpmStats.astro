@@ -363,7 +363,7 @@ function formatNum(num: number): string {
           this.burstTicksRemaining = this.randomInteger(2, 5);
           return this.randomDelay(450, 800);
         }
-        if (rhythm < 0.21) return this.randomDelay(5_000, 10_000);
+        if (rhythm < 0.21) return this.randomDelay(12_000, 20_000);
         if (rhythm < 0.34) return this.randomDelay(1_600, 2_600);
         return this.randomDelay(850, 1_400);
       }
@@ -393,14 +393,17 @@ function formatNum(num: number): string {
     private tick() {
       if (this.current >= this.target) return;
       const remaining = this.target - this.current;
-      const doubleStepChance = this.burstTicksRemaining > 0
-        ? 0.42
-        : remaining > 500
-          ? 0.2
-          : remaining > 100
-            ? 0.1
-            : 0;
-      const step = Math.random() < doubleStepChance ? 2 : 1;
+      const fastBurstActive = remaining > 500 && this.burstTicksRemaining > 0;
+      const doubleStepChance = remaining > 500
+        ? 0.2
+        : remaining > 100
+          ? 0.1
+          : 0;
+      const step = fastBurstActive
+        ? this.randomInteger(4, 12)
+        : Math.random() < doubleStepChance
+          ? 2
+          : 1;
       this.current = Math.min(this.target, this.current + step);
       this.render();
       this.scheduleNextTick();
