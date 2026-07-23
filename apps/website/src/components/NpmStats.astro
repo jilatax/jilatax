@@ -217,10 +217,13 @@ function formatNum(num: number): string {
   interface StoredProgress {
     value: number;
     target: number;
+    savedAt: number;
+    catchUpSnapshotAt?: string;
   }
 
-  const storageKey = 'jilatax:weekly-downloads:v2';
+  const storageKey = 'jilatax:weekly-downloads:v3';
   const catchUpWindow = 1_000;
+  const reentryCatchUpThreshold = 500;
   const snapshotRefreshMs = 5 * 60 * 1000;
   const numberFormatter = new Intl.NumberFormat('en-US');
 
@@ -237,8 +240,13 @@ function formatNum(num: number): string {
     private updatedAt = '';
     private tickTimer: number | undefined;
     private refreshTimer: number | undefined;
+    private reentryTimer: number | undefined;
     private reduceMotion = false;
     private burstTicksRemaining = 0;
+    private hasStoredProgress = false;
+    private restoredFromCache = false;
+    private reentrySteps: number[] = [];
+    private catchUpSnapshotAt = '';
 
     connectedCallback() {
       this.valueElement = this.querySelector('[data-weekly-downloads]');
@@ -252,7 +260,11 @@ function formatNum(num: number): string {
       this.updateVerifiedMetadata();
 
       document.addEventListener('visibilitychange', this.handleVisibilityChange);
-      this.scheduleNextTick();
+      if (this.restoredFromCache) {
+        this.startReentryCatchUp();
+      } else {
+        this.scheduleNextTick();
+      }
       void this.refreshSnapshot();
       this.refreshTimer = window.setInterval(() => void this.refreshSnapshot(), snapshotRefreshMs);
     }
@@ -265,10 +277,15 @@ function formatNum(num: number): string {
     private readonly handleVisibilityChange = () => {
       if (document.hidden) {
         window.clearTimeout(this.tickTimer);
+        window.clearTimeout(this.reentryTimer);
         return;
       }
 
-      this.scheduleNextTick();
+      if (this.reentrySteps.length > 0) {
+        this.scheduleReentryStep();
+      } else {
+        this.scheduleNextTick();
+      }
       void this.refreshSnapshot();
     };
 
@@ -281,16 +298,67 @@ function formatNum(num: number): string {
       const startingValue = Math.max(0, this.target - catchUpWindow);
 
       try {
-        const stored = JSON.parse(sessionStorage.getItem(storageKey) || 'null') as StoredProgress | null;
-        if (stored && Number.isFinite(stored.value) && Number.isFinite(stored.target)) {
+        const stored = JSON.parse(localStorage.getItem(storageKey) || 'null') as StoredProgress | null;
+        if (
+          stored
+          && Number.isFinite(stored.value)
+          && Number.isFinite(stored.target)
+          && Number.isFinite(stored.savedAt)
+        ) {
+          this.hasStoredProgress = true;
+          this.catchUpSnapshotAt = stored.catchUpSnapshotAt || '';
+          this.restoredFromCache = Boolean(
+            this.updatedAt && this.catchUpSnapshotAt !== this.updatedAt,
+          );
           if (stored.target > this.target) return startingValue;
-          return Math.min(this.target, Math.max(startingValue, Math.floor(stored.value)));
+          return Math.min(this.target, Math.max(0, Math.floor(stored.value)));
         }
       } catch {
-        // Session storage can be unavailable in privacy-restricted contexts.
+        // Persistent storage can be unavailable in privacy-restricted contexts.
       }
 
       return startingValue;
+    }
+
+    private startReentryCatchUp() {
+      const gap = this.target - this.current;
+      if (gap <= reentryCatchUpThreshold) {
+        this.catchUpSnapshotAt = this.updatedAt;
+        this.persistProgress();
+        this.scheduleNextTick();
+        return;
+      }
+
+      this.catchUpSnapshotAt = this.updatedAt;
+      this.persistProgress();
+      this.reentrySteps = [
+        Math.round(gap * this.randomRatio(0.28, 0.36)),
+        Math.round(gap * this.randomRatio(0.11, 0.17)),
+        Math.round(gap * this.randomRatio(0.05, 0.09)),
+      ].map((step) => Math.max(1, step));
+      this.scheduleReentryStep(true);
+    }
+
+    private scheduleReentryStep(initial = false) {
+      window.clearTimeout(this.reentryTimer);
+      if (document.hidden) return;
+
+      const step = this.reentrySteps[0];
+      if (!step || this.current >= this.target) {
+        this.reentrySteps = [];
+        this.scheduleNextTick();
+        return;
+      }
+
+      const delay = initial
+        ? this.randomDelay(120, 240)
+        : this.randomDelay(260, 420);
+      this.reentryTimer = window.setTimeout(() => {
+        this.reentrySteps.shift();
+        this.current = Math.min(this.target, this.current + step);
+        this.render();
+        this.scheduleReentryStep();
+      }, delay);
     }
 
     private tickDelay(): number {
@@ -306,7 +374,7 @@ function formatNum(num: number): string {
           this.burstTicksRemaining = this.randomInteger(2, 5);
           return this.randomDelay(450, 800);
         }
-        if (rhythm < 0.21) return this.randomDelay(5_000, 10_000);
+        if (rhythm < 0.21) return this.randomDelay(12_000, 20_000);
         if (rhythm < 0.34) return this.randomDelay(1_600, 2_600);
         return this.randomDelay(850, 1_400);
       }
@@ -323,6 +391,10 @@ function formatNum(num: number): string {
       return Math.floor(min + Math.random() * (max - min + 1));
     }
 
+    private randomRatio(min: number, max: number): number {
+      return min + Math.random() * (max - min);
+    }
+
     private scheduleNextTick() {
       window.clearTimeout(this.tickTimer);
       if (document.hidden || this.current >= this.target) return;
@@ -332,14 +404,17 @@ function formatNum(num: number): string {
     private tick() {
       if (this.current >= this.target) return;
       const remaining = this.target - this.current;
-      const doubleStepChance = this.burstTicksRemaining > 0
-        ? 0.42
-        : remaining > 500
-          ? 0.2
-          : remaining > 100
-            ? 0.1
-            : 0;
-      const step = Math.random() < doubleStepChance ? 2 : 1;
+      const fastBurstActive = remaining > 500 && this.burstTicksRemaining > 0;
+      const doubleStepChance = remaining > 500
+        ? 0.2
+        : remaining > 100
+          ? 0.1
+          : 0;
+      const step = fastBurstActive
+        ? this.randomInteger(4, 12)
+        : Math.random() < doubleStepChance
+          ? 2
+          : 1;
       this.current = Math.min(this.target, this.current + step);
       this.render();
       this.scheduleNextTick();
@@ -350,8 +425,21 @@ function formatNum(num: number): string {
       this.renderDigits(formatNumberDisplay(this.current), persist && !this.reduceMotion);
 
       if (!persist) return;
+      this.persistProgress();
+    }
+
+    private persistProgress() {
       try {
-        sessionStorage.setItem(storageKey, JSON.stringify({ value: this.current, target: this.target }));
+        const previous = JSON.parse(localStorage.getItem(storageKey) || 'null') as StoredProgress | null;
+        const previousValue = previous?.target === this.target && Number.isFinite(previous.value)
+          ? Math.min(this.target, previous.value)
+          : 0;
+        localStorage.setItem(storageKey, JSON.stringify({
+          value: Math.max(this.current, previousValue),
+          target: this.target,
+          savedAt: Date.now(),
+          catchUpSnapshotAt: this.catchUpSnapshotAt,
+        }));
       } catch {
         // The counter remains functional when storage is unavailable.
       }
@@ -482,15 +570,31 @@ function formatNum(num: number): string {
       if (!nextTarget || !Number.isFinite(Date.parse(snapshot.weeklyUpdatedAt))) return;
 
       const minimumVisibleValue = Math.max(0, nextTarget - catchUpWindow);
+      const targetChanged = nextTarget !== this.target;
+      const snapshotChanged = snapshot.weeklyUpdatedAt !== this.updatedAt;
       const targetDecreased = nextTarget < this.target;
+      const reentryActive = this.reentrySteps.length > 0;
+      const catchUpAvailable = this.hasStoredProgress
+        && this.catchUpSnapshotAt !== snapshot.weeklyUpdatedAt;
       this.target = nextTarget;
       this.updatedAt = snapshot.weeklyUpdatedAt;
       this.current = targetDecreased
         ? minimumVisibleValue
-        : Math.min(this.target, Math.max(this.current, minimumVisibleValue));
+        : reentryActive
+          ? Math.min(this.target, this.current)
+          : Math.min(this.target, Math.max(this.current, minimumVisibleValue));
       this.updateVerifiedMetadata();
       this.render();
-      this.scheduleNextTick();
+
+      if (reentryActive && (targetChanged || snapshotChanged)) {
+        window.clearTimeout(this.reentryTimer);
+        this.reentrySteps = [];
+        this.startReentryCatchUp();
+      } else if (!reentryActive && catchUpAvailable) {
+        this.startReentryCatchUp();
+      } else if (!reentryActive) {
+        this.scheduleNextTick();
+      }
     }
 
     private async refreshSnapshot() {
@@ -506,6 +610,7 @@ function formatNum(num: number): string {
 
     private clearTimers() {
       window.clearTimeout(this.tickTimer);
+      window.clearTimeout(this.reentryTimer);
       window.clearInterval(this.refreshTimer);
     }
   }
