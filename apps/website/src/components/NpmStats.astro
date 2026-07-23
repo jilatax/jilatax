@@ -298,16 +298,17 @@ function formatNum(num: number): string {
       if (remaining > 500) {
         if (this.burstTicksRemaining > 0) {
           this.burstTicksRemaining -= 1;
-          return this.randomDelay(620, 900);
+          return this.randomDelay(450, 800);
         }
 
         const rhythm = Math.random();
-        if (rhythm < 0.18) {
-          this.burstTicksRemaining = Math.floor(this.randomDelay(2, 5));
-          return this.randomDelay(620, 900);
+        if (rhythm < 0.16) {
+          this.burstTicksRemaining = this.randomInteger(2, 5);
+          return this.randomDelay(450, 800);
         }
-        if (rhythm < 0.36) return this.randomDelay(1_800, 2_800);
-        return this.randomDelay(950, 1_550);
+        if (rhythm < 0.21) return this.randomDelay(5_000, 10_000);
+        if (rhythm < 0.34) return this.randomDelay(1_600, 2_600);
+        return this.randomDelay(850, 1_400);
       }
 
       if (remaining > 100) return this.randomDelay(2_200, 4_200);
@@ -318,6 +319,10 @@ function formatNum(num: number): string {
       return Math.round(min + Math.random() * (max - min));
     }
 
+    private randomInteger(min: number, max: number): number {
+      return Math.floor(min + Math.random() * (max - min + 1));
+    }
+
     private scheduleNextTick() {
       window.clearTimeout(this.tickTimer);
       if (document.hidden || this.current >= this.target) return;
@@ -326,7 +331,16 @@ function formatNum(num: number): string {
 
     private tick() {
       if (this.current >= this.target) return;
-      this.current += 1;
+      const remaining = this.target - this.current;
+      const doubleStepChance = this.burstTicksRemaining > 0
+        ? 0.42
+        : remaining > 500
+          ? 0.2
+          : remaining > 100
+            ? 0.1
+            : 0;
+      const step = Math.random() < doubleStepChance ? 2 : 1;
+      this.current = Math.min(this.target, this.current + step);
       this.render();
       this.scheduleNextTick();
     }
@@ -413,11 +427,14 @@ function formatNum(num: number): string {
     }
 
     private rollDigit(token: HTMLElement, nextDigit: string, delay: number) {
-      const outgoing = token.firstElementChild as HTMLElement | null;
+      const outgoing = token.lastElementChild as HTMLElement | null;
       if (!outgoing) {
         this.replaceToken(token, nextDigit);
         return;
       }
+
+      token.getAnimations({ subtree: true }).forEach((animation) => animation.cancel());
+      token.replaceChildren(outgoing);
 
       const incoming = this.createGlyph(nextDigit);
       token.dataset.value = nextDigit;
